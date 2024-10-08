@@ -1,0 +1,4 @@
+site_name: FastDocs
+site_url: https://doc.fastx-ai.com
+theme:
+  name: material
