@@ -1,4 +1,63 @@
 site_name: FastDocs
 site_url: https://doc.fastx-ai.com
+site_description: FastDoc is a website that you can get started with FastX AI in minutes.
 theme:
   name: material
+  custom_dir: overrides
+  features:
+    - navigation.indexes
+    - navigation.instant.progress
+    - navigation.tracking
+    - navigation.tabs
+    - content.action.edit
+  icon:
+    repo: fontawesome/brands/github-alt
+    edit: material/pencil-box
+    view: material/eye
+extra_css:
+  - stylesheets/extra.css
+extra_javascript:
+  - javascripts/extra.js
+plugins:
+  - search
+  - blog:
+      blog_toc: true
+      pagination_per_page: 10
+      archive_pagination_per_page: 10
+      categories_pagination_per_page: 10
+  - tags
+  - rss:
+      match_path: "blog/posts/.*"
+      date_from_meta:
+        as_creation: date.created
+        as_update: date.updated
+  - social:
+      cards_layout_options:
+        background_color: "#ff1493"
+nav:
+  - Home: index.md
+  - Install: install.md
+  - Usage: usage.md
+  - Blog:
+      - blog/index.md
+extra:
+  social:
+    - icon: fontawesome/brands/mastodon
+      name: fastx-ai
+      link: https://fastx-ai.com
+    - icon: /fontawesome/regular/envelope
+      name: send me an email
+      link: mailto:x.stark.dylan@gmail.com
+    - icon: /material/mailbox
+      name: contact us
+      link: /contact
+hooks:
+  - hooks/socialmedia.py
+markdown_extensions:
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+repo_url: https://github.com/C-L-STARK/C-L-STARK.github.io
+repo_name: C-L-STARK/C-L-STARK.github.io
+edit_uri: edit/master/docs/
