@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+<!-- Add announcement here, including arbitrary HTML -->
+{% block announce %}
+<p style="text-align: center">
+  Welcome to <span style="font-size: bold">FastDocs</span>! Just feel free to start read docs!
+</p>
+{% endblock %}
+
+<!-- Add scripts that need to run before here -->
+{% block scripts %}
+<!-- Add scripts that need to run before here -->
+{{ super() }}
+<!-- Add scripts that need to run afterwards here -->
+{% endblock %}

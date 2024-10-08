@@ -1,6 +1,6 @@
 {
   "deepscan.enable": true,
-  "editor.formatOnSave": true,
+  // "editor.formatOnSave": true,
   "yaml.schemas": {
     "https://squidfunk.github.io/mkdocs-material/schema.json": "mkdocs.yml"
   },
@@ -23,7 +23,10 @@
     "elit",
     "fontawesome",
     "incididunt",
+    "inlinehilite",
     "labore",
+    "linenums",
+    "pygments",
     "pymdownx",
     "tempor",
     "twemoji"
