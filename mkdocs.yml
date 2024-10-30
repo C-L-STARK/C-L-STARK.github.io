@@ -87,13 +87,17 @@ plugins:
   - git-authors
   - glightbox
 nav:
-  - Home: index.md
-  - Install: install.md
-  - Usage: usage.md
-  - Blog:
+  - 主页: index.md
+  - 后端: backend/index.md
+  - 前端: web/index.md
+  - 客户端: client/index.md
+  - 桌面端: pc/index.md
+  - 大数据: big-data/index.md
+  - 人工智能: ml/index.md
+  - 运维: ops/index.md
+  - 博客:
       - blog/index.md
-  - Tags: tags.md
-  # - Resume: resume/index.html
+  - 简历模板: resume/index.html
 extra:
   social:
     - icon: fontawesome/brands/mastodon
