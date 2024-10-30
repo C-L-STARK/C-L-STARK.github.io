@@ -1,347 +1,214 @@
-# Welcome to MkDocs
+---
+hide:
+  - navigation
+  - toc
+---
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+# 欢迎访问 :smile:
 
-:smile:
-:fontawesome-regular-face-laugh-wink:
-:fontawesome-brands-youtube:{ .youtube }
-:octicons-heart-fill-24:{ .heart }
+> 访问光子人工智能网站获得基础 AI 服务 [fastx-ai.com](https://fastx-ai.com) :fontawesome-regular-face-laugh-wink:
 
-![Image title](https://dummyimage.com/600x400/){ loading=lazy }
+所以，这个以文档（mkdocs + material）为主体网站的主要目的是什么呢？
 
-- [x] Lorem ipsum dolor sit amet, consectetur adipiscing elit
-- [ ] Vestibulum convallis sit amet nisi a tincidunt
-    * [x] In hac habitasse platea dictumst
-    * [x] In scelerisque nibh non dolor mollis congue sed et metus
-    * [ ] Praesent sed risus massa
-- [ ] Aenean pretium efficitur erat, donec pharetra, ligula non scelerisque
+- [x] 提供基础的 AI 服务，并且提供可定制的（企业知识库、agent、大数据）服务
+- [x] 提供如下学习内容
+    - [x] 基础的前端、后端、大数据、机器学习教学内容
+    - [x] 基础的架构设计内容
+    - [x] 常用的框架等内容
+    - [x] 一些职场常用的软技能
+- [x] 提供自媒体相关的素材、内容、服务等
+- [x] 提供丰富的程序员外包资源，我们有来自
+    - [x] 阿里的高级技术专家，主导 淘系交易中台设计
+    - [x] 腾讯的客户端基础架构师，主导鸿蒙 QQ 研发
+    - [x] 华为的架构师，主导华为企业级 APM 研发
+
+所以，这是一个充满 :octicons-heart-fill-24:{ .heart } 的网站，我们希望可以在自身不断成长的过程中，输出良好的内容给行业的新鲜血液。另外，我们非常希望可以澄清以下几点：
+
+- [x] 程序员短期内不可能被 AI 替代
+- [x] 程序员是一个非常好的职业，是一个可以长期做的职业
+- [x] 程序员的进阶之路非常不容易，但又非常容易
+
+![Image title](./assets/home_land.png){ loading=lazy }
 
 $$
-\cos x=\sum_{k=0}^{\infty}\frac{(-1)^k}{(2k)!}x^{2k}
+终极程序员 = \sum_{k=0}^{\infty}硬技能^{软技能}
 $$
 
-The homomorphism $f$ is injective if and only if its kernel is only the
-singleton set $e_G$, because otherwise $\exists a,b\in G$ with $a\neq b$ such
-that $f(a)=f(b)$.
+:material-information-outline:{ title="Important information" } 这是一个非常好的公式，当你没有软技能的时候；光凭借硬技能也能走的很远；当你没有硬技能的时候，软技能也没什么大的作用；只有二者结合，才能让你变成 [埃隆马斯克](https://doc.fastx-ai.com "现实世界中我的偶像")、扎克伯格、斯蒂夫乔布斯等等闪耀的明星。
 
-:material-information-outline:{ title="Important information" }
+!!! info inline end "贴心小提示"
 
-The HTML specification is maintained by the W3C.
+    千万不要在意自己的年龄，最差最差最差的结果，就是当个保安嘛，慌什么
 
-*[HTML]: Hyper Text Markup Language
-*[W3C]: World Wide Web Consortium
+## 程序员疯狂成长之路
 
-[Hover me](https://example.com "I'm a tooltip!")
+- `小白程序员` - 通常，是那些门外汉吧，想要内窥程序员世界的那些人
+- `入门程序员` - 搜索引擎、AI 生成、工具、框架、脚本小子
+- `初级程序员` - **点** 代码编写能力以及问题解决能力
+- `高级程序员` - **线** 有思考的解决某一类问题
+- `超级程序员` - **面/体** 有思考的编写面向特定行业解决方案的程序员或者是研究员
+- `其他程序员` - 拥有特殊方向特殊技能的有价值群体
 
-!!! info inline end "Lorem ipsum"
+## 程序员必备知识技能
 
-    Lorem ipsum dolor sit amet, consectetur
-    adipiscing elit. Nulla et euismod nulla.
-    Curabitur feugiat, tortor non consequat
-    finibus, justo purus auctor massa, nec
-    semper lorem quam in massa.
+??? 提示
 
-## Commands
+    这里列出的知识技能总结来自于 "仅限于我们几位小伙伴的职场履历、创业履历的总结"
 
-- `mkdocs new [dir-name]` - Create a new project.
-- `mkdocs serve` - Start the live-reloading docs server.
-- `mkdocs build` - Build the documentation site.
-- `mkdocs -h` - Print help message and exit.
+:man_raising_hand: 如果你也有好的经历经验技术技能愿意分享, 非常欢迎加入我们的大家庭。
 
-## Project layout
+那么，就请开始学习吧，为了当下而努力，为了未来自给自足而努力，为了能创造更多的价值而努力。
 
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
-
-???+ note
-
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et euismod
-    nulla. Curabitur feugiat, tortor non consequat finibus, justo purus auctor
-    massa, nec semper lorem quam in massa.
-
-Lorem ipsum dolor sit amet, (1) consectetur adipiscing elit.
-{ .annotate }
-
-1.  :man_raising_hand: I'm an annotation! I can contain `code`, **formatted
-    text**, images, ... basically anything that can be expressed in Markdown.
-
-[Send :fontawesome-solid-paper-plane:](#){ .md-button }
-
-```py title="bubble_sort.py"
-def bubble_sort(items):
-    for i in range(len(items)):
-        for j in range(len(items) - 1 - i):
-            if items[j] > items[j + 1]:
-                items[j], items[j + 1] = items[j + 1], items[j]
+```py hl_lines="4" linenums="1" title="当下.py"
+def day_day_up(items):
+    for i in range(len(∞)):
+        for j in range(len(∞)):
+            ... # (1)
 ```
 
-```yaml
-theme:
-  features:
-    - content.code.annotate # (1)
-```
+1. :man_raising_hand: 既然你好奇的点开了这里，我们就可以大概确定，你是一个拥有探索未知能力的人。
 
-1.  :man_raising_hand: I'm a code annotation! I can contain `code`, **formatted
-    text**, images, ... basically anything that can be written in Markdown.
+所以，在本文的结尾处，我们希望你可以拥有自己的 `当下和未来` ！
 
-```py linenums="1"
-def bubble_sort(items):
-    for i in range(len(items)):
-        for j in range(len(items) - 1 - i):
-            if items[j] > items[j + 1]:
-                items[j], items[j + 1] = items[j + 1], items[j]
-```
+本网站涉及到的 **程序员相关内容** 内容包括但不限于如下技能：
+=== "JAVA"
 
-```py hl_lines="2 3"
-def bubble_sort(items):
-    for i in range(len(items)):
-        for j in range(len(items) - 1 - i):
-            if items[j] > items[j + 1]:
-                items[j], items[j + 1] = items[j + 1], items[j]
-```
-
-The `#!python range()` function is used to generate a sequence of numbers.
-
-```title=".browserslistrc"
---8<--
-tags.md
---8<--
-```
-
-=== "C"
-
-    ``` c
-    #include <stdio.h>
-
-    int main(void) {
-      printf("Hello world!\n");
-      return 0;
-    }
+    ``` java
+    import java.util.Scanner;
     ```
 
-=== "C++"
+=== "GO"
 
-    ``` c++
-    #include <iostream>
-
-    int main(void) {
-      std::cout << "Hello world!" << std::endl;
-      return 0;
-    }
+    ``` go
+    package main
     ```
 
-!!! example
+=== "NextJS"
 
-    === "Unordered List"
+    ``` typescript
+    const A = () => ();
+    ```
+
+=== "React"
+
+    ``` typescript
+    return (<></>)
+    ```
+
+=== "Vue"
+
+    ``` vue
+    <template setup>
+    ```
+
+=== "Flutter"
+
+    ``` dart
+    return fibonacci(n - 1) + fibonacci(n - 2);
+    ```
+
+=== "Android (Java)"
+
+    ``` java
+    setContentView(R.layout.first_layout);
+    ```
+
+=== "iOS/MacOS (OC/Swift)"
+
+    ``` objective-c
+    [UIView subViews];
+    ```
+
+=== "ML / LLMs (Python)"
+
+    ``` python
+    model = Sequential()
+    ```
+
+=== "大数据 (Java)"
+
+    ``` java
+    DataStream<Integer> listState  = savepoint.readUnionState<>(
+        OperatorIdentifier.forUid("my-uid"),
+        "union-state",
+        Types.INT);
+    ```
+
+=== "运维 (Shell)"
+
+    ``` shell
+    kubectl get po, svc -A
+    ```
+
+!!! 内容样例
+
+    === "JAVA"
 
         ``` markdown
-        * Sed sagittis eleifend rutrum
-        * Donec vitae suscipit est
-        * Nulla tempor lobortis orci
+        * JAVA 基础内容
+        * JAVA 进阶内容
+        * JAVA 职场必备基础知识
+        * JAVA 职场必备进阶技能
+        * JAVA 高性能调优
+        * JAVA ...
         ```
 
-    === "Ordered List"
+    === "大数据"
 
         ``` markdown
-        1. Sed sagittis eleifend rutrum
-        2. Donec vitae suscipit est
-        3. Nulla tempor lobortis orci
+        1. 大数据基础知识以及框架认识
+        2. 大数据框架选型必看
+        3. 大数据集群环境构建以及架构设计
+        4. ...
         ```
 
-| Method   | Description                          |
-| -------- | ------------------------------------ |
-| `GET`    | :material-check: Fetch resource      |
-| `PUT`    | :material-check-all: Update resource |
-| `DELETE` | :material-close: Delete resource     |
-
-```mermaid
-graph LR
-  A[Start] --> B{Error?};
-  B -->|Yes| C[Hmm...];
-  C --> D[Debug];
-  D --> B;
-  B ---->|No| E[Yay!];
-```
-
-```mermaid
-sequenceDiagram
-  autonumber
-  Alice->>John: Hello John, how are you?
-  loop Healthcheck
-      John->>John: Fight against hypochondria
-  end
-  Note right of John: Rational thoughts!
-  John-->>Alice: Great!
-  John->>Bob: How about you?
-  Bob-->>John: Jolly good!
-```
+| 负责人   | 内容方向                          |
+| --------| ------------------------------------ |
+| `LY`    | :material-check: 服务端、大数据、运维      |
+| `ZY`    | :material-check-all: 客户端、服务端 |
+| `CL`    | :material-check: 机器学习、客户端、服务端     |
+| `YD`    | :material-check-all: 大数据、前端     |
 
 ```mermaid
 gantt
-    title A Gantt Diagram
+    title 我们的小计划
     dateFormat YYYY-MM-DD
-    section Section
-        A task          :a1, 2014-01-01, 30d
-        Another task    :after a1, 20d
-    section Another
-        Task in Another :2014-01-12, 12d
-        another task    :24d
+    section 研发
+        持续内容输出          :a1, 2024-12-12, 365d
+        新技术探索学习         :a2, 2025-01-12, 180d
+    section 自媒体
+        后期制作 :2025-10-12, 60d
+        内容拍摄 :2025-07-12, 90d
+        剪辑学习 :2025-06-12, 30d
+        拍摄学习 :2025-05-12, 30d
+    section 网站
+        网站建设 :2024-10-20, 90d
+        其他    :2024-10-20, 30d
 ```
-
-```mermaid
----
-title: Example Git diagram
----
-gitGraph
-   commit
-   commit
-   branch develop
-   checkout develop
-   commit
-   commit
-   checkout main
-   merge develop
-   commit
-   commit
-```
-
-```mermaid
----
-config:
-  sankey:
-    showValues: false
----
-sankey-beta
-
-Agricultural 'waste',Bio-conversion,124.729
-Bio-conversion,Liquid,0.597
-Bio-conversion,Losses,26.862
-Bio-conversion,Solid,280.322
-Bio-conversion,Gas,81.144
-Biofuel imports,Liquid,35
-Biomass imports,Solid,35
-Coal imports,Coal,11.606
-Coal reserves,Coal,63.965
-Coal,Solid,75.571
-District heating,Industry,10.639
-District heating,Heating and cooling - commercial,22.505
-District heating,Heating and cooling - homes,46.184
-Electricity grid,Over generation / exports,104.453
-Electricity grid,Heating and cooling - homes,113.726
-Electricity grid,H2 conversion,27.14
-Electricity grid,Industry,342.165
-Electricity grid,Road transport,37.797
-Electricity grid,Agriculture,4.412
-Electricity grid,Heating and cooling - commercial,40.858
-Electricity grid,Losses,56.691
-Electricity grid,Rail transport,7.863
-Electricity grid,Lighting & appliances - commercial,90.008
-Electricity grid,Lighting & appliances - homes,93.494
-Gas imports,Ngas,40.719
-Gas reserves,Ngas,82.233
-Gas,Heating and cooling - commercial,0.129
-Gas,Losses,1.401
-Gas,Thermal generation,151.891
-Gas,Agriculture,2.096
-Gas,Industry,48.58
-Geothermal,Electricity grid,7.013
-H2 conversion,H2,20.897
-H2 conversion,Losses,6.242
-H2,Road transport,20.897
-Hydro,Electricity grid,6.995
-Liquid,Industry,121.066
-Liquid,International shipping,128.69
-Liquid,Road transport,135.835
-Liquid,Domestic aviation,14.458
-Liquid,International aviation,206.267
-Liquid,Agriculture,3.64
-Liquid,National navigation,33.218
-Liquid,Rail transport,4.413
-Marine algae,Bio-conversion,4.375
-Ngas,Gas,122.952
-Nuclear,Thermal generation,839.978
-Oil imports,Oil,504.287
-Oil reserves,Oil,107.703
-Oil,Liquid,611.99
-Other waste,Solid,56.587
-Other waste,Bio-conversion,77.81
-Pumped heat,Heating and cooling - homes,193.026
-Pumped heat,Heating and cooling - commercial,70.672
-Solar PV,Electricity grid,59.901
-Solar Thermal,Heating and cooling - homes,19.263
-Solar,Solar Thermal,19.263
-Solar,Solar PV,59.901
-Solid,Agriculture,0.882
-Solid,Thermal generation,400.12
-Solid,Industry,46.477
-Thermal generation,Electricity grid,525.531
-Thermal generation,Losses,787.129
-Thermal generation,District heating,79.329
-Tidal,Electricity grid,9.452
-UK land based bioenergy,Bio-conversion,182.01
-Wave,Electricity grid,19.013
-Wind,Electricity grid,289.366
-```
-
-Lorem ipsum[^1] dolor sit amet, consectetur adipiscing elit.[^2]
-
-Text can be {--deleted--} and replacement text {++added++}. This can also be
-combined into {~~one~>a single~~} operation. {==Highlighting==} is also
-possible {>>and comments can be added inline<<}.
-
-{==
-
-Formatting can also be applied to blocks by putting the opening and closing
-tags on separate lines and adding new lines between the tags and the content.
-
-==}
-
-++ctrl+alt+del++
-
-- H~2~O
-- A^T^A
 
 <div class="grid cards" markdown>
 
--   :material-clock-fast:{ .lg .middle } __Set up in 5 minutes__
+-   :material-clock-fast:{ .lg .middle } __快速了解__
 
     ---
 
-    Install [`mkdocs-material`](#) with [`pip`](#) and get up
-    and running in minutes
+    快速了解 [`学习方式方法`](#)， [`然后`](#) 开始具体内容的学习
 
-    [:octicons-arrow-right-24: Getting started](#)
+    [:octicons-arrow-right-24: 开始学习](#)
 
--   :fontawesome-brands-markdown:{ .lg .middle } __It's just Markdown__
-
-    ---
-
-    Focus on your content and generate a responsive and searchable static site
-
-    [:octicons-arrow-right-24: Reference](#)
-
--   :material-format-font:{ .lg .middle } __Made to measure__
+-   :material-format-font:{ .lg .middle } __还很迷茫__
 
     ---
 
-    Change the colors, fonts, language, icons, logo and more with a few lines
+    尝试通过 github 提交 issue 给我们，描述你的问题，我们会尽快回复您。
 
-    [:octicons-arrow-right-24: Customization](#)
-
--   :material-scale-balance:{ .lg .middle } __Open Source, MIT__
-
-    ---
-
-    Material for MkDocs is licensed under MIT and available on [GitHub]
-
-    [:octicons-arrow-right-24: License](#)
+    [:octicons-arrow-right-24: 还没准备好？](#)
 
 </div>
 
-[^1]: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-[^2]:
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et euismod
-    nulla. Curabitur feugiat, tortor non consequat finibus, justo purus auctor
-    massa, nec semper lorem quam in massa.
+++ctrl+shift+f5++
+
+如不能正产展示页面内容，可刷新本页面
+
+[^1]: 本页面内容 光子人工智能 拥有全部解释权
+[^2]: 本页面内容均受到版权保护，转载请注明出处
