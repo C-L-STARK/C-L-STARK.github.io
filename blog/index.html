@@ -16,7 +16,7 @@
         <link rel="prev" href="../ops/">
       
       
-        <link rel="next" href="category/holidays/">
+        <link rel="next" href="category/%E5%BE%AE%E4%BF%A1%E4%B8%9A%E5%8A%A1/">
       
       
         <link rel="alternate" type="application/rss+xml" title="RSS feed" href="../feed_rss_created.xml">
@@ -27,7 +27,7 @@
     
     
       
-        <title>Blog - FastDocs</title>
+        <title>博客 / 频道 - FastDocs</title>
       
     
     
@@ -74,7 +74,7 @@
       
         <meta  property="og:type"  content="website" >
       
-        <meta  property="og:title"  content="Blog - FastDocs" >
+        <meta  property="og:title"  content="博客 / 频道 - FastDocs" >
       
         <meta  property="og:description"  content="FastDoc is a website that you can get started with FastX AI in minutes." >
       
@@ -90,7 +90,7 @@
       
         <meta  name="twitter:card"  content="summary_large_image" >
       
-        <meta  name="twitter:title"  content="Blog - FastDocs" >
+        <meta  name="twitter:title"  content="博客 / 频道 - FastDocs" >
       
         <meta  name="twitter:description"  content="FastDoc is a website that you can get started with FastX AI in minutes." >
       
@@ -126,7 +126,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#blog" class="md-skip">
+        <a href="#_1" class="md-skip">
           Skip to content
         </a>
       
@@ -179,7 +179,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Blog
+              博客 / 频道
             
           </span>
         </div>
@@ -798,7 +798,7 @@
         
   
   
-    <a href="archive/2023/" class="md-nav__link">
+    <a href="archive/2024/" class="md-nav__link">
       
   
   <span class="md-ellipsis">
@@ -845,7 +845,7 @@
         
   
   
-    <a href="category/holidays/" class="md-nav__link">
+    <a href="category/%E5%BE%AE%E4%BF%A1%E4%B8%9A%E5%8A%A1/" class="md-nav__link">
       
   
   <span class="md-ellipsis">
@@ -904,7 +904,9 @@
   <div class="md-content" data-md-component="content">
     <div class="md-content__inner">
       <header class="md-typeset">
-        <h1 id="blog">Blog<a class="headerlink" href="#blog" title="Permanent link">&para;</a></h1>
+        <h1 id="_1">博客 / 频道<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<p>欢迎来到我们的博客频道，这里会经常性的放出一些小文章。大部分都是业务相关的短篇内容。因为在大厂工作也很难接触到外面世界的一些业务场景。所以我们在制作自己的小程序、小网站的时候也会碰到一些坑。</p>
+<p>厂里，中间件以及基础设施降低了创新的门槛。比如消息队列、RPC调用、DEV-OPS、SEC-OPS、配置中心、数据中台、机器学习平台、低代码平台等等等等轮子。然而，当我们做小程序的过程中，做自己的网站的过程中，做自己的独立工具的时候，碰到了非常多的坑。在这里写给大家吧。</p>
       </header>
       
         <article class="md-post md-post--excerpt">
@@ -921,18 +923,18 @@
     <div class="md-post__meta md-meta">
       <ul class="md-meta__list">
         <li class="md-meta__item">
-          <time datetime="2023-12-31 00:00:00">December 31, 2023</time></li>
+          <time datetime="2024-10-31 00:00:00">October 31, 2024</time></li>
         
           <li class="md-meta__item">
             in
             
-              <a href="category/holidays/" class="md-meta__link">Holidays</a></li>
+              <a href="category/%E5%BE%AE%E4%BF%A1%E4%B8%9A%E5%8A%A1/" class="md-meta__link">微信业务</a></li>
         
         
           
           <li class="md-meta__item">
             
-              15 min read
+              871 min read
             
           </li>
         
@@ -941,12 +943,39 @@
     </div>
   </header>
   <div class="md-post__content md-typeset">
-    <h2 id="happy-new-years-eve"><a class="toclink" href="2023/12/31/happy-new-years-eve/">Happy new years eve</a></h2>
-<p>We hope you are all having fun and wish you all the best for the new year!</p>
+    <h2 id="_1"><a class="toclink" href="2024/10/31/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%94%AF%E4%BB%98%E7%AF%87/">微信小程序支付篇</a></h2>
+<p>我们尽量用简单直白的内容，最快速的解决小程序支付的问题；</p>
+<p>初期的配置这里不做赘述，请配置服务器域名到微信支付、小程序的业务等域名中；</p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> 小程序框架：uni-app + vscode</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> 服务端框架：spring-boot + wx 官方java sdk</li>
+</ul>
+<p>小程序部分代码非常简单：</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">wxPay</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">payParams</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nx">amount</span><span class="o">:</span><span class="w"> </span><span class="mf">10</span><span class="p">,</span><span class="w"> </span><span class="c1">// 支付的金额，单位为 `分`</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nx">openid</span><span class="o">:</span><span class="w"> </span><span class="nx">userInfo</span><span class="p">.</span><span class="nx">openId</span><span class="p">,</span><span class="w"> </span><span class="c1">// 你的 openId；当然也可以服务端通过访问用户的一些身份信息识别出来自动填充；</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="p">};</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">post</span><span class="p">(</span><span class="s2">&quot;pay/unifiedOrder&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">payParams</span><span class="p">);</span><span class="w"> </span><span class="c1">// 调用服务端统一下单接口</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">code</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="mf">200</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="nx">wx</span><span class="p">.</span><span class="nx">requestPayment</span><span class="p">({</span><span class="w"> </span><span class="c1">// 小程序发起支付</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">      </span><span class="p">...</span><span class="nx">res</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">      </span><span class="kr">package</span><span class="o">:</span><span class="w"> </span><span class="nx">res</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">packageVal</span><span class="p">,</span><span class="w"> </span><span class="c1">// 我们直接把微信官方 sdk 的内容丢到了 res.data 里；但是微信的返回参数中，有一个字段不符合后面的参数逻辑；所以要单独做一下转换；</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">      </span><span class="nx">success</span><span class="p">(</span><span class="nx">resp</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;pay success&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">resp</span><span class="p">);</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">      </span><span class="p">},</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">      </span><span class="nx">fail</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s2">&quot;pay fail&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">);</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">      </span><span class="p">},</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">    </span><span class="p">});</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="p">};</span>
+</span></code></pre></div>
 
     
       <nav class="md-post__action">
-        <a href="2023/12/31/happy-new-years-eve/">
+        <a href="2024/10/31/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%94%AF%E4%BB%98%E7%AF%87/">
           Continue reading
         </a>
       </nav>
@@ -1006,13 +1035,13 @@
         
         
           
-          <a href="category/holidays/" class="md-footer__link md-footer__link--next" aria-label="Next: Holidays">
+          <a href="category/%E5%BE%AE%E4%BF%A1%E4%B8%9A%E5%8A%A1/" class="md-footer__link md-footer__link--next" aria-label="Next: 微信业务">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Holidays
+                微信业务
               </div>
             </div>
             <div class="md-footer__button md-icon">
