@@ -10,31 +10,29 @@
       
       
       
-        <link rel="canonical" href="https://doc.fastx-ai.com/blog/">
+        <link rel="canonical" href="https://doc.fastx-ai.com/blog/2024/11/01/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%90%8E%E5%8F%B0%E8%A2%AB%E6%94%BB%E5%87%BB%E7%9A%84%E8%B6%A3%E4%BA%8B/">
       
       
-        <link rel="prev" href="../ops/">
+        <link rel="prev" href="../../../10/31/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%94%AF%E4%BB%98%E7%AF%87/">
       
       
-        <link rel="next" href="category/%E5%BE%AE%E4%BF%A1%E4%B8%9A%E5%8A%A1/">
       
+        <link rel="alternate" type="application/rss+xml" title="RSS feed" href="../../../../../feed_rss_created.xml">
+        <link rel="alternate" type="application/rss+xml" title="RSS feed of updated content" href="../../../../../feed_rss_updated.xml">
       
-        <link rel="alternate" type="application/rss+xml" title="RSS feed" href="../feed_rss_created.xml">
-        <link rel="alternate" type="application/rss+xml" title="RSS feed of updated content" href="../feed_rss_updated.xml">
-      
-      <link rel="icon" href="../assets/images/favicon.png">
+      <link rel="icon" href="../../../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
     
     
       
-        <title>博客 / 频道 - FastDocs</title>
+        <title>记一次微信小程序后台被攻击的趣事 - FastDocs</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.8c3ca2c6.min.css">
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.8c3ca2c6.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -53,9 +51,9 @@
       
     
     
-      <link rel="stylesheet" href="../stylesheets/extra.css">
+      <link rel="stylesheet" href="../../../../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
   
@@ -74,11 +72,11 @@
       
         <meta  property="og:type"  content="website" >
       
-        <meta  property="og:title"  content="博客 / 频道 - FastDocs" >
+        <meta  property="og:title"  content="记一次微信小程序后台被攻击的趣事 - FastDocs" >
       
         <meta  property="og:description"  content="FastDoc is a website that you can get started with FastX AI in minutes." >
       
-        <meta  property="og:image"  content="https://doc.fastx-ai.com/assets/images/social/blog/index.png" >
+        <meta  property="og:image"  content="https://doc.fastx-ai.com/assets/images/social/blog/posts/wx-server-error.png" >
       
         <meta  property="og:image:type"  content="image/png" >
       
@@ -86,19 +84,19 @@
       
         <meta  property="og:image:height"  content="630" >
       
-        <meta  property="og:url"  content="https://doc.fastx-ai.com/blog/" >
+        <meta  property="og:url"  content="https://doc.fastx-ai.com/blog/2024/11/01/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%90%8E%E5%8F%B0%E8%A2%AB%E6%94%BB%E5%87%BB%E7%9A%84%E8%B6%A3%E4%BA%8B/" >
       
         <meta  name="twitter:card"  content="summary_large_image" >
       
-        <meta  name="twitter:title"  content="博客 / 频道 - FastDocs" >
+        <meta  name="twitter:title"  content="记一次微信小程序后台被攻击的趣事 - FastDocs" >
       
         <meta  name="twitter:description"  content="FastDoc is a website that you can get started with FastX AI in minutes." >
       
-        <meta  name="twitter:image"  content="https://doc.fastx-ai.com/assets/images/social/blog/index.png" >
+        <meta  name="twitter:image"  content="https://doc.fastx-ai.com/assets/images/social/blog/posts/wx-server-error.png" >
       
     
     
-   <link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+   <link href="../../../../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
     html.glightbox-open { overflow: initial; height: 100%; }
     .gslide-title { margin-top: 0px; user-select: text; }
     .gslide-desc { color: #666; user-select: text; }
@@ -107,7 +105,7 @@
     .gdesc-inner { font-size: 0.75rem; }
     body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
     body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
-    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../assets/javascripts/glightbox.min.js"></script></head>
+    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../../../../../assets/javascripts/glightbox.min.js"></script></head>
   
   
     
@@ -159,7 +157,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href=".." title="FastDocs" class="md-header__button md-logo" aria-label="FastDocs" data-md-component="logo">
+    <a href="../../../../.." title="FastDocs" class="md-header__button md-logo" aria-label="FastDocs" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -179,7 +177,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              博客 / 频道
+              记一次微信小程序后台被攻击的趣事
             
           </span>
         </div>
@@ -329,7 +327,7 @@
   
   
     <li class="md-tabs__item">
-      <a href=".." class="md-tabs__link">
+      <a href="../../../../.." class="md-tabs__link">
         
   
     
@@ -346,7 +344,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../backend/" class="md-tabs__link">
+      <a href="../../../../../backend/" class="md-tabs__link">
         
   
     
@@ -363,7 +361,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../web/" class="md-tabs__link">
+      <a href="../../../../../web/" class="md-tabs__link">
         
   
     
@@ -380,7 +378,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../client/" class="md-tabs__link">
+      <a href="../../../../../client/" class="md-tabs__link">
         
   
     
@@ -397,7 +395,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../pc/" class="md-tabs__link">
+      <a href="../../../../../pc/" class="md-tabs__link">
         
   
     
@@ -414,7 +412,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../big-data/" class="md-tabs__link">
+      <a href="../../../../../big-data/" class="md-tabs__link">
         
   
     
@@ -431,7 +429,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../ml/" class="md-tabs__link">
+      <a href="../../../../../ml/" class="md-tabs__link">
         
   
     
@@ -448,7 +446,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../ops/" class="md-tabs__link">
+      <a href="../../../../../ops/" class="md-tabs__link">
         
   
     
@@ -469,7 +467,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+        <a href="../../../../" class="md-tabs__link">
           
   
     
@@ -487,7 +485,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../resume/" class="md-tabs__link">
+      <a href="../../../../../resume/" class="md-tabs__link">
         
   
     
@@ -510,7 +508,9 @@
           
             
               
-              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -523,7 +523,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="FastDocs" class="md-nav__button md-logo" aria-label="FastDocs" data-md-component="logo">
+    <a href="../../../../.." title="FastDocs" class="md-nav__button md-logo" aria-label="FastDocs" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -553,7 +553,7 @@
   
   
     <li class="md-nav__item">
-      <a href=".." class="md-nav__link">
+      <a href="../../../../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -573,7 +573,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../backend/" class="md-nav__link">
+      <a href="../../../../../backend/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -593,7 +593,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../web/" class="md-nav__link">
+      <a href="../../../../../web/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -613,7 +613,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../client/" class="md-nav__link">
+      <a href="../../../../../client/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -633,7 +633,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../pc/" class="md-nav__link">
+      <a href="../../../../../pc/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -653,7 +653,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../big-data/" class="md-nav__link">
+      <a href="../../../../../big-data/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -673,7 +673,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ml/" class="md-nav__link">
+      <a href="../../../../../ml/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -693,7 +693,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ops/" class="md-nav__link">
+      <a href="../../../../../ops/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -745,7 +745,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="./" class="md-nav__link md-nav__link--active">
+            <a href="../../../../" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -756,7 +756,7 @@
             </a>
             
               
-              <label class="md-nav__link md-nav__link--active" for="__nav_9" id="__nav_9_label" tabindex="">
+              <label class="md-nav__link " for="__nav_9" id="__nav_9_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
@@ -798,7 +798,7 @@
         
   
   
-    <a href="archive/2024/" class="md-nav__link">
+    <a href="../../../../archive/2024/" class="md-nav__link">
       
   
   <span class="md-ellipsis">
@@ -845,7 +845,7 @@
         
   
   
-    <a href="category/%E5%BE%AE%E4%BF%A1%E4%B8%9A%E5%8A%A1/" class="md-nav__link">
+    <a href="../../../../category/%E5%BE%AE%E4%BF%A1%E4%B8%9A%E5%8A%A1/" class="md-nav__link">
       
   
   <span class="md-ellipsis">
@@ -879,7 +879,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../resume/" class="md-nav__link">
+      <a href="../../../../../resume/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -901,49 +901,200 @@
             
           
           
-  <div class="md-content" data-md-component="content">
-    <div class="md-content__inner">
-      <header class="md-typeset">
-        <h1 id="_1">博客 / 频道<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<p>欢迎来到我们的博客频道，这里会经常性的放出一些小文章。大部分都是业务相关的短篇内容。因为在大厂工作也很难接触到外面世界的一些业务场景。所以我们在制作自己的小程序、小网站的时候也会碰到一些坑。</p>
-<p>厂里，中间件以及基础设施降低了创新的门槛。比如消息队列、RPC调用、DEV-OPS、SEC-OPS、配置中心、数据中台、机器学习平台、低代码平台等等等等轮子。然而，当我们做小程序的过程中，做自己的网站的过程中，做自己的独立工具的时候，碰到了非常多的坑。在这里写给大家吧。</p>
-      </header>
-      
-        <article class="md-post md-post--excerpt">
-  <header class="md-post__header">
-    
-      <nav class="md-post__authors md-typeset">
-        
-          <span class="md-author">
-            <img src="https://simpleicons.org/icons/materialformkdocs.svg" alt="FastX-AI">
-          </span>
-        
-      </nav>
-    
-    <div class="md-post__meta md-meta">
-      <ul class="md-meta__list">
-        <li class="md-meta__item">
-          <time datetime="2024-11-01 00:00:00">November 1, 2024</time></li>
-        
-          <li class="md-meta__item">
-            in
+  <div class="md-content md-content--post" data-md-component="content">
+    <div class="md-sidebar md-sidebar--post" data-md-component="sidebar" data-md-type="navigation">
+      <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner md-post">
+          <nav class="md-nav md-nav--primary">
+            <div class="md-post__back">
+              <div class="md-nav__title md-nav__container">
+                <a href="../../../../" class="md-nav__link">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+                  <span class="md-ellipsis">
+                    Back to index
+                  </span>
+                </a>
+              </div>
+            </div>
             
-              <a href="category/%E5%BE%AE%E4%BF%A1%E4%B8%9A%E5%8A%A1/" class="md-meta__link">微信业务</a></li>
-        
-        
+              <div class="md-post__authors md-typeset">
+                
+                  <div class="md-profile md-post__profile">
+                    <span class="md-author md-author--long">
+                      <img src="https://simpleicons.org/icons/materialformkdocs.svg" alt="FastX-AI">
+                    </span>
+                    <span class="md-profile__description">
+                      <strong>
+                        
+                          FastX-AI
+                        
+                      </strong>
+                      <br>
+                      Creator
+                    </span>
+                  </div>
+                
+              </div>
+            
+            <ul class="md-post__meta md-nav__list">
+              <li class="md-nav__item md-nav__item--section">
+                <div class="md-post__title">
+                  <span class="md-ellipsis">
+                    Metadata
+                  </span>
+                </div>
+                <nav class="md-nav">
+                  <ul class="md-nav__list">
+                    <li class="md-nav__item">
+                      <div class="md-nav__link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 19H5V8h14m-3-7v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-1V1m-1 11h-5v5h5z"/></svg>
+                        <time datetime="2024-11-01 00:00:00" class="md-ellipsis">November 1, 2024</time>
+                      </div>
+                    </li>
+                    
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15 13h1.5v2.82l2.44 1.41-.75 1.3L15 16.69zm4-5H5v11h4.67c-.43-.91-.67-1.93-.67-3a7 7 0 0 1 7-7c1.07 0 2.09.24 3 .67zM5 21a2 2 0 0 1-2-2V5c0-1.11.89-2 2-2h1V1h2v2h8V1h2v2h1a2 2 0 0 1 2 2v6.1c1.24 1.26 2 2.99 2 4.9a7 7 0 0 1-7 7c-1.91 0-3.64-.76-4.9-2zm11-9.85A4.85 4.85 0 0 0 11.15 16c0 2.68 2.17 4.85 4.85 4.85A4.85 4.85 0 0 0 20.85 16c0-2.68-2.17-4.85-4.85-4.85"/></svg>
+                          <time datetime="2024-11-01 00:00:00" class="md-ellipsis">November 1, 2024</time>
+                        </div>
+                      </li>
+                    
+                    
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 3v15h3V3zm3 2 4 13 3-1-4-13zM5 5v13h3V5zM3 19v2h18v-2z"/></svg>
+                          <span class="md-ellipsis">
+                            in
+                            
+                              <a href="../../../../category/%E5%BE%AE%E4%BF%A1%E4%B8%9A%E5%8A%A1/">微信业务</a></span>
+                        </div>
+                      </li>
+                    
+                    
+                      
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg>
+                          <span class="md-ellipsis">
+                            
+                              10 min read
+                            
+                          </span>
+                        </div>
+                      </li>
+                    
+                  </ul>
+                </nav>
+              </li>
+            </ul>
+          </nav>
           
-          <li class="md-meta__item">
             
-              10 min read
-            
-          </li>
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      小程序安全检测上线公告官方
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="小程序安全检测上线公告官方">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      一、背景介绍
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      二、审核过程
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      三、审核结果
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      其他常见问题
+    </span>
+  </a>
+  
+</li>
         
       </ul>
+    </nav>
+  
+</li>
       
+    </ul>
+  
+</nav>
+          
+        </div>
+      </div>
     </div>
-  </header>
-  <div class="md-post__content md-typeset">
-    <h2 id="_1"><a class="toclink" href="2024/11/01/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%90%8E%E5%8F%B0%E8%A2%AB%E6%94%BB%E5%87%BB%E7%9A%84%E8%B6%A3%E4%BA%8B/">记一次微信小程序后台被攻击的趣事</a></h2>
+    <article class="md-content__inner md-typeset">
+      
+        
+  
+  
+
+<nav class="md-tags" >
+  
+    
+    
+    
+      <a href="../../../../../tags/#" class="md-tag">小程序支付</a>
+    
+  
+    
+    
+    
+      <a href="../../../../../tags/#" class="md-tag">微信支付</a>
+    
+  
+</nav>
+
+
+  
+    <a href="https://github.com/C-L-STARK/C-L-STARK.github.io/edit/master/docs/blog/posts/wx-server-error.md" title="Edit this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm-2.3 6.35c.22-.21.22-.56 0-.77L15.42 7.3a.53.53 0 0 0-.77 0l-1 1 2.05 2.05zM7 14.94V17h2.06l6.06-6.06-2.06-2.06z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="_1">记一次微信小程序后台被攻击的趣事<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <p>线上突然收到大量的异常报警（error 日志的数量达到一定量），查阅报警内容如下：</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">error.log</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
@@ -1090,121 +1241,151 @@
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="o">[</span><span class="mi">2024</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mo">01</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mi">21</span><span class="p">,</span><span class="mi">202</span><span class="o">][</span><span class="n">INFO</span><span class="o">][</span><span class="n">http</span><span class="o">-</span><span class="n">nio</span><span class="o">-</span><span class="mi">8282</span><span class="o">-</span><span class="n">exec</span><span class="o">-</span><span class="mi">9</span><span class="o">][</span><span class="n">p6spy</span><span class="o">][</span><span class="n">Slf4JLogger</span><span class="p">.</span><span class="na">java</span><span class="p">:</span><span class="mi">60</span><span class="o">][</span><span class="mi">110666799950860288</span><span class="o">]</span><span class="w"> </span><span class="n">sql</span><span class="o">|</span><span class="mi">0</span><span class="o">|</span><span class="n">SELECT</span><span class="w"> </span><span class="nf">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="n">AS</span><span class="w"> </span><span class="n">total</span><span class="w"> </span><span class="n">FROM</span><span class="w"> </span><span class="n">points_history</span><span class="w"> </span><span class="n">WHERE</span><span class="w"> </span><span class="n">is_delete</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="n">AND</span><span class="w"> </span><span class="p">(</span><span class="n">user_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">&#39;</span><span class="mi">7</span><span class="p">))</span><span class="w"> </span><span class="n">AND</span><span class="w"> </span><span class="p">(</span><span class="n">SELECT</span><span class="o">*</span><span class="n">FROM</span><span class="p">(</span><span class="n">SELECT</span><span class="p">(</span><span class="n">SLEEP</span><span class="p">(</span><span class="mi">3</span><span class="p">)))</span><span class="n">klcp</span><span class="p">)</span><span class="w"> </span><span class="n">limit</span><span class="w"> </span><span class="mi">1</span><span class="err">#&#39;</span><span class="p">)</span>
 </span></code></pre></div>
 <p>完整的 SQL 以及调用日志都有了，查询了调用的服务器 IP 地址为广东深圳的腾讯机房，于是猜测应该是小程序审核的代码安全检测吧？</p>
-<p><img alt="数据库信息" src="../assets/wx-server-error-1.png" /></p>
+<p><a class="glightbox" href="../../../../../assets/wx-server-error-1.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="数据库信息" src="../../../../../assets/wx-server-error-1.png" /></a></p>
 <p>于是，我们拿着数据咨询官方后，得到了一份公告内容，内容如下：</p>
-<h3 id="_2"><a class="toclink" href="2024/11/01/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%90%8E%E5%8F%B0%E8%A2%AB%E6%94%BB%E5%87%BB%E7%9A%84%E8%B6%A3%E4%BA%8B/#_2">小程序安全检测上线公告官方</a></h3>
+<h2 id="_2">小程序安全检测上线公告官方<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <blockquote>
 <p>微信团队 2021-12-13</p>
 </blockquote>
 <p>为进一步提升小程序的安全性和用户体验，目前平台将对提审的小程序进行安全检测，以便能及时帮助开发者发现小程序可能存在的安全漏洞。</p>
-<h4 id="_3"><a class="toclink" href="2024/11/01/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%90%8E%E5%8F%B0%E8%A2%AB%E6%94%BB%E5%87%BB%E7%9A%84%E8%B6%A3%E4%BA%8B/#_3">一、背景介绍</a></h4>
+<h3 id="_3">一、背景介绍<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
 <p>小程序在开发过程中若存在安全漏洞的情况，如敏感数据篡改、拖库信息泄露、WEB攻击等，容易造成小程序的安全隐患，可能带来代码易被反编译、核心业务逻辑被破译、算法易被二次打包等风险。因此，平台将对提审的小程序进行安全检测，以协助开发者提升小程序服务的安全性，同时开发者也应加强自身小程序安全漏洞监测能力，保证可及时消除潜在的安全风险。</p>
-<h4 id="_4"><a class="toclink" href="2024/11/01/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%90%8E%E5%8F%B0%E8%A2%AB%E6%94%BB%E5%87%BB%E7%9A%84%E8%B6%A3%E4%BA%8B/#_4">二、审核过程</a></h4>
+<h3 id="_4">二、审核过程<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
 <p>安全检测过程中，平台会模拟真实业务场景，向提审小程序的后台发送服务请求，服务器会收到来自平台（显示为：Tencent Security Team，请求IP为106.55.202.118；113.96.223.69；125.39.132.125；43.139.209.119）的请求。该请求均以较低速率进行，正常情况下不会影响小程序的正常服务。若确实出现了影响小程序正常业务的特殊情况，如用户无法进行小程序的正常访问，开发者可基于自身业务情况，对相应请求加以限频，如有其他疑问，欢迎随时通过官方社区进行反馈。</p>
-<h4 id="_5"><a class="toclink" href="2024/11/01/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%90%8E%E5%8F%B0%E8%A2%AB%E6%94%BB%E5%87%BB%E7%9A%84%E8%B6%A3%E4%BA%8B/#_5">三、审核结果</a></h4>
+<h3 id="_5">三、审核结果<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
 <p>安全检测的结果是小程序审核的重要参考。若小程序在安全检测中被检测到存在安全漏洞，该小程序的审核将不予通过。开发者可根据扫描报告中的修改指引，对安全漏洞进行相应修复后，再重新进行提审。</p>
-<h4 id="_6"><a class="toclink" href="2024/11/01/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%90%8E%E5%8F%B0%E8%A2%AB%E6%94%BB%E5%87%BB%E7%9A%84%E8%B6%A3%E4%BA%8B/#_6">其他常见问题</a></h4>
+<h3 id="_6">其他常见问题<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
 <p>Q1：可以选择不进行安全检测吗，是否会影响小程序代码提审结果？</p>
 <p>A1：安全检测是小程序审核的环节之一，所有提审的小程序均需进行，若检测中发现安全漏洞或小程序故意采取措施规避检测，该小程序的审核将不予通过。</p>
 <p>Q2:若在小程序代码审核已结束或审核已撤销的情况下，可以停止安全检测吗？</p>
 <p>A2:若在小程序代码审核已结束的情况下，平台将持续进行未完成的安全检测直至完成，如有需要，开发者可通过平台提供的相应链接（在【小程序管理后台 → 通知中心】查看站内信即可）自行中止安全检测；若在小程序审核已撤销的情况下，平台将自动中止未完成的安全检测。</p>
-<p><img alt="微信小程序公告安全检测内容 " src="../assets/wx-server-error-2.png" /></p>
+<p><a class="glightbox" href="../../../../../assets/wx-server-error-2.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="微信小程序公告安全检测内容 " src="../../../../../assets/wx-server-error-2.png" /></a></p>
 <p>小程序真是帮我们考虑了太多太多了，当然，这也关乎微信的声誉吧。小小虚惊一场，也高估了刚上线的小程序的流量 ಥ_ಥ <img alt="😢" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/1f622.svg" title=":cry:" /></p>
 <p>当然，我们同样要提到，一些必要的安全防范非常的重要，黑客会通过大量的扫描工具来不停的扫描公网的服务器，如果你有漏洞，就避免不了机器被拉去挖矿了。当然，安全是一门学问了，记得在上高中的时候，是中国红客联盟学生组的一名成员，俗称脚本小子们，也曾经参加过保卫祖国攻击日本政府网站的战役呢。在很多个日本的政府网都插上了中国的国旗。</p>
 <p>现在想想，真的是有趣呢！清楚的记得一些工具，中国菜刀，阿D注入工具，御剑，X-scan 等等，还有各种各样的马，shell 等等。</p>
 <p>好了，今天就到这里，祝你幸福。</p>
 <p><a class="md-button" href="https://x.com/intent/tweet?text=%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%90%8E%E5%8F%B0%E8%A2%AB%E6%94%BB%E5%87%BB%E7%9A%84%E8%B6%A3%E4%BA%8B%0A&amp;url=https://doc.fastx-ai.com/blog/2024/11/01/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%90%8E%E5%8F%B0%E8%A2%AB%E6%94%BB%E5%87%BB%E7%9A%84%E8%B6%A3%E4%BA%8B/">Share on <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg></span></a>
 <a class="md-button" href="https://www.facebook.com/sharer/sharer.php?u=https://doc.fastx-ai.com/blog/2024/11/01/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%90%8E%E5%8F%B0%E8%A2%AB%E6%94%BB%E5%87%BB%E7%9A%84%E8%B6%A3%E4%BA%8B/">Share on <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a9 9 0 0 1 1.141.195v3.325a9 9 0 0 0-.653-.036 27 27 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.7 1.7 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647"/></svg></span></a></p>
-    
-  </div>
-</article>
-      
-        <article class="md-post md-post--excerpt">
-  <header class="md-post__header">
-    
-      <nav class="md-post__authors md-typeset">
-        
-          <span class="md-author">
-            <img src="https://simpleicons.org/icons/materialformkdocs.svg" alt="FastX-AI">
-          </span>
-        
-      </nav>
-    
-    <div class="md-post__meta md-meta">
-      <ul class="md-meta__list">
-        <li class="md-meta__item">
-          <time datetime="2024-10-31 00:00:00">October 31, 2024</time></li>
-        
-          <li class="md-meta__item">
-            in
-            
-              <a href="category/%E5%BE%AE%E4%BF%A1%E4%B8%9A%E5%8A%A1/" class="md-meta__link">微信业务</a></li>
-        
-        
-          
-          <li class="md-meta__item">
-            
-              15 min read
-            
-          </li>
-        
-      </ul>
-      
-    </div>
-  </header>
-  <div class="md-post__content md-typeset">
-    <h2 id="_1"><a class="toclink" href="2024/10/31/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%94%AF%E4%BB%98%E7%AF%87/">微信小程序支付篇</a></h2>
-<p>我们尽量用简单直白的内容，最快速的解决小程序支付的问题；</p>
-<p>初期的配置这里不做赘述，请配置服务器域名到微信支付、小程序的业务等域名中；</p>
-<ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> 小程序框架：uni-app + vscode</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> 服务端框架：spring-boot + wx 官方java sdk</li>
-</ul>
-<p>小程序部分代码非常简单：</p>
-<div class="language-javascript highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">wxPay</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">payParams</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nx">amount</span><span class="o">:</span><span class="w"> </span><span class="mf">10</span><span class="p">,</span><span class="w"> </span><span class="c1">// 支付的金额，单位为 `分`</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nx">openid</span><span class="o">:</span><span class="w"> </span><span class="nx">userInfo</span><span class="p">.</span><span class="nx">openId</span><span class="p">,</span><span class="w"> </span><span class="c1">// 你的 openId；当然也可以服务端通过访问用户的一些身份信息识别出来自动填充；</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="p">};</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">post</span><span class="p">(</span><span class="s2">&quot;pay/unifiedOrder&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">payParams</span><span class="p">);</span><span class="w"> </span><span class="c1">// 调用服务端统一下单接口</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">code</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="mf">200</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="nx">wx</span><span class="p">.</span><span class="nx">requestPayment</span><span class="p">({</span><span class="w"> </span><span class="c1">// 小程序发起支付</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">      </span><span class="p">...</span><span class="nx">res</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">      </span><span class="kr">package</span><span class="o">:</span><span class="w"> </span><span class="nx">res</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">packageVal</span><span class="p">,</span><span class="w"> </span><span class="c1">// 我们直接把微信官方 sdk 的内容丢到了 res.data 里；但是微信的返回参数中，有一个字段不符合后面的参数逻辑；所以要单独做一下转换；</span>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">      </span><span class="nx">success</span><span class="p">(</span><span class="nx">resp</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;pay success&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">resp</span><span class="p">);</span>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">      </span><span class="p">},</span>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">      </span><span class="nx">fail</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s2">&quot;pay fail&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">);</span>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">      </span><span class="p">},</span>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">    </span><span class="p">});</span>
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">  </span><span class="p">}</span>
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="p">};</span>
-</span></code></pre></div>
-
-    
-      <nav class="md-post__action">
-        <a href="2024/10/31/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%94%AF%E4%BB%98%E7%AF%87/">
-          Continue reading
-        </a>
-      </nav>
-    
-  </div>
-</article>
-      
-      
-        
-          
 
 
 
-<nav class="md-pagination">
+
+
+
+
   
-</nav>
-        
+    
+  
+  
+    
+  
+
+
+  <aside class="md-source-file">
+    
       
-    </div>
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 1, 2024</span>
+  </span>
+
+    
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Created">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 1, 2024</span>
+  </span>
+
+    
+    
+      
+  
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Contributors">
+      
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 5.5A3.5 3.5 0 0 1 15.5 9a3.5 3.5 0 0 1-3.5 3.5A3.5 3.5 0 0 1 8.5 9 3.5 3.5 0 0 1 12 5.5M5 8c.56 0 1.08.15 1.53.42-.15 1.43.27 2.85 1.13 3.96C7.16 13.34 6.16 14 5 14a3 3 0 0 1-3-3 3 3 0 0 1 3-3m14 0a3 3 0 0 1 3 3 3 3 0 0 1-3 3c-1.16 0-2.16-.66-2.66-1.62a5.54 5.54 0 0 0 1.13-3.96c.45-.27.97-.42 1.53-.42M5.5 18.25c0-2.07 2.91-3.75 6.5-3.75s6.5 1.68 6.5 3.75V20h-13zM0 20v-1.5c0-1.39 1.89-2.56 4.45-2.9-.59.68-.95 1.62-.95 2.65V20zm24 0h-3.5v-1.75c0-1.03-.36-1.97-.95-2.65 2.56.34 4.45 1.51 4.45 2.9z"/></svg>
+      
+    </span>
+    <nav>
+      
+    </nav>
+  </span>
+
+    
+    
+  </aside>
+
+
+  
+
+
+  
+
+
+  <form class="md-feedback" name="feedback" hidden>
+    <fieldset>
+      <legend class="md-feedback__title">
+        Was this page helpful?
+      </legend>
+      <div class="md-feedback__inner">
+        <div class="md-feedback__list">
+          
+            <button class="md-feedback__icon md-icon" type="submit" title="This page was helpful" data-md-value="1">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 12a8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8m2 0a10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2a10 10 0 0 1 10 10M10 9.5c0 .8-.7 1.5-1.5 1.5S7 10.3 7 9.5 7.7 8 8.5 8s1.5.7 1.5 1.5m7 0c0 .8-.7 1.5-1.5 1.5S14 10.3 14 9.5 14.7 8 15.5 8s1.5.7 1.5 1.5m-5 7.73c-1.75 0-3.29-.73-4.19-1.81L9.23 14c.45.72 1.52 1.23 2.77 1.23s2.32-.51 2.77-1.23l1.42 1.42c-.9 1.08-2.44 1.81-4.19 1.81"/></svg>
+            </button>
+          
+            <button class="md-feedback__icon md-icon" type="submit" title="This page could be improved" data-md-value="0">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 12a8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8m2 0a10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2a10 10 0 0 1 10 10m-6.5-4c.8 0 1.5.7 1.5 1.5s-.7 1.5-1.5 1.5-1.5-.7-1.5-1.5.7-1.5 1.5-1.5M10 9.5c0 .8-.7 1.5-1.5 1.5S7 10.3 7 9.5 7.7 8 8.5 8s1.5.7 1.5 1.5m2 4.5c1.75 0 3.29.72 4.19 1.81l-1.42 1.42C14.32 16.5 13.25 16 12 16s-2.32.5-2.77 1.23l-1.42-1.42C8.71 14.72 10.25 14 12 14"/></svg>
+            </button>
+          
+        </div>
+        <div class="md-feedback__note">
+          
+            <div data-md-value="1" hidden>
+              
+              
+                
+              
+              Thanks for your feedback!
+            </div>
+          
+            <div data-md-value="0" hidden>
+              
+              
+                
+              
+              Thanks for your feedback! Help us improve this page by using our <a href="..." target="_blank" rel="noopener">feedback form</a>.
+            </div>
+          
+        </div>
+      </div>
+    </fieldset>
+  </form>
+
+
+<script
+  src="https://giscus.app/client.js"
+  data-repo="C-L-STARK/2024"
+  data-repo-id="R_kgDOMPJq-g"
+  data-category="Announcements"
+  data-category-id="DIC_kwDOMPJq-s4CjKHz"
+  data-mapping="title"
+  data-strict="0"
+  data-reactions-enabled="1"
+  data-emit-metadata="1"
+  data-input-position="top"
+  data-theme="preferred_color_scheme"
+  data-lang="en"
+  crossorigin="anonymous"
+  async></script>
+
+      
+    </article>
   </div>
 
           
@@ -1225,10 +1406,12 @@
   
     
       
+        
+      
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../ops/" class="md-footer__link md-footer__link--prev" aria-label="Previous: 运维">
+          <a href="../../../10/31/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%94%AF%E4%BB%98%E7%AF%87/" class="md-footer__link md-footer__link--prev" aria-label="Previous: 微信小程序支付篇">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256l137.3-137.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
@@ -1238,27 +1421,11 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                运维
+                微信小程序支付篇
               </div>
             </div>
           </a>
         
-        
-          
-          <a href="category/%E5%BE%AE%E4%BF%A1%E4%B8%9A%E5%8A%A1/" class="md-footer__link md-footer__link--next" aria-label="Next: 微信业务">
-            <div class="md-footer__title">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              <div class="md-ellipsis">
-                微信业务
-              </div>
-            </div>
-            <div class="md-footer__button md-icon">
-              
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg>
-            </div>
-          </a>
         
       </nav>
     
@@ -1321,16 +1488,16 @@
       <div class="md-progress" data-md-component="progress" role="progressbar"></div>
     
     
-    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.indexes", "navigation.instant.progress", "navigation.tracking", "navigation.tabs", "navigation.top", "navigation.footer", "navigation.prune", "content.action.edit", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips", "header.autohide", "announce.dismiss", "search.suggest", "search.highlight", "search.share", "toc.follow", "toc.integrate"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../../../../..", "features": ["navigation.indexes", "navigation.instant.progress", "navigation.tracking", "navigation.tabs", "navigation.top", "navigation.footer", "navigation.prune", "content.action.edit", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips", "header.autohide", "announce.dismiss", "search.suggest", "search.highlight", "search.share", "toc.follow", "toc.integrate"], "search": "../../../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
 <!-- Add scripts that need to run before here -->
 
-      <script src="../assets/javascripts/bundle.525ec568.min.js"></script>
+      <script src="../../../../../assets/javascripts/bundle.525ec568.min.js"></script>
       
-        <script src="../javascripts/extra.js"></script>
+        <script src="../../../../../javascripts/extra.js"></script>
       
-        <script src="../javascripts/mathjax.js"></script>
+        <script src="../../../../../javascripts/mathjax.js"></script>
       
         <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
       

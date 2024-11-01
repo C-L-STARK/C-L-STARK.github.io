@@ -2,7 +2,7 @@
 date:
   created: 2024-10-31
   updated: 2024-10-31
-readtime: 871
+readtime: 15
 pin: true
 links:
   - Homepage: index.md
