@@ -1,3 +1,41 @@
 # 后端
 
-## Welcome
+## JAVA 项目脚手架
+
+- utils
+    - commons-lang3
+    - commons-collections4
+    - guava
+    - lombok
+    - commons-pool2
+    - fastjson2
+    - httpclient5
+- spring
+    - spring-boot-starter
+    - spring-boot-devtools
+    - spring-boot-starter-test
+    - spring-boot-starter-web
+    - spring-boot-starter-cache
+    - spring-boot-starter-logging
+    - spring-boot-starter-aop
+- cache
+    - redisson-spring-boot-starter
+    - spring-boot-starter-data-redis
+- sql
+    - mysql-connector-j
+    - mybatis-plus-spring-boot3-starter
+    - mybatis-plus-join-boot-starter
+    - mybatis-plus-generator
+    - p6spy-spring-boot-starter
+- tcp
+    - tio-core / tio-udp
+    - tio-websocket-server
+- wx-pay
+    - com.github.wechatpay-apiv3/wechatpay-java
+- [Auth](justauth.cn) / JWT
+- other
+    - freemarker
+- middleware
+    - sentinel
+    - transmittable-thread-local
+    - RabbitMq
