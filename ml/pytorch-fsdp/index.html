@@ -1,0 +1,6100 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="FastDoc is a website that you can get started with FastX AI in minutes.">
+      
+      
+      
+        <link rel="canonical" href="https://doc.fastx-ai.com/ml/pytorch-fsdp/">
+      
+      
+        <link rel="prev" href="../pytorch-ddp-accelerate-transformers/">
+      
+      
+        <link rel="next" href="../quanto-diffusers/">
+      
+      
+        <link rel="alternate" type="application/rss+xml" title="RSS feed" href="../../feed_rss_created.xml">
+        <link rel="alternate" type="application/rss+xml" title="RSS feed of updated content" href="../../feed_rss_updated.xml">
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.46">
+    
+    
+      
+        <title>使用 PyTorch 完全分片数据并行技术加速大模型训练 - FastDocs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6f8fc17f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-XXXXXXXXXX"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-XXXXXXXXXX",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+      
+        <meta  property="og:type"  content="website" >
+      
+        <meta  property="og:title"  content="使用 PyTorch 完全分片数据并行技术加速大模型训练 - FastDocs" >
+      
+        <meta  property="og:description"  content="FastDoc is a website that you can get started with FastX AI in minutes." >
+      
+        <meta  property="og:image"  content="https://doc.fastx-ai.com/assets/images/social/ml/pytorch-fsdp.png" >
+      
+        <meta  property="og:image:type"  content="image/png" >
+      
+        <meta  property="og:image:width"  content="1200" >
+      
+        <meta  property="og:image:height"  content="630" >
+      
+        <meta  property="og:url"  content="https://doc.fastx-ai.com/ml/pytorch-fsdp/" >
+      
+        <meta  name="twitter:card"  content="summary_large_image" >
+      
+        <meta  name="twitter:title"  content="使用 PyTorch 完全分片数据并行技术加速大模型训练 - FastDocs" >
+      
+        <meta  name="twitter:description"  content="FastDoc is a website that you can get started with FastX AI in minutes." >
+      
+        <meta  name="twitter:image"  content="https://doc.fastx-ai.com/assets/images/social/ml/pytorch-fsdp.png" >
+      
+    
+    
+   <link href="../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }
+    .gscrollbar-fixer { padding-right: 15px; }
+    .gdesc-inner { font-size: 0.75rem; }
+    body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+    body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../../assets/javascripts/glightbox.min.js"></script></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#pytorch" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+              <button class="md-banner__button md-icon" aria-label="Don't show this again">
+                
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+              </button>
+            
+            
+<p style="text-align: center">
+  Welcome to <span style="font-size: bold">FastDocs</span>! Just feel free to start read docs!
+</p>
+
+          </div>
+          
+            <script>var el=document.querySelector("[data-md-component=announce]");if(el){var content=el.querySelector(".md-typeset");__md_hash(content.innerHTML)===__md_get("__announce")&&(el.hidden=!0)}</script>
+          
+        </aside>
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="FastDocs" class="md-header__button md-logo" aria-label="FastDocs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            FastDocs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              使用 PyTorch 完全分片数据并行技术加速大模型训练
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256l137.3-137.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/C-L-STARK/C-L-STARK.github.io" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1M480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2m-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3m-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1"/></svg>
+  </div>
+  <div class="md-source__repository">
+    C-L-STARK/C-L-STARK.github.io
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+    
+  
+  主页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../backend/" class="md-tabs__link">
+        
+  
+    
+  
+  后端
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../web/" class="md-tabs__link">
+        
+  
+    
+  
+  前端
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../client/" class="md-tabs__link">
+        
+  
+    
+  
+  客户端
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../pc/" class="md-tabs__link">
+        
+  
+    
+  
+  桌面端
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../big-data/" class="md-tabs__link">
+        
+  
+    
+  
+  大数据
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../1_58_llm_extreme_quantization/" class="md-tabs__link">
+          
+  
+    
+  
+  人工智能
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../ops/" class="md-tabs__link">
+        
+  
+    
+  
+  运维
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../blog/" class="md-tabs__link">
+          
+  
+    
+  
+  博客
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../resume/" class="md-tabs__link">
+        
+  
+    
+  
+  简历模板
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="FastDocs" class="md-nav__button md-logo" aria-label="FastDocs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    FastDocs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/C-L-STARK/C-L-STARK.github.io" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1M480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2m-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3m-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1"/></svg>
+  </div>
+  <div class="md-source__repository">
+    C-L-STARK/C-L-STARK.github.io
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    主页
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../backend/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    后端
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../web/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    前端
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../client/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    客户端
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pc/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    桌面端
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../big-data/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    大数据
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    人工智能
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            人工智能
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1_58_llm_extreme_quantization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fine-tuning LLMs to 1.58bit: extreme quantization made easy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2023-in-llms/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2023, 开源大模型之年
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3d-assets/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    手把手教你使用人工智能生成 3D 素材
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4bit-transformers-bitsandbytes/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    用 bitsandbytes、4 比特量化和 QLoRA 打造亲民的 LLM
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Llama2-for-non-engineers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    非工程师指南：训练 LLaMA 2 聊天机器人
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Lora-for-sequence-classification-with-Roberta-Llama-Mistral/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在灾难推文分析场景上比较用 LoRA 微调 Roberta、Llama 2 和 Mistral 的过程及表现
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../_policy-ntia-rfc/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    人工智能政策@🤗：回应美国国家电信和信息管理局（ NTIA ）关于人工智能问责制的评论请求
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../accelerate-v1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Accelerate 1.0.0
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../accelerated-inference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    如何成功将 🤗 API 客户的 transformer 模型推理速度加快 100 倍
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../agents/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    授权调用：介绍 Transformers 智能体 2.0  
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aivsai/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AI 大战 AI，一个深度强化学习多智能体竞赛系统
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../arena-tts/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TTS 擂台: 文本转语音模型的自由搏击场
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../asr-diarization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 Hugging Face 推理终端搭建强大的“语音识别 + 说话人分割 + 投机解码”工作流
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../assisted-generation-support-gaudi/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    英特尔 Gaudi 加速辅助生成
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../assisted-generation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    辅助生成：低延迟文本生成的新方向
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../audioldm2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AudioLDM 2，加速⚡️！
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../autoformer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Transformer 模型能够有效地进行时间序列预测 (使用 Autoformer)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../beating-gaia/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Transformers 代码智能体成功刷榜 GAIA
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../big-bird/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    深入理解 BigBird 的块稀疏注意力
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../blip-2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 BLIP-2 零样本“图生文”
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bloom-inference-optimization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    优化故事: BLOOM 模型推理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bloom-inference-pytorch-scripts/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 DeepSpeed 和 Accelerate 进行超快 BLOOM 模型推理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bloom-megatron-deepspeed/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    千亿参数开源大模型 BLOOM 背后的技术
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bridgetower/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 Habana Gaudi2 加速视觉语言模型 BridgeTower
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chat-templates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    聊天模板：无声性能杀手的终结
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chinese-ai-expansion/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    中国 AI 出海现状概述
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chinese-language-blog/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hugging Face 中文博客正式发布！
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cloudflare-workers-ai/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    为 Hugging Face 用户带来无服务器 GPU 推理服务
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../codellama/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Code Llama：Llama 2 学会写代码了！
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../community-datasets/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    数据好合：Argilla 和 Hugging Face Spaces 赋能社区合力构建更好的数据集
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../constrained-beam-search/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在 🤗 Transformers 中使用约束波束搜索引导文本生成
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../controlnet/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 🧨 Diffusers 实现 ControlNet 高速推理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cosmopedia/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Cosmopedia：如何为大语言模型预训练构建大规模合成数据集
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cost-efficient-rag-applications-with-intel/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    利用英特尔 Gaudi 2 和至强 CPU 构建经济高效的企业级 RAG 应用
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cv_state/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hugging Face 中计算机视觉的现状
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../daily-papers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hugging Face 论文平台 Daily Papers 功能全解析
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dedup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    BigCode 背后的大规模数据去重
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deep-learning-with-proteins/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    蛋白质深度学习
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deepspeed-to-fsdp-and-back/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    从 DeepSpeed 到 FSDP，再回到 Hugging Face Accelerate
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deploy-deepfloydif-using-bentoml/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 BentoML 部署 🤗 Hugging Face 上的模型：DeepFloyd IF 实战
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deploy-with-openvino/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 Optimum-Intel 和 OpenVINO GenAI 优化和部署模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dialog-agents/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    是什么让对话代理有用？
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diffusers-turns-1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    🤗 Diffusers 一岁啦 !
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docmatix/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Docmatix - 超大文档视觉问答数据集
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../document-ai/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    加速 Document AI (文档智能) 发展
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dpo-trl/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 DPO 微调 Llama 2
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dpo_vlm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    为视觉语言多模态模型进行偏好优化
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dreambooth/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 Diffusers 通过 Dreambooth 技术来训练 Stable Diffusion
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dynamic_speculation_lookahead/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    更快的辅助生成: 动态推测
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../elixir-bumblebee/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    从 GPT2 到 Stable Diffusion：Elixir 社区迎来了 Hugging Face
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedding-quantization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    用于显著提高检索速度和降低成本的二进制和标量嵌入量化
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../encoder-decoder/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    基于 Transformers 的编码器-解码器模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../encrypted-llm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 FHE 实现加密大语言模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ethics-diffusers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    开发 Diffusers 库的道德行为指南
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ethics-soc-3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    道德与社会问题简报 #3: Hugging Face 上的道德开放性
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ethics-soc-4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ethics and Society Newsletter #4: Bias in Text-to-Image Models
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../falcon-180b/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Falcon 180B 登陆 Hugging Face Hub 🔥
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../falcon/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Falcon 登陆 Hugging Face 生态
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../falconmamba/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Falcon Mamba: 首个高效的无注意力机制 7B 模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fine-tune-whisper/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 🤗 Transformers 为多语种语音识别任务微调 Whisper 模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fine-video/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    揭秘 FineVideo 数据集构建的背后的秘密
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../finetune-florence2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    微调 Florence-2 - 微软的尖端视觉语言模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../game-jam-first-edition-results/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    首届开源 AI 游戏挑战赛事结果
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gaussian-splatting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3D 高斯点染简介
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gemma-july-update/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Google 最新发布： Gemma 2 2B, ShieldGemma 和 Gemma Scope
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gemma-peft/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 Hugging Face 微调 Gemma 模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gemma/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    欢迎 Gemma: Google 最新推出开放大语言模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gemma2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Google 发布最新开放大语言模型 Gemma 2，现已登陆 Hugging Face Hub
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../generative-ai-models-on-intel-cpu/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    越小越好：Q8-Chat，在英特尔至强 CPU 上体验高效的生成式 AI
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started-habana/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    基于 Habana Gaudi 的 Transformers 入门
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../google-cloud-model-garden/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在 Google Cloud 上轻松部署开放大语言模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gptq-integration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 AutoGPTQ 和 transformers 让大语言模型更轻量化
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gradio-5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gradio 5 现已发布
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gradio-lite/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gradio-Lite: 完全在浏览器里运行的无服务器 Gradio
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gradio-reload/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 Gradio 的“热重载”模式快速开发 AI 应用
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../graphml-classification/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 Transformers 进行图分类
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../habana-gaudi-2-benchmark/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    更快的训练和推理：对比 Habana Gaudi®2 和英伟达 A100 80GB
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../habana-gaudi-2-bloom/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    大语言模型快速推理：在 Habana Gaudi2 上推理 BLOOMZ
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hf-bitsandbytes-integration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    大规模 Transformer 模型 8 比特矩阵乘简介 - 基于 Hugging Face Transformers、Accelerate 以及 bitsandbytes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../how-to-generate/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    如何生成文本：通过 Transformers 用不同的解码方法生成文本
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hugging-face-wiz-security-blog/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hugging Face 与 Wiz Research 合作提高人工智能安全性
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../huggy-lingo/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Huggy Lingo：利用机器学习改进 Hugging Face Hub 上的语言元数据
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../idefics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    IDEFICS 简介：最先进视觉语言模型的开源复现
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../idefics2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Idefics2 简介：为社区而生的强大 8B 视觉语言模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../if/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在免费版 Google Colab 上使用 🧨 diffusers 运行 IF
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../image-similarity/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    基于 Hugging Face Datasets 和 Transformers 的图像相似性搜索
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../inference-endpoints-llm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    用 Hugging Face 推理端点部署 LLM
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../inference-update/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hugging Face 提供的推理（Inference）解决方案
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../infini-attention/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    一次失败的实验——无限注意力，我们为什么坚持实验
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../informer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 Informer 进行多元概率时间序列预测
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../instruction-tuning-sd/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 InstructPix2Pix 对 Stable Diffusion 进行指令微调
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../intel-fast-embedding/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    利用 🤗 Optimum Intel 和 fastRAG 在 CPU 上优化文本嵌入
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../intel-protein-language-model-protst/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在英特尔 Gaudi 2 上加速蛋白质语言模型 ProtST
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../intel-sapphire-rapids-inference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CPU 推理 | 使用英特尔 Sapphire Rapids 加速 PyTorch Transformers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../intel-sapphire-rapids/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用英特尔 Sapphire Rapids 加速 PyTorch Transformers 模型（第一部分）
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../intel-starcoder-quantization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 🤗 Optimum Intel 在英特尔至强上加速 StarCoder：Q8/Q4 及投机解码
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../intro-graphml/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    一文带你入门图机器学习
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introducing-csearch/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在 Transformers 中使用对比搜索生成可媲美人类水平的文本🤗
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduction-to-ggml/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ggml 简介
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jat/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    万事通，专精部分领域的多功能 Transformer 智能体
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kv-cache-quantization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    用 KV 缓存量化解锁长文本生成
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../langchain/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hugging Face x LangChain：全新 LangChain 合作伙伴包
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../large-language-models/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    大语言模型：新的摩尔定律？
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lcm_lora/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 LCM LoRA 4 步完成 SDXL 推理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../leaderboard-bigcodebench/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    BigCodeBench: 继 HumanEval 之后的新一代代码生成基准测试
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../leaderboard-decodingtrust/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    来自 AI Secure 实验室的 LLM 安全排行榜简介
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../leaderboard-medicalllm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    开源医疗大模型排行榜：健康领域大模型基准测试
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../leaderboard-patronus/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    企业场景排行榜简介：现实世界用例排行榜
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../llama2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Llama 2 来袭 - 在 Hugging Face 上玩转它
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../llama3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    欢迎 Llama 3：Meta 的新一代开源大语言模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../llama31/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Llama 3.1：405B/70B/8B 模型的多语言与长上下文能力解析
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../llama32/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    现在 Llama 具备视觉能力并可以在你的设备上运行 - 欢迎使用 Llama 3.2
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../long-range-transformers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    长程 transformer 模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lora/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 LoRA 进行 Stable Diffusion 的高效参数微调
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mask2former/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    通用图像分割任务：使用 Mask2Former 和 OneFormer
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../matryoshka/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    🪆 俄罗斯套娃嵌入模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../megatron-training/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    如何使用 Megatron-LM 训练语言模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mixtral/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    欢迎 Mixtral - 当前 Hugging Face 上最先进的 MoE 模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ml-for-games-1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    基于AI进行游戏开发：5天！创建一个农场游戏！第1部分
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ml-for-games-2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 ChatGPT 启发游戏创意｜基于 AI 5 天创建一个农场游戏，第 2 天
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ml-for-games-3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AI 制作 3D 素材｜基于 AI 5 天创建一个农场游戏，第 3 天
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ml-for-games-4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    制作 2D 素材｜基于 AI 5 天创建一个农场游戏，第 4 天
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ml-for-games-5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ChatGPT 设计游戏剧情 | 基于 AI 5 天创建一个农场游戏，完结篇！
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mms_adapters/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    微调用于多语言 ASR 的 MMS 适配器模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../moe/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    混合专家模型（MoE）详解
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multi-lora-serving/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TGI 多-LoRA：部署一次，搞定 30 个模型的推理服务
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../noob_intro_transformers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hugging Face Transformers 萌新完全指南
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../open-llm-leaderboard-drop/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    开放 LLM 排行榜：深入研究 DROP
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../open-llm-leaderboard-mmlu/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Open LLM 排行榜近况
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../open-llm-leaderboard-rlhf/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    基础大模型能像人类一样标注数据吗？
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../open-source-llms-as-agents/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    开源大语言模型作为 LangChain 智能体
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../optimize-llm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    面向生产的 LLM 优化
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../optimizing-bark/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 🤗 Transformers 优化 Bark
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../optimum-onnxruntime-training/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Optimum + ONNX Runtime: 更容易、更快地训练你的 Hugging Face 模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../os-llms/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hugging Face 的文本生成和大语言模型的开源生态
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../overview-quantization-transformers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    🤗 Transformers 中原生支持的量化方案概述
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packing-with-FA2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    通过打包 Flash Attention 来提升 Hugging Face 训练效率
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paligemma/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PaliGemma 正式发布 — Google 最新发布的前沿开放视觉语言模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../password-git-deprecation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hub 上的 Git 操作不再支持使用密码验证
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../peft/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    🤗 PEFT：在低资源硬件上对十亿规模模型进行参数高效微调
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../personal-copilot/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    个人编程助手：训练你自己的编码助手
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phi2-intel-meteor-lake/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    笔记本电脑上的聊天机器人：在英特尔 Meteor Lake 上运行 Phi-2
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../presidio-pii-detection/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在 Hub 上使用 Presidio 进行自动 PII 检测实验
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../putting_rl_back_in_rlhf_with_rloo/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    将强化学习重新引入 RLHF
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pycharm-integration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hugging Face 与 PyCharm 深度集成：轻松引入丰富的 AI 模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pytorch-ddp-accelerate-transformers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    从 PyTorch DDP 到 Accelerate 到 Trainer，轻松掌握分布式训练
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    使用 PyTorch 完全分片数据并行技术加速大模型训练
+  </span>
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quanto-diffusers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    基于 Quanto 和 Diffusers 的内存高效 transformer 扩散模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quanto-introduction/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quanto：PyTorch 量化工具包
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ram-efficient-pytorch-fsdp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 PyTorch FSDP 微调 Llama 2 70B
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../red-teaming/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    为大语言模型建立红队对抗
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reformer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Reformer 模型 - 突破语言建模的极限
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../regions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    HF Hub 现已加入存储区域功能
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../researcher-dataset-sharing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在 Hugging Face Hub 分享你的开源数据集
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rlhf/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ChatGPT 背后的“功臣”——RLHF 技术详解
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rwkv/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    RWKV -- transformer 与 RNN 的强强联合
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ryght-case-study/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ryght 在 Hugging Face 专家助力下赋能医疗保健和生命科学之旅
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../safecoder/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    推介 SafeCoder
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sc2-instruct/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    StarCoder2-Instruct: 完全透明和可自我对齐的代码生成
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sd3-5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    欢迎 Stable Diffusion 3.5 Large 加入 🧨 Diffusers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sd3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    欢迎 Stable Diffusion 3 加入 🧨 Diffusers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sd_distillation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    开源 SD-Small 和 SD-Tiny 知识蒸馏代码与权重
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sdxl_lora_advanced_script/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    全世界 LoRA 训练脚本，联合起来!
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setfit-absa/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SetFitABSA：基于 SetFit 的少样本、方面级情感分析
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setfit-optimum-intel/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在英特尔至强 CPU 上使用 🤗 Optimum Intel 实现超快 SetFit 推理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setfit/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SetFit: 高效的无提示少样本学习
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../smollm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SmolLM：一个超快速、超高性能的小模型集合
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../speecht5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 SpeechT5 进行语音合成、识别和更多功能
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sql-console/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    为数据集而生的 SQL 控制台
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stable-diffusion-finetuning-intel/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在英特尔 CPU 上微调 Stable Diffusion 模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stable-diffusion-inference-intel/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在英特尔 CPU 上加速 Stable Diffusion 推理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stable_diffusion/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用Diffusers来实现Stable Diffusion 🧨
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stackllama/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    “StackLLaMA”: 用 RLHF 训练 LLaMA 的手把手教程
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../starchat-alpha/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 StarCoder 创建一个编程助手
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../starcoder/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    StarCoder：最先进的代码大模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../starcoder2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    StarCoder2 及 The Stack v2 数据集正式发布
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../synthetic-data-save-costs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    合成数据：利用开源技术节约资金、时间和减少碳排放
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../synthid-text/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SynthID Text：在 AI 生成文本中应用不可见水印的新技术
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../t2i-sdxl-adapters/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在 SDXL 上用 T2I-Adapter 实现高效可控的文生图
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../text-to-video/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    深入理解文生视频模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../textgen-pipe-gaudi/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    基于英特尔® Gaudi® 2 AI 加速器的文本生成流水线
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tgi-benchmarking/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TGI 基准测试
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../the-age-of-ml-as-code/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    机器学习即代码的时代已经到来
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../the_n_implementation_details_of_rlhf_with_ppo/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 PPO 算法进行 RLHF 的 N 步实现细节
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../time-series-transformers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 🤗 Transformers 进行概率时间序列预测
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../train-dgx-cloud/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在 NVIDIA DGX Cloud上使用 H100 GPU 轻松训练模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../train-optimize-sd-intel/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    基于 NNCF 和 🤗 Optimum 面向 Intel CPU 对 Stable Diffusion 优化
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../train-sentence-transformers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    用 Sentence Transformers v3 训练和微调嵌入模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../train-your-controlnet/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 diffusers 训练你自己的 ControlNet 🧨
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../transformers-design-philosophy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    〜不要〜重复自己
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trl-ddpo/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 DDPO 在 TRL 中微调 Stable Diffusion 模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trl-peft/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在一张 24 GB 的消费级显卡上用 RLHF 微调 20B LLMs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trufflesecurity-partnership/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hugging Face 与 TruffleHog 成为合作伙伴，实现风险信息预警
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../unified-tool-use/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    对 LLM 工具使用进行统一
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../unity-api/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    如何安装和使用 Hugging Face Unity API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../unity-asr/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    如何在 Unity 游戏中集成 AI 语音识别？
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../unity-in-spaces/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    如何在 🤗 Space 上托管 Unity 游戏
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../universal_assisted_generation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    通用辅助生成：使用任意辅助模型加速解码
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vertex-colored-to-textured-mesh/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    顶点着色网格转换为 UV 映射的纹理化网格
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vision_language_pretraining/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    深入了解视觉语言模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vit-align/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Kakao Brain 的开源 ViT、ALIGN 和 COYO 文字
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vlms/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    视觉语言模型详解
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../watermarking/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    人工智能水印技术入门：工具与技巧
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../whisper-speculative-decoding/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用推测解码使 Whisper 实现 2 倍的推理加速
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../winning-aimo-progress-prize/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    NuminaMath 是如何荣膺首届 AIMO 进步奖的？
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xethub-joins-hf/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    XetHub 加入 Hugging Face!
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zero-shot-vqa-docmatix/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LAVE：使用 LLM 对 Docmatix 进行零样本 VQA 评估 - 我们还需要微调吗？
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ops/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    运维
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../blog/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    博客
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../resume/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    简历模板
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+    <a href="https://github.com/C-L-STARK/C-L-STARK.github.io/edit/master/docs/ml/pytorch-fsdp.md" title="Edit this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm-2.3 6.35c.22-.21.22-.56 0-.77L15.42 7.3a.53.53 0 0 0-.77 0l-1 1 2.05 2.05zM7 14.94V17h2.06l6.06-6.06-2.06-2.06z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="pytorch">使用 PyTorch 完全分片数据并行技术加速大模型训练<a class="headerlink" href="#pytorch" title="Permanent link">&para;</a></h1>
+<p>本文，我们将了解如何基于 PyTorch 最新的 <strong><a href="https://pytorch.org/blog/introducing-pytorch-filled-sharded-data-parallel-api/">完全分片数据并行 (Fully Sharded Data Parallel，FSDP)</a></strong> 功能用 <strong><a href="https://github.com/huggingface/accelerate">Accelerate</a></strong> 库来训练大模型。</p>
+<h1 id="_1">动机 🤗<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<p><strong>随着机器学习 (ML) 模型的规模、大小和参数量的不断增加，ML 从业者发现在自己的硬件上训练甚至加载如此大的模型变得越来越难。</strong> 一方面，人们发现大模型与较小的模型相比，学习速度更快 (数据和计算效率更高) 且会有显著的提升 [1]; 另一方面，在大多数硬件上训练此类模型变得令人望而却步。</p>
+<p>分布式训练是训练这些机器学习大模型的关键。 <strong>大规模分布式训练</strong> 领域最近取得了不少重大进展，我们将其中一些最突出的进展总结如下:</p>
+<ol>
+<li>
+<p>使用 ZeRO 数据并行 - 零冗余优化器 [2]</p>
+</li>
+<li>
+<p>阶段 1: 跨数据并行进程 / GPU 对<code>优化器状态</code> 进行分片</p>
+</li>
+<li>阶段 2: 跨数据并行进程/ GPU 对<code>优化器状态 + 梯度</code> 进行分片</li>
+<li>阶段 3: 跨数据并行进程 / GPU 对<code>优化器状态 + 梯度 + 模型参数</code> 进行分片</li>
+<li>
+<p>CPU 卸载: 进一步将 ZeRO 阶段 2 的<code>优化器状态 + 梯度</code> 卸载到 CPU 上 [3]</p>
+</li>
+<li>
+<p>张量并行 [4]: 模型并行的一种形式，通过对各层参数进行精巧的跨加速器 / GPU 分片，在实现并行计算的同时避免了昂贵的通信同步开销。</p>
+</li>
+<li>流水线并行 [5]: 模型并行的另一种形式，其将模型的不同层放在不同的加速器 / GPU 上，并利用流水线来保持所有加速器同时运行。举个例子，在第 2 个加速器 / GPU 对第 1 个 micro batch 进行计算的同时，第 1 个加速器 / GPU 对第 2 个 micro batch 进行计算。</li>
+<li>3D 并行 [3]: 采用 <code>ZeRO 数据并行 + 张量并行 + 流水线并行</code> 的方式来训练数百亿参数的大模型。例如，BigScience 176B 语言模型就采用了该并行方式 [6]。</li>
+</ol>
+<p>本文我们主要关注 ZeRO 数据并行，更具体地讲是 PyTorch 最新的 <strong><a href="https://pytorch.org/blog/introducing-pytorch-complete-sharded-data-parallel-api/">完全分片数据并行 (Fully Sharded Data Parallel，FSDP)</a></strong> 功能。 <strong><a href="https://github.com/microsoft/deepspeed">DeepSpeed</a></strong> 和 <strong><a href="https://github.com/facebookresearch/fairscale/">FairScale</a></strong> 实现了 ZeRO 论文的核心思想。我们已经将其集成到了 <code>transformers</code> 的 <code>Trainer</code> 中，详见博文 <a href="https://huggingface.co/blog/zero-deepspeed-fairscale">通过 DeepSpeed 和 FairScale 使用 ZeRO 进行更大更快的训练</a>[10]。最近，PyTorch 已正式将 Fairscale FSDP 整合进其 Distributed 模块中，并增加了更多的优化。</p>
+<h1 id="accelerate-pytorch-fsdp">Accelerate 🚀: 无需更改任何代码即可使用 PyTorch FSDP<a class="headerlink" href="#accelerate-pytorch-fsdp" title="Permanent link">&para;</a></h1>
+<p>我们以基于 GPT-2 的 Large (762M) 和 XL (1.5B) 模型的因果语言建模任务为例。</p>
+<p>以下是预训练 GPT-2 模型的代码。其与 <a href="https://github.com/huggingface/transformers/blob/main/examples/pytorch/language-modeling/run_clm_no_trainer.py">此处</a> 的官方因果语言建模示例相似，仅增加了 2 个参数 <code>n_train</code> (2000) 和 <code>n_val</code> (500) 以防止对整个数据集进行预处理/训练，从而支持更快地进行概念验证。</p>
+<p><a href="https://huggingface.co/blog/assets/62_pytorch_fsdp/run_clm_no_trainer.py" target="_parent">run_clm_no_trainer.py</a></p>
+<p>运行 <code>accelerate config</code> 命令后得到的 FSDP 配置示例如下:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>compute_environment:<span class="w"> </span>LOCAL_MACHINE
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>deepspeed_config:<span class="w"> </span><span class="o">{}</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>distributed_type:<span class="w"> </span>FSDP
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>fsdp_config:
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span>min_num_params:<span class="w"> </span><span class="m">2000</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span>offload_params:<span class="w"> </span><span class="nb">false</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span>sharding_strategy:<span class="w"> </span><span class="m">1</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>machine_rank:<span class="w"> </span><span class="m">0</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>main_process_ip:<span class="w"> </span>null
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>main_process_port:<span class="w"> </span>null
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>main_training_function:<span class="w"> </span>main
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>mixed_precision:<span class="w"> </span><span class="s1">&#39;no&#39;</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>num_machines:<span class="w"> </span><span class="m">1</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>num_processes:<span class="w"> </span><span class="m">2</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>use_cpu:<span class="w"> </span><span class="nb">false</span>
+</span></code></pre></div>
+<h2 id="gpu-fsdp">多 GPU FSDP<a class="headerlink" href="#gpu-fsdp" title="Permanent link">&para;</a></h2>
+<p>本文我们使用单节点多 GPU 上作为实验平台。我们比较了分布式数据并行 (DDP) 和 FSDP 在各种不同配置下的性能。我们可以看到，对 GPT-2 Large(762M) 模型而言，DDP 尚能够支持其中某些 batch size 而不会引起内存不足 (OOM) 错误。但当使用 GPT-2 XL (1.5B) 时，即使 batch size 为 1，DDP 也会失败并出现 OOM 错误。同时，我们看到，FSDP 可以支持以更大的 batch size 训练 GPT-2 Large 模型，同时它还可以使用较大的 batch size 训练 DDP 训练不了的 GPT-2 XL 模型。</p>
+<p><strong>硬件配置</strong>: 2 张 24GB 英伟达 Titan RTX GPU。</p>
+<p>GPT-2 Large 模型 (762M 参数) 的训练命令如下:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">BS</span><span class="o">=</span><span class="c1">#`try with different batch sizes till you don&#39;t get OOM error,</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1">#i.e., start with larger batch size and go on decreasing till it fits on GPU`</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nb">time</span><span class="w"> </span>accelerate<span class="w"> </span>launch<span class="w"> </span>run_clm_no_trainer.py<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>--model_name_or_path<span class="w"> </span>gpt2-large<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>--dataset_name<span class="w"> </span>wikitext<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>--dataset_config_name<span class="w"> </span>wikitext-2-raw-v1<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>--per_device_train_batch_size<span class="w"> </span><span class="nv">$BS</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>--per_device_eval_batch_size<span class="w"> </span><span class="nv">$BS</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>--num_train_epochs<span class="w"> </span><span class="m">1</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>--block_size<span class="w"> </span><span class="m">12</span>
+</span></code></pre></div>
+<p>FSDP 运行截屏:</p>
+<p><a class="glightbox" href="https://huggingface.co/blog/assets/62_pytorch_fsdp/sample_fsdp_run.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="FSDP 运行截屏" src="https://huggingface.co/blog/assets/62_pytorch_fsdp/sample_fsdp_run.png" /></a></p>
+<table>
+<thead>
+<tr>
+<th>并行方法</th>
+<th>最大 Batch Size ($BS)</th>
+<th>大致训练时间 (分钟)</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DDP</td>
+<td>7</td>
+<td>15</td>
+<td></td>
+</tr>
+<tr>
+<td>DDP + FP16</td>
+<td>7</td>
+<td>8</td>
+<td></td>
+</tr>
+<tr>
+<td>FSDP (配置: SHARD_GRAD_OP)</td>
+<td>11</td>
+<td>11</td>
+<td></td>
+</tr>
+<tr>
+<td>FSDP (配置: min_num_params = 1M + FULL_SHARD)</td>
+<td>15</td>
+<td>12</td>
+<td></td>
+</tr>
+<tr>
+<td>FSDP (配置: min_num_params = 2K + FULL_SHARD)</td>
+<td>15</td>
+<td>13</td>
+<td></td>
+</tr>
+<tr>
+<td>FSDP (配置: min_num_params = 1M + FULL_SHARD + CPU 卸载)</td>
+<td>20</td>
+<td>23</td>
+<td></td>
+</tr>
+<tr>
+<td>FSDP (配置: min_num_params = 2K + FULL_SHARD + CPU 卸载)</td>
+<td>22</td>
+<td>24</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>表 1: GPT-2 Large (762M) 模型 FSDP 训练性能基准测试</p>
+<p>从表 1 中我们可以看到，相对于 DDP 而言，FSDP <strong>支持更大的 batch size</strong>，在不使用和使用 CPU 卸载设置的情况下 FSDP 支持的最大 batch size 分别可达 DDP 的 <strong>2 倍及 3 倍</strong>。从训练时间来看，混合精度的 DDP 最快，其后是分别使用 ZeRO 阶段 2 和阶段 3 的 FSDP。由于因果语言建模的任务的上下文序列长度 ( <code>--block_size</code> ) 是固定的，因此 FSDP 在训练时间上加速还不是太高。对于动态 batch size 的应用而言，支持更大 batch size 的 FSDP 可能会在训练时间方面有更大的加速。目前，FSDP 的混合精度支持在 <code>transformers</code> 上还存在一些 <a href="https://github.com/pytorch/pytorch/issues/75676">问题</a>。一旦问题解决，训练时间将会进一步显著缩短。</p>
+<h3 id="cpu-gpu">使用 CPU 卸载来支持放不进 GPU 显存的大模型训练<a class="headerlink" href="#cpu-gpu" title="Permanent link">&para;</a></h3>
+<p>训练 GPT-2 XL (1.5B) 模型的命令如下:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">BS</span><span class="o">=</span><span class="c1">#`try with different batch sizes till you don&#39;t get OOM error,</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1">#i.e., start with larger batch size and go on decreasing till it fits on GPU`</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nb">time</span><span class="w"> </span>accelerate<span class="w"> </span>launch<span class="w"> </span>run_clm_no_trainer.py<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>--model_name_or_path<span class="w"> </span>gpt2-xl<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>--dataset_name<span class="w"> </span>wikitext<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>--dataset_config_name<span class="w"> </span>wikitext-2-raw-v1<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>--per_device_train_batch_size<span class="w"> </span><span class="nv">$BS</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>--per_device_eval_batch_size<span class="w"> </span><span class="nv">$BS</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>--num_train_epochs<span class="w"> </span><span class="m">1</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>--block_size<span class="w"> </span><span class="m">12</span>
+</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>并行方法</th>
+<th>最大 Batch Size ($BS)</th>
+<th>GPU 数</th>
+<th>大致训练时间 (小时)</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DDP</td>
+<td>1</td>
+<td>1</td>
+<td>NA</td>
+<td>OOM Error RuntimeError: CUDA out of memory. Tried to allocate 40.00 MiB (GPU 0; 23.65 GiB total capacity; 22.27 GiB already allocated; 20.31 MiB free; 22.76 GiB reserved in total by PyTorch)</td>
+</tr>
+<tr>
+<td>DDP</td>
+<td>1</td>
+<td>2</td>
+<td>NA</td>
+<td>OOM Error RuntimeError: CUDA out of memory. Tried to allocate 40.00 MiB (GPU 0; 23.65 GiB total capacity; 22.27 GiB already allocated; 20.31 MiB free; 22.76 GiB reserved in total by PyTorch)</td>
+</tr>
+<tr>
+<td>DDP + FP16</td>
+<td>1</td>
+<td>1</td>
+<td>NA</td>
+<td>OOM Error RuntimeError: CUDA out of memory. Tried to allocate 40.00 MiB (GPU 0; 23.65 GiB total capacity; 22.27 GiB already allocated; 20.31 MiB free; 22.76 GiB reserved in total by PyTorch)</td>
+</tr>
+<tr>
+<td>FSDP (配置: min_num_params = 2K)</td>
+<td>5</td>
+<td>2</td>
+<td>0.6</td>
+<td></td>
+</tr>
+<tr>
+<td>FSDP (配置: min_num_params = 2K + CPU 卸载)</td>
+<td>10</td>
+<td>1</td>
+<td>3</td>
+<td></td>
+</tr>
+<tr>
+<td>FSDP (配置: min_num_params = 2K + CPU 卸载)</td>
+<td>14</td>
+<td>2</td>
+<td>1.16</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>表 2: GPT-2 XL (1.5B) 模型上的 FSDP 基准测试</p>
+<p>从表 2 中，我们可以观察到 DDP (带和不带 fp16) 甚至在 batch size 为 1 的情况下就会出现 CUDA OOM 错误，从而无法运行。而开启了 ZeRO- 阶段 3 的 FSDP 能够以 batch size 为 5 (总 batch size = 10 (5 <span class="arithmatex">\(\times\)</span> 2) ) 在 2 个 GPU 上运行。当使用 2 个 GPU 时，开启了 CPU 卸载的 FSDP 还能将最大 batch size 进一步增加到每 GPU 14。 <strong>开启了 CPU 卸载的 FSDP 可以在单个 GPU 上训练 GPT-2 1.5B 模型，batch size 为 10</strong>。这使得机器学习从业者能够用最少的计算资源来训练大模型，从而助力大模型训练民主化。</p>
+<h2 id="accelerate-fsdp">Accelerate 的 FSDP 集成的功能和限制<a class="headerlink" href="#accelerate-fsdp" title="Permanent link">&para;</a></h2>
+<p>下面，我们深入了解以下 Accelerate 对 FSDP 的集成中，支持了那些功能，有什么已知的限制。</p>
+<p><strong>支持 FSDP 所需的 PyTorch 版本</strong>: PyTorch Nightly 或 1.12.0 之后的版本。</p>
+<p><strong>命令行支持的配置:</strong></p>
+<ol>
+<li><strong>分片策略</strong>: [1] FULL_SHARD, [2] SHARD_GRAD_OP</li>
+<li><strong>Min Num Params</strong>: FSDP 默认自动包装的最小参数量。</li>
+<li><strong>Offload Params</strong>: 是否将参数和梯度卸载到 CPU。</li>
+</ol>
+<p>如果想要对更多的控制参数进行配置，用户可以利用 <code>FullyShardedDataParallelPlugin</code> ，其可以指定 <code>auto_wrap_policy</code> 、 <code>backward_prefetch</code> 以及 <code>ignored_modules</code> 。</p>
+<p>创建该类的实例后，用户可以在创建 Accelerator 对象时把该实例传进去。</p>
+<p>有关这些选项的更多信息，请参阅 PyTorch <a href="https://github.com/pytorch/pytorch/blob/0df2e863fbd5993a7b9e652910792bd21a516ff3/torch/distributed/fsdp/filled_sharded_data_parallel.py#L236">FullyShardedDataParallel</a> 代码。</p>
+<p>接下来，我们体会下 <code>min_num_params</code> 配置的重要性。以下内容摘自 [8]，它详细说明了 FSDP 自动包装策略的重要性。</p>
+<p><a class="glightbox" href="https://huggingface.co/blog/assets/62_pytorch_fsdp/auto_wrap_importance.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="FSDP 自动包装策略的重要性" src="https://huggingface.co/blog/assets/62_pytorch_fsdp/auto_wrap_importance.png" /></a></p>
+<p>(图源: <a href="https://pytorch.org/tutorials/intermediate/FSDP_tutorial.html">链接</a>)</p>
+<p>当使用 <code>default_auto_wrap_policy</code> 时，如果该层的参数量超过 <code>min_num_params</code> ，则该层将被包装在一个 FSDP 模块中。官方有一个在 GLUE MRPC 任务上微调 BERT-Large (330M) 模型的示例代码，其完整地展示了如何正确使用 FSDP 功能，其中还包含了用于跟踪峰值内存使用情况的代码。</p>
+<p><a href="https://github.com/huggingface/accelerate/tree/main/examples/by_feature/fsdp_with_peak_mem_tracking.py">fsdp_with_peak_mem_tracking.py</a></p>
+<p>我们利用 Accelerate 的跟踪功能来记录训练和评估期间的峰值内存使用情况以及模型准确率指标。下图展示了 wandb <a href="https://wandb.ai/smangrul/FSDP-Test?workspace=user-smangrul">实验台</a> 页面的截图。</p>
+<p><a class="glightbox" href="https://huggingface.co/blog/assets/62_pytorch_fsdp/wandb_run.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="wandb 实验台" src="https://huggingface.co/blog/assets/62_pytorch_fsdp/wandb_run.png" /></a></p>
+<p>我们可以看到，DDP 占用的内存是使用了自动模型包装功能的 FSDP 的两倍。不带自动模型包装的 FSDP 比带自动模型包装的 FSDP 的内存占用更多，但比 DDP 少得多。与 <code>min_num_params=1M</code> 时相比， <code>min_num_params=2k</code> 时带自动模型包装的 FSDP 占用的内存略少。这凸显了 FSDP 自动模型包装策略的重要性，用户应该调整 <code>min_num_params</code> 以找到能显著节省内存又不会导致大量通信开销的设置。如 [8] 中所述，PyTorch 团队也在为此开发自动配置调优工具。</p>
+<h3 id="_2"><strong>需要注意的一些事项</strong><a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p>PyTorch FSDP 会自动对模型子模块进行包装、将参数摊平并对其进行原位分片。因此，在模型包装之前创建的任何优化器都会被破坏并导致更多的内存占用。因此，强烈建议在对模型调用 <code>prepare</code> 方法后再创建优化器，这样效率会更高。对单模型而言，如果没有按照顺序调用的话， <code>Accelerate</code> 会抛出以下告警信息，并自动帮你包装模型并创建优化器。</p>
+<blockquote>
+<p>FSDP Warning: When using FSDP, it is efficient and recommended to call prepare for the model before creating the optimizer
+</p>
+</blockquote>
+</li>
+</ul>
+<p>即使如此，我们还是推荐用户在使用 FSDP 时用以下方式显式准备模型和优化器:</p>
+<div class="language-diff highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>model = AutoModelForSequenceClassification.from_pretrained(&quot;bert-base-cased&quot;, return_dict=True)
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="gi">+ model = accelerator.prepare(model)</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>optimizer = torch.optim.AdamW(params=model.parameters(), lr=lr)
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="gd">- model, optimizer, train_dataloader, eval_dataloader, lr_scheduler = accelerator.prepare(model,</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="gd">- optimizer, train_dataloader, eval_dataloader, lr_scheduler</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="gd">- )</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="gi">+ optimizer, train_dataloader, eval_dataloader, lr_scheduler = accelerator.prepare(</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="gi">+ optimizer, train_dataloader, eval_dataloader, lr_scheduler</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="gi">+ )</span>
+</span></code></pre></div>
+<ul>
+<li>
+<p>对单模型而言，如果你的模型有多组参数，而你想为它们设置不同优化器超参。此时，如果你对整个模型统一调用 <code>prepare</code> 方法，这些参数的组别信息会丢失，你会看到如下告警信息:</p>
+<blockquote>
+<p>FSDP Warning: When using FSDP, several parameter groups will be conflated into a single one due to nested module wrapping and parameter flattening.
+</p>
+</blockquote>
+</li>
+</ul>
+<p>告警信息表明，在使用 FSDP 对模型进行包装后，之前创建的参数组信息丢失了。因为 FSDP 会将嵌套式的模块参数摊平为一维数组 (一个数组可能包含多个子模块的参数)。举个例子，下面是 GPU 0 上 FSDP 模型的有名称的参数 (当使用 2 个 GPU 时，FSDP 会把第一个分片的参数给 GPU 0， 因此其一维数组中大约会有 55M (110M / 2) 个参数)。此时，如果我们在 FSDP 包装前将 BERT-Base 模型的 [bias, LayerNorm.weight] 参数的权重衰减设为 0，则在模型包装后，该设置将无效。原因是，你可以看到下面这些字符串中均已不含这俩参数的名字，这俩参数已经被并入了其他层。想要了解更多细节，可参阅本 <a href="https://github.com/pytorch/pytorch/issues/76501">问题</a> (其中写道: <code>原模型参数没有 .grads 属性意味着它们无法单独被优化器优化 (这就是我们为什么不能支持对多组参数设置不同的优化器超参)</code> )。</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>{
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>&#39;_fsdp_wrapped_module.flat_param&#39;: torch.Size([494209]),
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>&#39;_fsdp_wrapped_module._fpw_module.bert.embeddings.word_embeddings._fsdp_wrapped_module.flat_param&#39;: torch.Size([11720448]),
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>&#39;_fsdp_wrapped_module._fpw_module.bert.encoder._fsdp_wrapped_module.flat_param&#39;: torch.Size([42527232])
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>}
+</span></code></pre></div>
+<ul>
+<li>如果是多模型情况，须在创建优化器之前调用模型 <code>prepare</code> 方法，否则会抛出错误。</li>
+<li><del>FSDP 目前不支持混合精度，我们正在等待 PyTorch 修复对其的支持。</del></li>
+</ul>
+<h1 id="_3">工作原理 📝<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h1>
+<p><a class="glightbox" href="https://huggingface.co/blog/assets/62_pytorch_fsdp/FSDP_workflow.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="FSDP 工作流" src="https://huggingface.co/blog/assets/62_pytorch_fsdp/FSDP_workflow.png" /></a></p>
+<p>(图源: <a href="https://pytorch.org/blog/introducing-pytorch-fully-sharded-data-parallel-api/">链接</a>)</p>
+<p>上述工作流概述了 FSDP 的幕后流程。我们先来了解一下 DDP 是如何工作的，然后再看 FSDP 是如何改进它的。在 DDP 中，每个工作进程 (加速器 / GPU) 都会保留一份模型的所有参数、梯度和优化器状态的副本。每个工作进程会获取不同的数据，这些数据会经过前向传播，计算损失，然后再反向传播以生成梯度。接着，执行 all-reduce 操作，此时每个工作进程从其余工作进程获取梯度并取平均。这样一轮下来，每个工作进程上的梯度都是相同的，且都是全局梯度，接着优化器再用这些梯度来更新模型参数。我们可以看到，每个 GPU 上都保留完整副本会消耗大量的显存，这限制了该方法所能支持的 batch size 以及模型尺寸。</p>
+<p>FSDP 通过让各数据并行工作进程分片存储优化器状态、梯度和模型参数来解决这个问题。进一步地，还可以通过将这些张量卸载到 CPU 内存来支持那些 GPU 显存容纳不下的大模型。在具体运行时，与 DDP 类似，FSDP 的每个工作进程获取不同的数据。在前向传播过程中，如果启用了 CPU 卸载，则首先将本地分片的参数搬到 GPU/加速器。然后，每个工作进程对给定的 FSDP 包装模块/层执行 all-gather 操作以获取所需的参数，执行计算，然后释放/清空其他工作进程的参数分片。在对所有 FSDP 模块全部执行该操作后就是计算损失，然后是后向传播。在后向传播期间，再次执行 all-gather 操作以获取给定 FSDP 模块所需的所有参数，执行计算以获得局部梯度，然后再次释放其他工作进程的分片。最后，使用 reduce-scatter 操作对局部梯度进行平均并将相应分片给对应的工作进程，该操作使得每个工作进程都可以更新其本地分片的参数。如果启用了 CPU 卸载的话，梯度会传给 CPU，以便直接在 CPU 上更新参数。</p>
+<p>如欲深入了解 PyTorch FSDP 工作原理以及相关实验及其结果，请参阅 [7,8,9]。</p>
+<h1 id="_4">问题<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h1>
+<p>如果在 accelerate 中使用 PyTorch FSDP 时遇到任何问题，请提交至 <a href="https://github.com/huggingface/accelerate/issues">accelerate</a>。</p>
+<p>但如果你的问题是跟 PyTorch FSDP 配置和部署有关的 - 你需要提交相应的问题至 <a href="https://github.com/pytorch/pytorch/issues">PyTorch</a>。</p>
+<h1 id="_5">参考文献<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h1>
+<p>[1] <a href="http://nlp.cs.berkeley.edu/pubs/Li-Wallace-Shen-Lin-Keutzer-Klein-Gonzalez_2020_Transformers_paper.pdf">Train Large, Then Compress: Rethinking Model Size for Efficient Training and Inference of Transformers</a></p>
+<p>[2] <a href="https://arxiv.org/pdf/1910.02054v3.pdf">ZeRO: Memory Optimizations Toward Training Trillion Parameter Models</a></p>
+<p>[3] <a href="https://www.microsoft.com/en-us/research/blog/deepspeed-extreme-scale-model-training-for-everyone/">DeepSpeed: Extreme-scale model training for everyone - Microsoft Research</a></p>
+<p>[4] <a href="https://arxiv.org/pdf/1909.08053.pdf">Megatron-LM: Training Multi-Billion Parameter Language Models Using
+Model Parallelism</a></p>
+<p>[5] <a href="https://ai.googleblog.com/2019/03/introducing-gpipe-open-source-library.html">Introducing GPipe, an Open Source Library for Efficiently Training Large-scale Neural Network Models</a></p>
+<p>[6] <a href="https://bigscience.huggingface.co/blog/which-hardware-to-train-a-176b-parameters-model">Which hardware do you need to train a 176B parameters model?</a></p>
+<p>[7] <a href="https://pytorch.org/blog/introducing-pytorch-fully-sharded-data-parallel-api/">Introducing PyTorch Fully Sharded Data Parallel (FSDP) API | PyTorch</a></p>
+<p>[8] <a href="https://pytorch.org/tutorials/intermediate/FSDP_tutorial.html">Getting Started with Fully Sharded Data Parallel(FSDP) — PyTorch Tutorials 1.11.0+cu102 documentation</a></p>
+<p>[9] <a href="https://medium.com/pytorch/training-a-1-trillion-parameter-model-with-pytorch-fully-sharded-data-parallel-on-aws-3ac13aa96cff">Training a 1 Trillion Parameter Model With PyTorch Fully Sharded Data Parallel on AWS | by PyTorch | PyTorch | Mar, 2022 | Medium</a></p>
+<p>[10] <a href="https://huggingface.co/blog/zero-deepspeed-fairscale">Fit More and Train Faster With ZeRO via DeepSpeed and FairScale</a></p>
+
+
+
+
+
+
+
+  
+    
+  
+  
+    
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 1, 2024</span>
+  </span>
+
+    
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Created">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 1, 2024</span>
+  </span>
+
+    
+    
+      
+  
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Contributors">
+      
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 5.5A3.5 3.5 0 0 1 15.5 9a3.5 3.5 0 0 1-3.5 3.5A3.5 3.5 0 0 1 8.5 9 3.5 3.5 0 0 1 12 5.5M5 8c.56 0 1.08.15 1.53.42-.15 1.43.27 2.85 1.13 3.96C7.16 13.34 6.16 14 5 14a3 3 0 0 1-3-3 3 3 0 0 1 3-3m14 0a3 3 0 0 1 3 3 3 3 0 0 1-3 3c-1.16 0-2.16-.66-2.66-1.62a5.54 5.54 0 0 0 1.13-3.96c.45-.27.97-.42 1.53-.42M5.5 18.25c0-2.07 2.91-3.75 6.5-3.75s6.5 1.68 6.5 3.75V20h-13zM0 20v-1.5c0-1.39 1.89-2.56 4.45-2.9-.59.68-.95 1.62-.95 2.65V20zm24 0h-3.5v-1.75c0-1.03-.36-1.97-.95-2.65 2.56.34 4.45 1.51 4.45 2.9z"/></svg>
+      
+    </span>
+    <nav>
+      
+    </nav>
+  </span>
+
+    
+    
+  </aside>
+
+
+  
+
+
+
+  <form class="md-feedback" name="feedback" hidden>
+    <fieldset>
+      <legend class="md-feedback__title">
+        Was this page helpful?
+      </legend>
+      <div class="md-feedback__inner">
+        <div class="md-feedback__list">
+          
+            <button class="md-feedback__icon md-icon" type="submit" title="This page was helpful" data-md-value="1">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 12a8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8m2 0a10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2a10 10 0 0 1 10 10M10 9.5c0 .8-.7 1.5-1.5 1.5S7 10.3 7 9.5 7.7 8 8.5 8s1.5.7 1.5 1.5m7 0c0 .8-.7 1.5-1.5 1.5S14 10.3 14 9.5 14.7 8 15.5 8s1.5.7 1.5 1.5m-5 7.73c-1.75 0-3.29-.73-4.19-1.81L9.23 14c.45.72 1.52 1.23 2.77 1.23s2.32-.51 2.77-1.23l1.42 1.42c-.9 1.08-2.44 1.81-4.19 1.81"/></svg>
+            </button>
+          
+            <button class="md-feedback__icon md-icon" type="submit" title="This page could be improved" data-md-value="0">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 12a8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8m2 0a10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2a10 10 0 0 1 10 10m-6.5-4c.8 0 1.5.7 1.5 1.5s-.7 1.5-1.5 1.5-1.5-.7-1.5-1.5.7-1.5 1.5-1.5M10 9.5c0 .8-.7 1.5-1.5 1.5S7 10.3 7 9.5 7.7 8 8.5 8s1.5.7 1.5 1.5m2 4.5c1.75 0 3.29.72 4.19 1.81l-1.42 1.42C14.32 16.5 13.25 16 12 16s-2.32.5-2.77 1.23l-1.42-1.42C8.71 14.72 10.25 14 12 14"/></svg>
+            </button>
+          
+        </div>
+        <div class="md-feedback__note">
+          
+            <div data-md-value="1" hidden>
+              
+              
+                
+              
+              Thanks for your feedback!
+            </div>
+          
+            <div data-md-value="0" hidden>
+              
+              
+                
+              
+              Thanks for your feedback! Help us improve this page by using our <a href="..." target="_blank" rel="noopener">feedback form</a>.
+            </div>
+          
+        </div>
+      </div>
+    </fieldset>
+  </form>
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../pytorch-ddp-accelerate-transformers/" class="md-footer__link md-footer__link--prev" aria-label="Previous: 从 PyTorch DDP 到 Accelerate 到 Trainer，轻松掌握分布式训练">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256l137.3-137.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                从 PyTorch DDP 到 Accelerate 到 Trainer，轻松掌握分布式训练
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../quanto-diffusers/" class="md-footer__link md-footer__link--next" aria-label="Next: 基于 Quanto 和 Diffusers 的内存高效 transformer 扩散模型">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                基于 Quanto 和 Diffusers 的内存高效 transformer 扩散模型
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2020 - 2024 FastX-AI
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+    
+    
+    
+    <a href="https://fastx-ai.com" target="_blank" rel="noopener me" title="fastx-ai" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M433 179.11c0-97.2-63.71-125.7-63.71-125.7-62.52-28.7-228.56-28.4-290.48 0 0 0-63.72 28.5-63.72 125.7 0 115.7-6.6 259.4 105.63 289.1 40.51 10.7 75.32 13 103.33 11.4 50.81-2.8 79.32-18.1 79.32-18.1l-1.7-36.9s-36.31 11.4-77.12 10.1c-40.41-1.4-83-4.4-89.63-54a102.5 102.5 0 0 1-.9-13.9c85.63 20.9 158.65 9.1 178.75 6.7 56.12-6.7 105-41.3 111.23-72.9 9.8-49.8 9-121.5 9-121.5m-75.12 125.2h-46.63v-114.2c0-49.7-64-51.6-64 6.9v62.5h-46.33V197c0-58.5-64-56.6-64-6.9v114.2H90.19c0-122.1-5.2-147.9 18.41-175 25.9-28.9 79.82-30.8 103.83 6.1l11.6 19.5 11.6-19.5c24.11-37.1 78.12-34.8 103.83-6.1 23.71 27.3 18.4 53 18.4 175z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="mailto:x.stark.dylan@gmail.com" target="_blank" rel="noopener" title="send me an email" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M64 112c-8.8 0-16 7.2-16 16v22.1l172.5 141.6c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16zM48 212.2V384c0 8.8 7.2 16 16 16h384c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0zM0 128c0-35.3 28.7-64 64-64h384c35.3 0 64 28.7 64 64v256c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="/contact" target="_blank" rel="noopener" title="contact us" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 4H7a5 5 0 0 0-5 5v11h18a2 2 0 0 0 2-2V9a5 5 0 0 0-5-5m-7 14H4V9a3 3 0 0 1 3-3 3 3 0 0 1 3 3zm9-3h-2v-2h-4v-2h6zM9 11H5V9h4z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.indexes", "navigation.instant.progress", "navigation.tracking", "navigation.tabs", "navigation.top", "navigation.footer", "navigation.prune", "content.action.edit", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips", "header.autohide", "announce.dismiss", "search.suggest", "search.highlight", "search.share", "toc.follow", "toc.integrate"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+<!-- Add scripts that need to run before here -->
+
+      <script src="../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+        <script src="../../javascripts/extra.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+<!-- Add scripts that need to run afterwards here -->
+
+  <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body>
+</html>

@@ -1,0 +1,6522 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="FastDoc is a website that you can get started with FastX AI in minutes.">
+      
+      
+      
+        <link rel="canonical" href="https://doc.fastx-ai.com/ml/dedup/">
+      
+      
+        <link rel="prev" href="../daily-papers/">
+      
+      
+        <link rel="next" href="../deep-learning-with-proteins/">
+      
+      
+        <link rel="alternate" type="application/rss+xml" title="RSS feed" href="../../feed_rss_created.xml">
+        <link rel="alternate" type="application/rss+xml" title="RSS feed of updated content" href="../../feed_rss_updated.xml">
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.46">
+    
+    
+      
+        <title>BigCode 背后的大规模数据去重 - FastDocs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6f8fc17f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-XXXXXXXXXX"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-XXXXXXXXXX",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+      
+        <meta  property="og:type"  content="website" >
+      
+        <meta  property="og:title"  content="BigCode 背后的大规模数据去重 - FastDocs" >
+      
+        <meta  property="og:description"  content="FastDoc is a website that you can get started with FastX AI in minutes." >
+      
+        <meta  property="og:image"  content="https://doc.fastx-ai.com/assets/images/social/ml/dedup.png" >
+      
+        <meta  property="og:image:type"  content="image/png" >
+      
+        <meta  property="og:image:width"  content="1200" >
+      
+        <meta  property="og:image:height"  content="630" >
+      
+        <meta  property="og:url"  content="https://doc.fastx-ai.com/ml/dedup/" >
+      
+        <meta  name="twitter:card"  content="summary_large_image" >
+      
+        <meta  name="twitter:title"  content="BigCode 背后的大规模数据去重 - FastDocs" >
+      
+        <meta  name="twitter:description"  content="FastDoc is a website that you can get started with FastX AI in minutes." >
+      
+        <meta  name="twitter:image"  content="https://doc.fastx-ai.com/assets/images/social/ml/dedup.png" >
+      
+    
+    
+   <link href="../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }
+    .gscrollbar-fixer { padding-right: 15px; }
+    .gdesc-inner { font-size: 0.75rem; }
+    body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+    body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../../assets/javascripts/glightbox.min.js"></script></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#bigcode" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+              <button class="md-banner__button md-icon" aria-label="Don't show this again">
+                
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+              </button>
+            
+            
+<p style="text-align: center">
+  Welcome to <span style="font-size: bold">FastDocs</span>! Just feel free to start read docs!
+</p>
+
+          </div>
+          
+            <script>var el=document.querySelector("[data-md-component=announce]");if(el){var content=el.querySelector(".md-typeset");__md_hash(content.innerHTML)===__md_get("__announce")&&(el.hidden=!0)}</script>
+          
+        </aside>
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="FastDocs" class="md-header__button md-logo" aria-label="FastDocs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            FastDocs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              BigCode 背后的大规模数据去重
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256l137.3-137.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/C-L-STARK/C-L-STARK.github.io" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1M480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2m-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3m-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1"/></svg>
+  </div>
+  <div class="md-source__repository">
+    C-L-STARK/C-L-STARK.github.io
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+    
+  
+  主页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../backend/" class="md-tabs__link">
+        
+  
+    
+  
+  后端
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../web/" class="md-tabs__link">
+        
+  
+    
+  
+  前端
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../client/" class="md-tabs__link">
+        
+  
+    
+  
+  客户端
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../pc/" class="md-tabs__link">
+        
+  
+    
+  
+  桌面端
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../big-data/" class="md-tabs__link">
+        
+  
+    
+  
+  大数据
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../1_58_llm_extreme_quantization/" class="md-tabs__link">
+          
+  
+    
+  
+  人工智能
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../ops/" class="md-tabs__link">
+        
+  
+    
+  
+  运维
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../blog/" class="md-tabs__link">
+          
+  
+    
+  
+  博客
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../resume/" class="md-tabs__link">
+        
+  
+    
+  
+  简历模板
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="FastDocs" class="md-nav__button md-logo" aria-label="FastDocs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    FastDocs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/C-L-STARK/C-L-STARK.github.io" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1M480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2m-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3m-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1"/></svg>
+  </div>
+  <div class="md-source__repository">
+    C-L-STARK/C-L-STARK.github.io
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    主页
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../backend/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    后端
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../web/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    前端
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../client/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    客户端
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pc/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    桌面端
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../big-data/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    大数据
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    人工智能
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            人工智能
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1_58_llm_extreme_quantization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fine-tuning LLMs to 1.58bit: extreme quantization made easy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2023-in-llms/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2023, 开源大模型之年
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3d-assets/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    手把手教你使用人工智能生成 3D 素材
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4bit-transformers-bitsandbytes/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    用 bitsandbytes、4 比特量化和 QLoRA 打造亲民的 LLM
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Llama2-for-non-engineers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    非工程师指南：训练 LLaMA 2 聊天机器人
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Lora-for-sequence-classification-with-Roberta-Llama-Mistral/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在灾难推文分析场景上比较用 LoRA 微调 Roberta、Llama 2 和 Mistral 的过程及表现
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../_policy-ntia-rfc/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    人工智能政策@🤗：回应美国国家电信和信息管理局（ NTIA ）关于人工智能问责制的评论请求
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../accelerate-v1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Accelerate 1.0.0
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../accelerated-inference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    如何成功将 🤗 API 客户的 transformer 模型推理速度加快 100 倍
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../agents/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    授权调用：介绍 Transformers 智能体 2.0  
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aivsai/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AI 大战 AI，一个深度强化学习多智能体竞赛系统
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../arena-tts/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TTS 擂台: 文本转语音模型的自由搏击场
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../asr-diarization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 Hugging Face 推理终端搭建强大的“语音识别 + 说话人分割 + 投机解码”工作流
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../assisted-generation-support-gaudi/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    英特尔 Gaudi 加速辅助生成
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../assisted-generation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    辅助生成：低延迟文本生成的新方向
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../audioldm2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AudioLDM 2，加速⚡️！
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../autoformer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Transformer 模型能够有效地进行时间序列预测 (使用 Autoformer)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../beating-gaia/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Transformers 代码智能体成功刷榜 GAIA
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../big-bird/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    深入理解 BigBird 的块稀疏注意力
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../blip-2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 BLIP-2 零样本“图生文”
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bloom-inference-optimization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    优化故事: BLOOM 模型推理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bloom-inference-pytorch-scripts/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 DeepSpeed 和 Accelerate 进行超快 BLOOM 模型推理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bloom-megatron-deepspeed/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    千亿参数开源大模型 BLOOM 背后的技术
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bridgetower/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 Habana Gaudi2 加速视觉语言模型 BridgeTower
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chat-templates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    聊天模板：无声性能杀手的终结
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chinese-ai-expansion/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    中国 AI 出海现状概述
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chinese-language-blog/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hugging Face 中文博客正式发布！
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cloudflare-workers-ai/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    为 Hugging Face 用户带来无服务器 GPU 推理服务
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../codellama/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Code Llama：Llama 2 学会写代码了！
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../community-datasets/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    数据好合：Argilla 和 Hugging Face Spaces 赋能社区合力构建更好的数据集
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../constrained-beam-search/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在 🤗 Transformers 中使用约束波束搜索引导文本生成
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../controlnet/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 🧨 Diffusers 实现 ControlNet 高速推理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cosmopedia/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Cosmopedia：如何为大语言模型预训练构建大规模合成数据集
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cost-efficient-rag-applications-with-intel/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    利用英特尔 Gaudi 2 和至强 CPU 构建经济高效的企业级 RAG 应用
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cv_state/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hugging Face 中计算机视觉的现状
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../daily-papers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hugging Face 论文平台 Daily Papers 功能全解析
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    BigCode 背后的大规模数据去重
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    BigCode 背后的大规模数据去重
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      目标受众
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      动机
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bigscience-bigcode" class="md-nav__link">
+    <span class="md-ellipsis">
+      从 BigScience 到 BigCode
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#minhash" class="md-nav__link">
+    <span class="md-ellipsis">
+      例解 MinHash
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="例解 MinHash">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      词袋生成
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      指纹计算
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lsh" class="md-nav__link">
+    <span class="md-ellipsis">
+      局部敏感哈希 (LSH)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      候选对生成后 ……
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      数据质量很重要
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      系统扩展性
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      谨慎行事
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      后续方向
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      致谢
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      更多资源
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      参考文献
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deep-learning-with-proteins/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    蛋白质深度学习
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deepspeed-to-fsdp-and-back/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    从 DeepSpeed 到 FSDP，再回到 Hugging Face Accelerate
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deploy-deepfloydif-using-bentoml/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 BentoML 部署 🤗 Hugging Face 上的模型：DeepFloyd IF 实战
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deploy-with-openvino/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 Optimum-Intel 和 OpenVINO GenAI 优化和部署模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dialog-agents/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    是什么让对话代理有用？
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diffusers-turns-1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    🤗 Diffusers 一岁啦 !
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docmatix/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Docmatix - 超大文档视觉问答数据集
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../document-ai/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    加速 Document AI (文档智能) 发展
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dpo-trl/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 DPO 微调 Llama 2
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dpo_vlm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    为视觉语言多模态模型进行偏好优化
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dreambooth/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 Diffusers 通过 Dreambooth 技术来训练 Stable Diffusion
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dynamic_speculation_lookahead/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    更快的辅助生成: 动态推测
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../elixir-bumblebee/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    从 GPT2 到 Stable Diffusion：Elixir 社区迎来了 Hugging Face
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedding-quantization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    用于显著提高检索速度和降低成本的二进制和标量嵌入量化
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../encoder-decoder/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    基于 Transformers 的编码器-解码器模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../encrypted-llm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 FHE 实现加密大语言模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ethics-diffusers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    开发 Diffusers 库的道德行为指南
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ethics-soc-3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    道德与社会问题简报 #3: Hugging Face 上的道德开放性
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ethics-soc-4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ethics and Society Newsletter #4: Bias in Text-to-Image Models
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../falcon-180b/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Falcon 180B 登陆 Hugging Face Hub 🔥
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../falcon/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Falcon 登陆 Hugging Face 生态
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../falconmamba/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Falcon Mamba: 首个高效的无注意力机制 7B 模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fine-tune-whisper/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 🤗 Transformers 为多语种语音识别任务微调 Whisper 模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fine-video/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    揭秘 FineVideo 数据集构建的背后的秘密
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../finetune-florence2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    微调 Florence-2 - 微软的尖端视觉语言模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../game-jam-first-edition-results/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    首届开源 AI 游戏挑战赛事结果
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gaussian-splatting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3D 高斯点染简介
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gemma-july-update/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Google 最新发布： Gemma 2 2B, ShieldGemma 和 Gemma Scope
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gemma-peft/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 Hugging Face 微调 Gemma 模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gemma/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    欢迎 Gemma: Google 最新推出开放大语言模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gemma2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Google 发布最新开放大语言模型 Gemma 2，现已登陆 Hugging Face Hub
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../generative-ai-models-on-intel-cpu/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    越小越好：Q8-Chat，在英特尔至强 CPU 上体验高效的生成式 AI
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started-habana/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    基于 Habana Gaudi 的 Transformers 入门
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../google-cloud-model-garden/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在 Google Cloud 上轻松部署开放大语言模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gptq-integration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 AutoGPTQ 和 transformers 让大语言模型更轻量化
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gradio-5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gradio 5 现已发布
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gradio-lite/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gradio-Lite: 完全在浏览器里运行的无服务器 Gradio
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gradio-reload/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 Gradio 的“热重载”模式快速开发 AI 应用
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../graphml-classification/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 Transformers 进行图分类
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../habana-gaudi-2-benchmark/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    更快的训练和推理：对比 Habana Gaudi®2 和英伟达 A100 80GB
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../habana-gaudi-2-bloom/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    大语言模型快速推理：在 Habana Gaudi2 上推理 BLOOMZ
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hf-bitsandbytes-integration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    大规模 Transformer 模型 8 比特矩阵乘简介 - 基于 Hugging Face Transformers、Accelerate 以及 bitsandbytes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../how-to-generate/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    如何生成文本：通过 Transformers 用不同的解码方法生成文本
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hugging-face-wiz-security-blog/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hugging Face 与 Wiz Research 合作提高人工智能安全性
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../huggy-lingo/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Huggy Lingo：利用机器学习改进 Hugging Face Hub 上的语言元数据
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../idefics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    IDEFICS 简介：最先进视觉语言模型的开源复现
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../idefics2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Idefics2 简介：为社区而生的强大 8B 视觉语言模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../if/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在免费版 Google Colab 上使用 🧨 diffusers 运行 IF
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../image-similarity/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    基于 Hugging Face Datasets 和 Transformers 的图像相似性搜索
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../inference-endpoints-llm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    用 Hugging Face 推理端点部署 LLM
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../inference-update/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hugging Face 提供的推理（Inference）解决方案
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../infini-attention/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    一次失败的实验——无限注意力，我们为什么坚持实验
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../informer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 Informer 进行多元概率时间序列预测
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../instruction-tuning-sd/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 InstructPix2Pix 对 Stable Diffusion 进行指令微调
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../intel-fast-embedding/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    利用 🤗 Optimum Intel 和 fastRAG 在 CPU 上优化文本嵌入
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../intel-protein-language-model-protst/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在英特尔 Gaudi 2 上加速蛋白质语言模型 ProtST
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../intel-sapphire-rapids-inference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CPU 推理 | 使用英特尔 Sapphire Rapids 加速 PyTorch Transformers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../intel-sapphire-rapids/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用英特尔 Sapphire Rapids 加速 PyTorch Transformers 模型（第一部分）
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../intel-starcoder-quantization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 🤗 Optimum Intel 在英特尔至强上加速 StarCoder：Q8/Q4 及投机解码
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../intro-graphml/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    一文带你入门图机器学习
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introducing-csearch/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在 Transformers 中使用对比搜索生成可媲美人类水平的文本🤗
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduction-to-ggml/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ggml 简介
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jat/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    万事通，专精部分领域的多功能 Transformer 智能体
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kv-cache-quantization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    用 KV 缓存量化解锁长文本生成
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../langchain/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hugging Face x LangChain：全新 LangChain 合作伙伴包
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../large-language-models/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    大语言模型：新的摩尔定律？
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lcm_lora/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 LCM LoRA 4 步完成 SDXL 推理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../leaderboard-bigcodebench/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    BigCodeBench: 继 HumanEval 之后的新一代代码生成基准测试
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../leaderboard-decodingtrust/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    来自 AI Secure 实验室的 LLM 安全排行榜简介
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../leaderboard-medicalllm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    开源医疗大模型排行榜：健康领域大模型基准测试
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../leaderboard-patronus/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    企业场景排行榜简介：现实世界用例排行榜
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../llama2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Llama 2 来袭 - 在 Hugging Face 上玩转它
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../llama3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    欢迎 Llama 3：Meta 的新一代开源大语言模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../llama31/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Llama 3.1：405B/70B/8B 模型的多语言与长上下文能力解析
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../llama32/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    现在 Llama 具备视觉能力并可以在你的设备上运行 - 欢迎使用 Llama 3.2
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../long-range-transformers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    长程 transformer 模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lora/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 LoRA 进行 Stable Diffusion 的高效参数微调
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mask2former/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    通用图像分割任务：使用 Mask2Former 和 OneFormer
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../matryoshka/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    🪆 俄罗斯套娃嵌入模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../megatron-training/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    如何使用 Megatron-LM 训练语言模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mixtral/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    欢迎 Mixtral - 当前 Hugging Face 上最先进的 MoE 模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ml-for-games-1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    基于AI进行游戏开发：5天！创建一个农场游戏！第1部分
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ml-for-games-2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 ChatGPT 启发游戏创意｜基于 AI 5 天创建一个农场游戏，第 2 天
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ml-for-games-3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AI 制作 3D 素材｜基于 AI 5 天创建一个农场游戏，第 3 天
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ml-for-games-4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    制作 2D 素材｜基于 AI 5 天创建一个农场游戏，第 4 天
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ml-for-games-5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ChatGPT 设计游戏剧情 | 基于 AI 5 天创建一个农场游戏，完结篇！
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mms_adapters/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    微调用于多语言 ASR 的 MMS 适配器模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../moe/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    混合专家模型（MoE）详解
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multi-lora-serving/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TGI 多-LoRA：部署一次，搞定 30 个模型的推理服务
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../noob_intro_transformers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hugging Face Transformers 萌新完全指南
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../open-llm-leaderboard-drop/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    开放 LLM 排行榜：深入研究 DROP
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../open-llm-leaderboard-mmlu/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Open LLM 排行榜近况
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../open-llm-leaderboard-rlhf/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    基础大模型能像人类一样标注数据吗？
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../open-source-llms-as-agents/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    开源大语言模型作为 LangChain 智能体
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../optimize-llm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    面向生产的 LLM 优化
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../optimizing-bark/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 🤗 Transformers 优化 Bark
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../optimum-onnxruntime-training/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Optimum + ONNX Runtime: 更容易、更快地训练你的 Hugging Face 模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../os-llms/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hugging Face 的文本生成和大语言模型的开源生态
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../overview-quantization-transformers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    🤗 Transformers 中原生支持的量化方案概述
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packing-with-FA2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    通过打包 Flash Attention 来提升 Hugging Face 训练效率
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paligemma/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PaliGemma 正式发布 — Google 最新发布的前沿开放视觉语言模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../password-git-deprecation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hub 上的 Git 操作不再支持使用密码验证
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../peft/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    🤗 PEFT：在低资源硬件上对十亿规模模型进行参数高效微调
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../personal-copilot/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    个人编程助手：训练你自己的编码助手
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phi2-intel-meteor-lake/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    笔记本电脑上的聊天机器人：在英特尔 Meteor Lake 上运行 Phi-2
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../presidio-pii-detection/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在 Hub 上使用 Presidio 进行自动 PII 检测实验
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../putting_rl_back_in_rlhf_with_rloo/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    将强化学习重新引入 RLHF
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pycharm-integration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hugging Face 与 PyCharm 深度集成：轻松引入丰富的 AI 模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pytorch-ddp-accelerate-transformers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    从 PyTorch DDP 到 Accelerate 到 Trainer，轻松掌握分布式训练
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pytorch-fsdp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 PyTorch 完全分片数据并行技术加速大模型训练
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quanto-diffusers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    基于 Quanto 和 Diffusers 的内存高效 transformer 扩散模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quanto-introduction/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quanto：PyTorch 量化工具包
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ram-efficient-pytorch-fsdp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 PyTorch FSDP 微调 Llama 2 70B
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../red-teaming/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    为大语言模型建立红队对抗
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reformer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Reformer 模型 - 突破语言建模的极限
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../regions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    HF Hub 现已加入存储区域功能
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../researcher-dataset-sharing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在 Hugging Face Hub 分享你的开源数据集
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rlhf/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ChatGPT 背后的“功臣”——RLHF 技术详解
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rwkv/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    RWKV -- transformer 与 RNN 的强强联合
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ryght-case-study/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ryght 在 Hugging Face 专家助力下赋能医疗保健和生命科学之旅
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../safecoder/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    推介 SafeCoder
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sc2-instruct/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    StarCoder2-Instruct: 完全透明和可自我对齐的代码生成
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sd3-5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    欢迎 Stable Diffusion 3.5 Large 加入 🧨 Diffusers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sd3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    欢迎 Stable Diffusion 3 加入 🧨 Diffusers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sd_distillation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    开源 SD-Small 和 SD-Tiny 知识蒸馏代码与权重
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sdxl_lora_advanced_script/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    全世界 LoRA 训练脚本，联合起来!
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setfit-absa/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SetFitABSA：基于 SetFit 的少样本、方面级情感分析
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setfit-optimum-intel/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在英特尔至强 CPU 上使用 🤗 Optimum Intel 实现超快 SetFit 推理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setfit/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SetFit: 高效的无提示少样本学习
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../smollm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SmolLM：一个超快速、超高性能的小模型集合
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../speecht5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 SpeechT5 进行语音合成、识别和更多功能
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sql-console/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    为数据集而生的 SQL 控制台
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stable-diffusion-finetuning-intel/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在英特尔 CPU 上微调 Stable Diffusion 模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stable-diffusion-inference-intel/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在英特尔 CPU 上加速 Stable Diffusion 推理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stable_diffusion/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用Diffusers来实现Stable Diffusion 🧨
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stackllama/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    “StackLLaMA”: 用 RLHF 训练 LLaMA 的手把手教程
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../starchat-alpha/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 StarCoder 创建一个编程助手
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../starcoder/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    StarCoder：最先进的代码大模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../starcoder2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    StarCoder2 及 The Stack v2 数据集正式发布
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../synthetic-data-save-costs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    合成数据：利用开源技术节约资金、时间和减少碳排放
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../synthid-text/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SynthID Text：在 AI 生成文本中应用不可见水印的新技术
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../t2i-sdxl-adapters/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在 SDXL 上用 T2I-Adapter 实现高效可控的文生图
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../text-to-video/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    深入理解文生视频模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../textgen-pipe-gaudi/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    基于英特尔® Gaudi® 2 AI 加速器的文本生成流水线
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tgi-benchmarking/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TGI 基准测试
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../the-age-of-ml-as-code/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    机器学习即代码的时代已经到来
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../the_n_implementation_details_of_rlhf_with_ppo/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 PPO 算法进行 RLHF 的 N 步实现细节
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../time-series-transformers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 🤗 Transformers 进行概率时间序列预测
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../train-dgx-cloud/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在 NVIDIA DGX Cloud上使用 H100 GPU 轻松训练模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../train-optimize-sd-intel/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    基于 NNCF 和 🤗 Optimum 面向 Intel CPU 对 Stable Diffusion 优化
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../train-sentence-transformers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    用 Sentence Transformers v3 训练和微调嵌入模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../train-your-controlnet/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 diffusers 训练你自己的 ControlNet 🧨
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../transformers-design-philosophy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    〜不要〜重复自己
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trl-ddpo/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 DDPO 在 TRL 中微调 Stable Diffusion 模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trl-peft/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在一张 24 GB 的消费级显卡上用 RLHF 微调 20B LLMs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trufflesecurity-partnership/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hugging Face 与 TruffleHog 成为合作伙伴，实现风险信息预警
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../unified-tool-use/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    对 LLM 工具使用进行统一
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../unity-api/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    如何安装和使用 Hugging Face Unity API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../unity-asr/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    如何在 Unity 游戏中集成 AI 语音识别？
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../unity-in-spaces/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    如何在 🤗 Space 上托管 Unity 游戏
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../universal_assisted_generation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    通用辅助生成：使用任意辅助模型加速解码
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vertex-colored-to-textured-mesh/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    顶点着色网格转换为 UV 映射的纹理化网格
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vision_language_pretraining/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    深入了解视觉语言模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vit-align/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Kakao Brain 的开源 ViT、ALIGN 和 COYO 文字
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vlms/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    视觉语言模型详解
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../watermarking/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    人工智能水印技术入门：工具与技巧
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../whisper-speculative-decoding/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用推测解码使 Whisper 实现 2 倍的推理加速
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../winning-aimo-progress-prize/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    NuminaMath 是如何荣膺首届 AIMO 进步奖的？
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xethub-joins-hf/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    XetHub 加入 Hugging Face!
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zero-shot-vqa-docmatix/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LAVE：使用 LLM 对 Docmatix 进行零样本 VQA 评估 - 我们还需要微调吗？
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ops/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    运维
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../blog/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    博客
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../resume/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    简历模板
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+    <a href="https://github.com/C-L-STARK/C-L-STARK.github.io/edit/master/docs/ml/dedup.md" title="Edit this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm-2.3 6.35c.22-.21.22-.56 0-.77L15.42 7.3a.53.53 0 0 0-.77 0l-1 1 2.05 2.05zM7 14.94V17h2.06l6.06-6.06-2.06-2.06z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="bigcode">BigCode 背后的大规模数据去重<a class="headerlink" href="#bigcode" title="Permanent link">&para;</a></h1>
+<h2 id="_1">目标受众<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>本文面向对大规模文档去重感兴趣，且对散列 (hashing) 、图 (graph) 及文本处理有一定了解的读者。</p>
+<h2 id="_2">动机<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>老话说得好: 垃圾进，垃圾出 (garbage in, garbage out)，把数据处理干净再输入给模型至关重要，至少对大语言模型如此。虽然现在一些明星大模型 (严格来讲，它们很多是 API) 的存在让大家恍惚产生了数据质量好像不那么重要了的错觉，但事实绝非如此。</p>
+<p>在 BigScience 和 BigCode 项目中，在数据质量方面，我们面临的一个很大的问题是数据重复，这不仅包括训练集内的数据重复，还包括训练集中包含测试基准中的数据从而造成了基准污染 (benchmark contamination)。已经有研究表明，当训练集中存在较多重复数据时，模型倾向于逐字输出训练数据 <a href="#1">[1]</a> (这一现象在其他一些领域并不常见 <a href="#2">[2]</a>)，而且训得的模型也更容易遭受隐私攻击 <a href="#1">[1]</a>。除了能避免上面两个问题外，去重还有不少好处:</p>
+<ol>
+<li>让训练更高效: 你可以用更少的训练步骤获得相同的，甚至是更好的性能 <a href="#3">[3]</a> <a href="#4">[4]</a>。</li>
+<li>防止可能的数据泄漏和基准污染: 数据重复会损害你的模型性能报告的公信力，并可能让所谓的改进沦为泡影。</li>
+<li>提高数据可得性。我们大多数人都负担不起重复下载或传输数千 GB 文本的成本，更不用说由此带来的额外训练成本了。对数据集进行去重，能使其更易于学习、传输及协作。</li>
+</ol>
+<h2 id="bigscience-bigcode">从 BigScience 到 BigCode<a class="headerlink" href="#bigscience-bigcode" title="Permanent link">&para;</a></h2>
+<p>我想先分享一个故事，故事主要讲述我如何接受数据去重这一任务，过程如何，以及在此过程中我学到了什么。</p>
+<p>一切开始于 LinkedIn 上的一次对话，当时 <a href="https://bigscience.huggingface.co/">BigScience</a> 已经开始几个月了。Huu Nguyen 注意到我在 GitHub 上的一个小项目并找到了我，问我是否有兴趣为 BigScience 做数据去重工作。我当然愿意了，尽管当时我完全没意识到由于数据量巨大，这项工作比想象中麻烦很多。</p>
+<p>这项工作既有趣又充满挑战。挑战在于，我对处理如此大规模的数据并没有太多经验。但项目组的每个人仍然欢迎我、信任我，还给了我数千美元的云计算预算。有多少回，我不得不从睡梦中醒来，反复确认我是否关闭了那些云实例。我不停地在试验和错误中学习，在此过程中，新的视角被打开了。如果没有 BigScience，可能我永远不会有这种视角。</p>
+<p>一年后的今天，我正在把从 BigScience 学到的东西应用到 <a href="https://www.bigcode-project.org/">BigCode</a> 项目中去，去处理更大的数据集。除了英语 <a href="#3">[3]</a> LLM 之外，我们已经再次证明数据去重也能改进代码模型 <a href="#4">[4]</a> 的性能。有了数据去重，我们可以用更小的数据集达到更优的性能。现在，亲爱的读者，我想与你分享我学到的知识，希望你能透过数据去重的镜头一瞥 BigCode 项目的幕后故事。</p>
+<p>下表列出了 BigScience 项目中各数据集使用的去重方法，以供参考:</p>
+<table>
+<thead>
+<tr>
+<th>数据集</th>
+<th>输入数据量</th>
+<th>输出数据尺寸或数据精简比</th>
+<th>去重粒度</th>
+<th>方法</th>
+<th>参数</th>
+<th>语种</th>
+<th>耗时</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OpenWebText2<a href="#5">[5]</a></td>
+<td>对 URL 去重后: 193.89 GB（69M）</td>
+<td>使用 MinHash LSH 后: 65.86 GB（17M）</td>
+<td>URL + 文档</td>
+<td>URL（精确匹配）+ 文档（MinHash LSH）</td>
+<td><span class="arithmatex">\((10, 0.5, ?, ?, ?)\)</span></td>
+<td>英语</td>
+<td></td>
+</tr>
+<tr>
+<td>Pile-CC<a href="#5">[5]</a></td>
+<td><em>~306 GB</em></td>
+<td><em>227.12 GiB（~55M）</em></td>
+<td>文档</td>
+<td>文档（MinHash LSH）</td>
+<td>$(10, 0.5, ?, ?, ?) $</td>
+<td>英语</td>
+<td>数天</td>
+</tr>
+<tr>
+<td>BNE5<a href="#6">[6]</a></td>
+<td>2 TB</td>
+<td>570 GB</td>
+<td>文档</td>
+<td>Onion</td>
+<td>5-元组</td>
+<td>西班牙语</td>
+<td></td>
+</tr>
+<tr>
+<td>MassiveText<a href="#7">[7]</a></td>
+<td></td>
+<td>0.001 TB ~ 2.1 TB</td>
+<td>文档</td>
+<td>文档（精确匹配 + MinHash LSH）</td>
+<td><span class="arithmatex">\((?, 0.8, 13, ?, ?)\)</span></td>
+<td>英语</td>
+<td></td>
+</tr>
+<tr>
+<td>CC100-XL<a href="#8">[8]</a></td>
+<td></td>
+<td>0.01 GiB ~ 3324.45 GiB</td>
+<td>URL + 段落</td>
+<td>URL（精确匹配） + 段落（精确匹配）</td>
+<td>SHA-1</td>
+<td>多语种</td>
+<td></td>
+</tr>
+<tr>
+<td>C4<a href="#3">[3]</a></td>
+<td>806.92 GB (364M)</td>
+<td>3.04% ~ 7.18% <strong>↓</strong> （训练集）</td>
+<td>子字符串或文档</td>
+<td>子字符串（后缀数组）或文档（MinHash）</td>
+<td>后缀数组：50-词元，MinHash: <span class="arithmatex">\((9000, 0.8, 5, 20, 450)\)</span></td>
+<td>英语</td>
+<td></td>
+</tr>
+<tr>
+<td>Real News<a href="#3">[3]</a></td>
+<td>~120 GiB</td>
+<td>13.63% ~ 19.4% <strong>↓</strong>（训练集）</td>
+<td>同 <strong>C4</strong></td>
+<td>同 <strong>C4</strong></td>
+<td>同 <strong>C4</strong></td>
+<td>英语</td>
+<td></td>
+</tr>
+<tr>
+<td>LM1B<a href="#3">[3]</a></td>
+<td>~4.40 GiB（30M）</td>
+<td>0.76% ~ 4.86% <strong>↓</strong>（训练集）</td>
+<td>同 <strong>C4</strong></td>
+<td>同 <strong>C4</strong></td>
+<td>同 <strong>C4</strong></td>
+<td>英语</td>
+<td></td>
+</tr>
+<tr>
+<td>WIKI40B<a href="#3">[3]</a></td>
+<td>~2.9M</td>
+<td>0.39% ~ 2.76% <strong>↓</strong>（训练集）</td>
+<td>同 <strong>C4</strong></td>
+<td>同 <strong>C4</strong></td>
+<td>同 <strong>C4</strong></td>
+<td>英语</td>
+<td></td>
+</tr>
+<tr>
+<td>BigScience ROOTS 语料集<a href="#9">[9]</a></td>
+<td></td>
+<td>0.07% ~ 2.7% <strong>↓</strong> (文档) + 10.61% ~ 32.30% <strong>↓</strong> (子字符串)</td>
+<td>文档 + 子字符串</td>
+<td>文档 (SimHash) + 子字符串 (后缀数组)</td>
+<td>SimHash：6-元组，汉明距离（hamming distance）为 4，后缀数组：50-词元</td>
+<td>多语种</td>
+<td>12 小时 ~ 数天</td>
+</tr>
+</tbody>
+</table>
+<p>下表是我们在创建 BigCode 的训练数据集 (训练数据皆为代码) 时所用的方法。这里，如果当遇到没有名字的数据集时，我们就用模型名称来代替。</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>去重方法</th>
+<th>参数</th>
+<th>去重级别</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>InCoder<a href="#10">[10]</a></td>
+<td>精确匹配</td>
+<td>代码词元/MD5 + 布隆滤波（Bloom filtering）</td>
+<td>文档</td>
+</tr>
+<tr>
+<td>CodeGen<a href="#11">[11]</a></td>
+<td>精确匹配</td>
+<td>SHA256</td>
+<td>文档</td>
+</tr>
+<tr>
+<td>AlphaCode<a href="#12">[12]</a></td>
+<td>精确匹配</td>
+<td>忽略空格</td>
+<td>文档</td>
+</tr>
+<tr>
+<td>PolyCode<a href="#13">[13]</a></td>
+<td>精确匹配</td>
+<td>SHA256</td>
+<td>文档</td>
+</tr>
+<tr>
+<td>PaLM Coder<a href="#14">[14]</a></td>
+<td>Levenshtein 距离</td>
+<td></td>
+<td>文档</td>
+</tr>
+<tr>
+<td>CodeParrot<a href="#15">[15]</a></td>
+<td>MinHash + LSH</td>
+<td><span class="arithmatex">\((256, 0.8, 1)\)</span></td>
+<td>文档</td>
+</tr>
+<tr>
+<td>The Stack<a href="#16">[16]</a></td>
+<td>MinHash + LSH</td>
+<td><span class="arithmatex">\((256, 0.7, 5)\)</span></td>
+<td>文档</td>
+</tr>
+</tbody>
+</table>
+<p>MinHash + LSH 参数 <span class="arithmatex">\((P, T, K, B, R)\)</span> :</p>
+<ol>
+<li><span class="arithmatex">\(P\)</span> 哈希函数的个数或排列的个数</li>
+<li><span class="arithmatex">\(T\)</span> Jaccard 相似度阈值</li>
+<li><span class="arithmatex">\(K\)</span> K- 元组</li>
+<li><span class="arithmatex">\(B\)</span> 条带数</li>
+<li><span class="arithmatex">\(R\)</span> 每条带包含的行数</li>
+</ol>
+<p>我们做了一个简单的演示程序来说明这些参数对结果的影响: <a href="https://huggingface.co/spaces/bigcode/near-deduplication">MinHash 数学演示</a>。</p>
+<h2 id="minhash">例解 MinHash<a class="headerlink" href="#minhash" title="Permanent link">&para;</a></h2>
+<p>在本节中，我们将详细介绍在 BigCode 中使用的 MinHash 方法的每个步骤，并讨论该方法的系统扩展性问题及其解决方案。我们以一个含有三个英文文档为例来演示整个工作流程:</p>
+<table>
+<thead>
+<tr>
+<th>doc_id</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>Deduplication is so much fun!</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Deduplication is so much fun and easy!</td>
+</tr>
+<tr>
+<td>2</td>
+<td>I wish spider dog<a href="#17">[17]</a> is a thing.</td>
+</tr>
+</tbody>
+</table>
+<p>MinHash 的典型工作流程如下:</p>
+<ol>
+<li>词袋生成 (生成 n- 元组) 及指纹生成 (生成 MinHash): 将每个文档映射成一组哈希值。</li>
+<li>局部敏感哈希 (LSH): 逐条带 (band) 的比较文档的相似性，并将相似的文档聚类以减少后续比较的次数。</li>
+<li>去重: 决定保留或删除哪些重复文档。</li>
+</ol>
+<h3 id="_3">词袋生成<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<p>与大多数文本应用一样，我们需要先把文本表示成词袋，这里我们通常使用 N- 元组词袋。在本例中，我们使用以单词为基本单元的 3- 元组 (即每 3 个连续单词组成一个元组)，且不考虑标点符号。我们后面会回过头来讨论元组大小对性能的影响。</p>
+<table>
+<thead>
+<tr>
+<th>doc_id</th>
+<th>3-元组</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>{"Deduplication is so", "is so much", "so much fun"}</td>
+</tr>
+<tr>
+<td>1</td>
+<td>{'so much fun', 'fun and easy', 'Deduplication is so', 'is so much'}</td>
+</tr>
+<tr>
+<td>2</td>
+<td>{'dog is a', 'is a thing', 'wish spider dog', 'spider dog is', 'I wish spider'}</td>
+</tr>
+</tbody>
+</table>
+<p>这个操作的时间复杂度为 <span class="arithmatex">\(\mathcal{O}(NM)\)</span>，其中 <span class="arithmatex">\(N\)</span> 表示文档数，而 <span class="arithmatex">\(M\)</span> 表示文档长度。也就是说，时间复杂度与数据集大小呈线性关系。我们可以用多进程或分布式计算来并行化词袋生成过程。</p>
+<h3 id="_4">指纹计算<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<p>使用 MinHash 方法时，每个 N- 元组需要生成多个哈希值，此时我们通常要么 1) 使用不同的哈希函数进行多次哈希，要么 2) 使用一个哈希函数进行哈希后再进行多次重排。本例中，我们选择第二种方法，重排生成 5 个哈希值。 更多 MinHash 的变体可以参考 <a href="https://en.wikipedia.org/wiki/MinHash?useskin=vector">MinHash - 维基百科</a>。</p>
+<table>
+<thead>
+<tr>
+<th>N-元组</th>
+<th>哈希值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Deduplication is so</td>
+<td>[403996643, 2764117407, 3550129378, 3548765886, 2353686061]</td>
+</tr>
+<tr>
+<td>is so much</td>
+<td>[3594692244, 3595617149, 1564558780, 2888962350, 432993166]</td>
+</tr>
+<tr>
+<td>so much fun</td>
+<td>[1556191985, 840529008, 1008110251, 3095214118, 3194813501]</td>
+</tr>
+</tbody>
+</table>
+<p>对以上文档哈希矩阵中的每一列取最小值 —— 即  “MinHash” 中的 “Min” 的题中之义，我们就能得到该文档最终的 MinHash 值:</p>
+<table>
+<thead>
+<tr>
+<th>doc_id</th>
+<th>MinHash</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>[403996643, 840529008, 1008110251, 2888962350, 432993166]</td>
+</tr>
+<tr>
+<td>1</td>
+<td>[403996643, 840529008, 1008110251, 1998729813, 432993166]</td>
+</tr>
+<tr>
+<td>2</td>
+<td>[166417565, 213933364, 1129612544, 1419614622, 1370935710]</td>
+</tr>
+</tbody>
+</table>
+<p>从技术上讲，虽然我们通常取最小值，但这并不代表我们一定要取每列的最小值。其他顺序统计量也是可以的，例如最大值、第 k 个最小值或第 k 个最大值 <a href="#21">[21]</a>。</p>
+<p>在具体实现时，我们可以使用 <code>numpy</code> 来对这些操作进行向量化。该操作的时间复杂度为 <span class="arithmatex">\(\mathcal{O}(NMK)\)</span>，其中 <span class="arithmatex">\(K\)</span> 是排列数。以下列出了我们的代码，它是基于 <a href="https://github.com/ekzhu/datasketch">Datasketch</a> 的实现修改而得的。</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">def</span> <span class="nf">embed_func</span><span class="p">(</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a> <span class="o">*</span><span class="p">,</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">num_perm</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">ngram_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">hashranges</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]],</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">permutations</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">permutations</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="n">masks</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">num_perm</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="n">MAX_HASH</span><span class="p">)</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    <span class="n">tokens</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">ngrams</span><span class="p">(</span><span class="n">NON_ALPHA</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">content</span><span class="p">),</span> <span class="n">ngram_size</span><span class="p">)}</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    <span class="n">hashvalues</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">sha1_hash</span><span class="p">(</span><span class="n">token</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">tokens</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">)</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    <span class="n">permuted_hashvalues</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bitwise_and</span><span class="p">(</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>        <span class="p">((</span><span class="n">hashvalues</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hashvalues</span><span class="p">),</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="o">%</span> <span class="n">MERSENNE_PRIME</span><span class="p">,</span> <span class="n">MAX_HASH</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    <span class="p">)</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    <span class="n">hashvalues</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">permuted_hashvalues</span><span class="p">,</span> <span class="n">masks</span><span class="p">])</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    <span class="n">Hs</span> <span class="o">=</span> <span class="p">[</span><span class="nb">bytes</span><span class="p">(</span><span class="n">hashvalues</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span><span class="o">.</span><span class="n">byteswap</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="p">)</span> <span class="k">for</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="ow">in</span> <span class="n">hashranges</span><span class="p">]</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;__signatures__&quot;</span><span class="p">:</span> <span class="n">Hs</span><span class="p">,</span> <span class="s2">&quot;__id__&quot;</span><span class="p">:</span> <span class="n">idx</span><span class="p">}</span>
+</span></code></pre></div>
+<p>熟悉 <a href="https://github.com/ekzhu/datasketch">Datasketch</a> 的读者可能会问，为什么我们要费心费力剥离 Datasketch 库提供的所有高级功能？其主要原因并不是因为我们要减少依赖项，而是因为我们想要尽可能地榨取 CPU 的算力。而将多个步骤融合到一个函数中，是更好利用计算资源的手段之一。</p>
+<p>由于每个文档的计算互相独立，因此我们可以充分利用 <code>datasets</code> 库的 <code>map</code> 函数来实现并行化:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">embedded</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="n">function</span><span class="o">=</span><span class="n">embed_func</span><span class="p">,</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="n">fn_kwargs</span><span class="o">=</span><span class="p">{</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>        <span class="s2">&quot;num_perm&quot;</span><span class="p">:</span> <span class="n">args</span><span class="o">.</span><span class="n">num_perm</span><span class="p">,</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>        <span class="s2">&quot;hashranges&quot;</span><span class="p">:</span> <span class="n">HASH_RANGES</span><span class="p">,</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>        <span class="s2">&quot;ngram_size&quot;</span><span class="p">:</span> <span class="n">args</span><span class="o">.</span><span class="n">ngram</span><span class="p">,</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>        <span class="s2">&quot;permutations&quot;</span><span class="p">:</span> <span class="n">PERMUTATIONS</span><span class="p">,</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    <span class="p">},</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="n">input_columns</span><span class="o">=</span><span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">column</span><span class="p">],</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    <span class="n">remove_columns</span><span class="o">=</span><span class="n">ds</span><span class="o">.</span><span class="n">column_names</span><span class="p">,</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    <span class="n">num_proc</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">(),</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>    <span class="n">with_indices</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Fingerprinting...&quot;</span><span class="p">,</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="p">)</span>
+</span></code></pre></div>
+<p>指纹计算完毕之后，每个文档都被映射成了一个整数数组。为了弄清楚哪些文档彼此相似，我们需要根据这些指纹对它们进行聚类。轮到 <strong>局部敏感哈希 (Locality Sensitive Hashing，LSH)</strong> 闪亮登场了。</p>
+<h3 id="lsh">局部敏感哈希 (LSH)<a class="headerlink" href="#lsh" title="Permanent link">&para;</a></h3>
+<p>LSH 将指纹数组按行分成若干个条带 (band)，每个条带的行数相同，如果遇到最后一个条带行数不足，我们就直接忽略它。以条带数 <span class="arithmatex">\(b=2\)</span> 为例，每个条带有 <span class="arithmatex">\(r=2\)</span> 行，具体组织如下:</p>
+<table>
+<thead>
+<tr>
+<th>doc_id</th>
+<th>MinHash</th>
+<th>条带</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>[403996643, 840529008, 1008110251, 2888962350, 432993166]</td>
+<td>[0:[403996643, 840529008], 1:[1008110251, 2888962350]]</td>
+</tr>
+<tr>
+<td>1</td>
+<td>[403996643, 840529008, 1008110251, 1998729813, 432993166]</td>
+<td>[0:[403996643, 840529008], 1:[1008110251, 1998729813]]</td>
+</tr>
+<tr>
+<td>2</td>
+<td>[166417565, 213933364, 1129612544, 1419614622, 1370935710]</td>
+<td>[0:[166417565, 213933364], 1:[1129612544, 1419614622]]</td>
+</tr>
+</tbody>
+</table>
+<p>若两个文档在某条带上 MinHash 值相同，这两个文档就会被聚到同一个桶中备选。</p>
+<table>
+<thead>
+<tr>
+<th>条带 ID</th>
+<th>条带值</th>
+<th>doc_ids</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>[403996643, 840529008]</td>
+<td>0, 1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>[1008110251, 2888962350]</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>[1008110251, 1998729813]</td>
+<td>1</td>
+</tr>
+<tr>
+<td>0</td>
+<td>[166417565, 213933364]</td>
+<td>2</td>
+</tr>
+<tr>
+<td>1</td>
+<td>[1129612544, 1419614622]</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<p>遍历 <code>doc_ids</code> 列的每一行，将其中的文档两两配对就生成了候选对。上表中，我们能生成一个候选对: <code>(0, 1)</code> 。</p>
+<h3 id="_5">候选对生成后 ……<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<p>很多数据去重的论文或教程讲完上一节就结束了，但在实际项目中我们还涉及如何处理这些候选对的问题。通常，候选对生成后，我们有两个选择:</p>
+<ol>
+<li>由于 MinHash 只是一个近似，所以仍需计算两个文档的 N- 元组集合的交并比来算得准确的 Jaccard 相似性。此时，因为 LSH 已经帮我们过滤了不少，所以最终参与计算的候选对的量会大大减少。在 BigCode 项目中，我们起初就采用了这种做法，效果相当不错。</li>
+<li>我们还可以直接认可 LSH 选出来的相似对。这里面可能会有个问题: Jaccard 相似性不具传递性，也就是说 <span class="arithmatex">\(A\)</span> 相似于 <span class="arithmatex">\(B\)</span> 且  <span class="arithmatex">\(B\)</span> 相似于 <span class="arithmatex">\(C\)</span>，并不意味着 <span class="arithmatex">\(A\)</span> 相似于 <span class="arithmatex">\(C\)</span>。所以这里可能会有不少假阳性。通过在 The Stack 数据集上的实验，我们发现，直接认可 LSH 选出来的相似对在很大程度上能提高下游模型的性能，同时还节省了处理时间和训练时间。因此目前我们正慢慢开始转向这种方法。但是，这个经验并不是放之四海而皆准的，如果你准备在自己的数据集上仿效我们的做法，我们建议你在此之前好好检查你的数据集及其特点，然后作出数据驱动的决策。</li>
+</ol>
+<p>最后，我们可以用生成的相似文本对构建一个图，在这个图中，重复的文档会被聚至同一个社区或同一个连通子图中。不幸的是， <code>datasets</code> 在这方面帮不上什么忙，因为现在我们需要类似 <code>groupby</code> 的功能，以根据 <em>条带 ID</em> 及 <em>文档在该条带上的取值</em> 对文档进行聚类。下面列出了我们尝试过的一些方案:</p>
+<p><strong>方案 1: 老办法，迭代数据集以创建图，然后用一个图处理库对其做社区检测或者连通分量检测。</strong></p>
+<p>我们测试下来，该方案的扩展性不怎么好，其原因是多方面的: 首先，整个数据集迭代起来很慢，而且内存消耗很大; 其次，诸如 <code>graphtool</code> 或 <code>networkx</code> 的市面上流行的图处理库创建图的开销较大。</p>
+<p><strong>方案 2: 使用流行的 Python 框架 (如 <code>dask</code> ) 及其高效的 <code>groupby</code> 操作</strong>。</p>
+<p>但迭代慢和创建图慢的问题仍然存在。</p>
+<p><strong>方案 3: 迭代数据集并使用并查集 (union find data structure) 对文档进行聚类。</strong></p>
+<p>这个方案引入了一个很小的迭代开销，对中等数据集的有不错的效果不错，但在大数据集上还是慢。</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">for</span> <span class="n">table</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">HASH_TABLES</span><span class="p">,</span> <span class="n">dynamic_ncols</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Clustering...&quot;</span><span class="p">):</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="k">for</span> <span class="n">cluster</span> <span class="ow">in</span> <span class="n">table</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>            <span class="k">continue</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>        <span class="n">idx</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cluster</span><span class="p">:</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>            <span class="n">uf</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>方案 4: 对大数据集，使用 Spark。</strong></p>
+<p>我们已经知道到 LSH 的有些步骤是可以并行化的，我们可以用 Spark 来实现它们。Spark 的好处是，它开箱即支持分布式 <code>groupBy</code> ，而且也能很轻松地实现像 <a href="#18">[18]</a> 这样的连通分量检测算法。注意，这里我们并没有使用 Spark 的原生 MinHash 实现，其原因是迄今为止我们所有的实验都源于 <a href="https://github.com/ekzhu/datasketch">Datasketch</a>，而 Datasketch 的 MinHash 实现与 Spark 的原生实现完全不同。我们希望之前的经验和教训能帮助到后面的工作，而不是另起炉灶，进入另一个消融实验的轮回，因此我们选择在 Spark 中自己实现 Datasketch 的 MinHash 算法。</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">edges</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="n">records</span><span class="o">.</span><span class="n">flatMap</span><span class="p">(</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>        <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">generate_hash_values</span><span class="p">(</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>            <span class="n">content</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>            <span class="n">idx</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>            <span class="n">num_perm</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">num_perm</span><span class="p">,</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>            <span class="n">ngram_size</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">ngram_size</span><span class="p">,</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>            <span class="n">hashranges</span><span class="o">=</span><span class="n">HASH_RANGES</span><span class="p">,</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>            <span class="n">permutations</span><span class="o">=</span><span class="n">PERMUTATIONS</span><span class="p">,</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>        <span class="p">)</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>    <span class="p">)</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    <span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    <span class="o">.</span><span class="n">flatMap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">generate_edges</span><span class="p">([</span><span class="n">i</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]]))</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>    <span class="o">.</span><span class="n">distinct</span><span class="p">()</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>    <span class="o">.</span><span class="n">cache</span><span class="p">()</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="p">)</span>
+</span></code></pre></div>
+<p>以下是基于 <a href="#18">[18]</a> 的简单连通分量检测算法的 Spark 实现。</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">a</span> <span class="o">=</span> <span class="n">edges</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    <span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">flatMap</span><span class="p">(</span><span class="n">large_star_map</span><span class="p">)</span><span class="o">.</span><span class="n">groupByKey</span><span class="p">()</span><span class="o">.</span><span class="n">flatMap</span><span class="p">(</span><span class="n">large_star_reduce</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">cache</span><span class="p">()</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    <span class="n">a</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">small_star_map</span><span class="p">)</span><span class="o">.</span><span class="n">groupByKey</span><span class="p">()</span><span class="o">.</span><span class="n">flatMap</span><span class="p">(</span><span class="n">small_star_reduce</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">cache</span><span class="p">()</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    <span class="n">changes</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">a</span><span class="p">))</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">changes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>        <span class="k">break</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="n">results</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+</span></code></pre></div>
+<p>多亏了云计算提供商，我们可以使用 GCP DataProc 等服务轻松地搭建 一个 Spark 集群。 <strong>最终，我们把程序运行起来，只用了不到 4 小时就完成了 1.4 TB 数据的去重工作，每小时仅需 15 美元。</strong></p>
+<h2 id="_6">数据质量很重要<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<p>我们不可能爬着梯子登上月球。因此我们不仅要确保方向正确，还要确保方法正确。</p>
+<p>早期，我们使用的参数主要来自 CodeParrot 的实验，消融实验表明这些参数确实提高了模型的下游性能 <a href="#16">[16]</a>。后来，我们开始沿着这条路进一步探索，由此进一步确认了以下结论 <a href="#4">[4]</a>:</p>
+<ol>
+<li>数据去重可以在缩小数据集 (6 TB VS. 3 TB) 规模的同时提高模型的下游性能</li>
+<li>虽然我们还没有完全搞清楚其能力边界及限制条件，但我们确实发现更激进的数据去重 (6 TB VS. 2.4 TB) 可以进一步提高性能，方法有:</li>
+<li>降低相似度阈值</li>
+<li>使用更长的元组 (如: 一元组 → 五元组)</li>
+<li>放弃误报检查，承受一小部分误报带来的数据损失</li>
+</ol>
+<p><a class="glightbox" href="https://huggingface.co/datasets/chenghao/dedup_blog_assets/resolve/main/data/violin_chart_1.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="1- 元组时不同设置影响的小提琴图" src="https://huggingface.co/datasets/chenghao/dedup_blog_assets/resolve/main/data/violin_chart_1.png" /></a></p>
+<p><a class="glightbox" href="https://huggingface.co/datasets/chenghao/dedup_blog_assets/resolve/main/data/violin_chart_2.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="5- 元组时不同设置影响的小提琴图" src="https://huggingface.co/datasets/chenghao/dedup_blog_assets/resolve/main/data/violin_chart_2.png" /></a></p>
+<p><center>
+图例: 上述两幅图展示了相似性阈值和元组大小带来的影响，第一幅图使用 1- 元组，第二幅图使用 5- 元组。红色虚线表示相似性阈值: 低于该值的文档与同一簇中其他文档的相似性低于阈值，我们将其视为误报。
+</center></p>
+<p>上面两幅图可以帮助我们理解为什么有必要仔细检查 CodeParrot 以及早期版本的 The Stack 训练数据上的误报: 这是使用 1- 元组的误报比例会很大; 上图还表明，将元组大小增加到 5，误报比例会显著降低。如果想激进点去重的话，阈值可以设低点。</p>
+<p>还有实验表明，降低阈值会删除更多包含部分相似内容的文档，因此意味着提高了我们最想删除的那部分文档的查全率。</p>
+<h2 id="_7">系统扩展性<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<p><a class="glightbox" href="https://huggingface.co/datasets/chenghao/dedup_blog_assets/resolve/main/data/scale.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Scaling results for dataset size and deduplication time" src="https://huggingface.co/datasets/chenghao/dedup_blog_assets/resolve/main/data/scale.png" /></a></p>
+<p><center> 图例: 数据去重时间与原始数据集规模的关系。测试基于 GCP 上的 15 个 c2d-standard-16 实例，每个实例每小时的成本约为 0.7 美元。</center></p>
+<p><a class="glightbox" href="https://huggingface.co/datasets/chenghao/dedup_blog_assets/resolve/main/data/usage.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="CPU usage screenshot for the cluster during processing JSON dataset" src="https://huggingface.co/datasets/chenghao/dedup_blog_assets/resolve/main/data/usage.png" /></a></p>
+<p><center> 图例: 集群在处理 JSON 数据集时的 CPU 使用率。</center></p>
+<p>上述扩展性数据未必非常严格，但也足够说明，在给定预算的情况下，数据去重耗时与数据集规模的关系应该是线性的。如果你仔细看一下处理 JSON 数据集 (The Stack 数据集的最大子集) 的集群资源使用情况，你会发现实际总计算时间 (图中第 2 和第 3 阶段) 主要都花在了 MinHash + LSH (图中第 2 阶段) 上，这与我们先前的分析一致，即第 2 阶段 d 的时间复杂度为 $ \mathcal{O}(NM) $ — 与数据体量成线性关系。</p>
+<h2 id="_8">谨慎行事<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<p>数据去完重并不意味着万事大吉了，你仍然需要对数据进行彻底的探索和分析。此外，上文这些有关数据去重的发现来自于 The Stack 数据集，并不意味着它能无脑适用于其他数据集或语言。要构建一个好的训练数据集，我们仅仅迈出了万里长征的第一步，后面还有很多工作要做，例如数据质量过滤 (如过滤漏洞数据、毒性数据、偏见数据、模板生成的数据、个人身份数据等)。</p>
+<p>我们还鼓励你在训练前像我们一样对数据集进行彻底的分析，因为大家的情况可能各不相同。例如，如果你的时间和计算预算都很紧张，那么数据去重可能不是很有帮助: <a href="http://arxiv.org/abs/2212.14034">@geiping_2022</a> 提到基于子字符串的数据去重并没有提高他们模型的下游性能。在使用前，可能还需要对现存数据集进行彻底检查，例如，<a href="http://arxiv.org/abs/2101.00027">@gao_2020</a> 声明他们只确保 Pile 本身及其子集都已去重，但不保证其与任何下游基准数据集没有重复，要不要对 Pile 与下游基准数据集进行去重取决于使用者自己。</p>
+<p>在数据泄露和基准污染方面，还有很多需要探索的地方。由于 HumanEval 也是 GitHub Python 存储库之一，我们不得不重新训练了我们的代码模型。早期的工作还发现，最流行的编码基准之一的 MBPP<a href="#19">[19]</a> 与许多 Leetcode 问题有很多相似之处 (例如，MBPP 中的任务 601 基本上是 Leetcode 646，任务 604 ≃ Leetcode 151)。我们都知道 GitHub 中不乏很多编程挑战赛题及其答案代码。如果居心叵测的人把所有基准测试的 Python 代码以不易察觉的方式上传到 Github，污染你所有的训练数据，这事儿就更难了。</p>
+<h2 id="_9">后续方向<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
+<ol>
+<li>子串去重。尽管在英语 <a href="#3">[3]</a> 上子串去重是有益的，但尚不清楚是否对代码数据也有用;</li>
+<li>重复段落: 在一篇文档中重复多次的段落。 <a href="http://arxiv.org/abs/2112.11446">@rae_2021</a> 分享了一些关于如何检测和删除它们的有趣的启发式方法。</li>
+<li>使用模型嵌入进行语义级的去重。这是另外一套思路了，需要一整套去重、扩展性、成本、销蚀等各方面的实验和权衡。对此 <a href="#20">[20]</a> 提出了一些有趣的看法，但我们仍然需要更多实际证据才能得出结论 (其文本去重工作仅参考了 <a href="http://arxiv.org/abs/2107.06499">@lee_2022a</a> 的工作，而 <a href="http://arxiv.org/abs/2107.06499">@lee_2022a</a> 的主张主要是去重有作用而并未证明其效果达到了 SOTA)。</li>
+<li>优化。还有不少优化空间: 更好的质量评估标准、扩展性、对下游性能影响的分析等。</li>
+<li>换个角度: 对相似数据，去重到什么程度就会开始损害性能？需要保留多少相似数据以保留数据的多样性又不至冗余？</li>
+</ol>
+<h2 id="_10">致谢<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
+<p>题图中的表情符 (Hugging Face、圣诞老人、文档、巫师以及魔杖) 来自于 Noto Emoji (Apache 2.0)。我也庄严保证，这篇博文是我一个字一个字敲出来的，没有使用任何文本生成 API。</p>
+<p>非常感谢 Huu Nguyen(@Huu) 和 Hugo Laurençon(@HugoLaurencon) 在 BigScience 项目中的合作，以及 BigCode 项目中每个人一路上的帮助！如果你发现任何错误，请随时联系我: mouchenghao at gmail dot com。</p>
+<h2 id="_11">更多资源<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="https://github.com/ekzhu/datasketch">Datasketch</a> (MIT)</li>
+<li><a href="https://github.com/seomoz/simhash-py/tree/master/simhash">simhash-py</a> 及 <a href="https://github.com/seomoz/simhash-cpp">simhash-cpp</a> (MIT)</li>
+<li><a href="https://github.com/google-research/deduplicate-text-datasets">Deduplicating Training Data Makes Language Models Better</a> (Apache 2.0)</li>
+<li><a href="https://github.com/serega/gaoya">Gaoya</a> (MIT)</li>
+<li><a href="https://github.com/bigscience-workshop">BigScience</a> (Apache 2.0)</li>
+<li><a href="https://github.com/bigcode-project">BigCode</a> (Apache 2.0)</li>
+</ul>
+<h2 id="_12">参考文献<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a id="1">[1]</a> : Nikhil Kandpal, Eric Wallace, Colin Raffel, <a href="http://arxiv.org/abs/2202.06539">Deduplicating Training Data Mitigates Privacy Risks in Language Models</a>, 2022</li>
+<li><a id="2">[2]</a> : Gowthami Somepalli, et al., <a href="http://arxiv.org/abs/2212.03860">Diffusion Art or Digital Forgery? Investigating Data Replication in Diffusion Models</a>, 2022</li>
+<li><a id="3">[3]</a> : Katherine Lee, Daphne Ippolito, et al., <a href="http://arxiv.org/abs/2107.06499">Deduplicating Training Data Makes Language Models Better</a>, 2022</li>
+<li><a id="4">[4]</a> : Loubna Ben Allal, Raymond Li, et al., <a href="http://arxiv.org/abs/2301.03988">SantaCoder: Don't reach for the stars!</a>, 2023</li>
+<li><a id="5">[5]</a> : Leo Gao, Stella Biderman, et al., <a href="http://arxiv.org/abs/2101.00027">The Pile: An 800GB Dataset of Diverse Text for Language Modeling</a>, 2020</li>
+<li><a id="6">[6]</a> : Asier Gutiérrez-Fandiño, Jordi Armengol-Estapé, et al., <a href="http://arxiv.org/abs/2107.07253">MarIA: Spanish Language Models</a>, 2022</li>
+<li><a id="7">[7]</a> : Jack W. Rae, Sebastian Borgeaud, et al., <a href="http://arxiv.org/abs/2112.11446">Scaling Language Models: Methods, Analysis &amp; Insights from Training Gopher</a>, 2021</li>
+<li><a id="8">[8]</a> : Xi Victoria Lin, Todor Mihaylov, et al., <a href="http://arxiv.org/abs/2112.10668">Few-shot Learning with Multilingual Language Models</a>, 2021</li>
+<li><a id="9">[9]</a> : Hugo Laurençon, Lucile Saulnier, et al., <a href="https://openreview.net/forum?id=UoEw6KigkUn">The BigScience ROOTS Corpus: A 1.6TB Composite Multilingual Dataset</a>, 2022</li>
+<li><a id="10">[10]</a> : Daniel Fried, Armen Aghajanyan, et al., <a href="http://arxiv.org/abs/2204.05999">InCoder: A Generative Model for Code Infilling and Synthesis</a>, 2022</li>
+<li><a id="11">[11]</a> : Erik Nijkamp, Bo Pang, et al., <a href="http://arxiv.org/abs/2203.13474">CodeGen: An Open Large Language Model for Code with Multi-Turn Program Synthesis</a>, 2023</li>
+<li><a id="12">[12]</a> : Yujia Li, David Choi, et al., <a href="http://arxiv.org/abs/2203.07814">Competition-Level Code Generation with AlphaCode</a>, 2022</li>
+<li><a id="13">[13]</a> : Frank F. Xu, Uri Alon, et al., <a href="http://arxiv.org/abs/2202.13169">A Systematic Evaluation of Large Language Models of Code</a>, 2022</li>
+<li><a id="14">[14]</a> : Aakanksha Chowdhery, Sharan Narang, et al., <a href="http://arxiv.org/abs/2204.02311">PaLM: Scaling Language Modeling with Pathways</a>, 2022</li>
+<li><a id="15">[15]</a> : Lewis Tunstall, Leandro von Werra, Thomas Wolf, <a href="https://www.oreilly.com/library/view/natural-language-processing/9781098136789/">Natural Language Processing with Transformers, Revised Edition</a>, 2022</li>
+<li><a id="16">[16]</a> : Denis Kocetkov, Raymond Li, et al., <a href="http://arxiv.org/abs/2211.15533">The Stack: 3 TB of permissively licensed source code</a>, 2022</li>
+<li><a id="17">[17]</a> : <a href="https://projecthailmary.fandom.com/wiki/Rocky">Rocky | Project Hail Mary Wiki | Fandom</a></li>
+<li><a id="18">[18]</a> : Raimondas Kiveris, Silvio Lattanzi, et al., <a href="https://doi.org/10.1145/2670979.2670997">Connected Components in MapReduce and Beyond</a>, 2014</li>
+<li><a id="19">[19]</a> : Jacob Austin, Augustus Odena, et al., <a href="http://arxiv.org/abs/2108.07732">Program Synthesis with Large Language Models</a>, 2021</li>
+<li><a id="20">[20]</a>: Amro Abbas, Kushal Tirumala, et al., <a href="http://arxiv.org/abs/2303.09540">SemDeDup: Data-efficient learning at web-scale through semantic deduplication</a>, 2023</li>
+<li><a id="21">[21]</a>: Edith Cohen, <a href="http://www.cohenwang.com/edith/Surveys/minhash.pdf">MinHash Sketches : A Brief Survey</a>, 2016</li>
+</ul>
+
+
+
+
+
+
+
+  
+    
+  
+  
+    
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 1, 2024</span>
+  </span>
+
+    
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Created">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 1, 2024</span>
+  </span>
+
+    
+    
+      
+  
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Contributors">
+      
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 5.5A3.5 3.5 0 0 1 15.5 9a3.5 3.5 0 0 1-3.5 3.5A3.5 3.5 0 0 1 8.5 9 3.5 3.5 0 0 1 12 5.5M5 8c.56 0 1.08.15 1.53.42-.15 1.43.27 2.85 1.13 3.96C7.16 13.34 6.16 14 5 14a3 3 0 0 1-3-3 3 3 0 0 1 3-3m14 0a3 3 0 0 1 3 3 3 3 0 0 1-3 3c-1.16 0-2.16-.66-2.66-1.62a5.54 5.54 0 0 0 1.13-3.96c.45-.27.97-.42 1.53-.42M5.5 18.25c0-2.07 2.91-3.75 6.5-3.75s6.5 1.68 6.5 3.75V20h-13zM0 20v-1.5c0-1.39 1.89-2.56 4.45-2.9-.59.68-.95 1.62-.95 2.65V20zm24 0h-3.5v-1.75c0-1.03-.36-1.97-.95-2.65 2.56.34 4.45 1.51 4.45 2.9z"/></svg>
+      
+    </span>
+    <nav>
+      
+    </nav>
+  </span>
+
+    
+    
+  </aside>
+
+
+  
+
+
+
+  <form class="md-feedback" name="feedback" hidden>
+    <fieldset>
+      <legend class="md-feedback__title">
+        Was this page helpful?
+      </legend>
+      <div class="md-feedback__inner">
+        <div class="md-feedback__list">
+          
+            <button class="md-feedback__icon md-icon" type="submit" title="This page was helpful" data-md-value="1">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 12a8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8m2 0a10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2a10 10 0 0 1 10 10M10 9.5c0 .8-.7 1.5-1.5 1.5S7 10.3 7 9.5 7.7 8 8.5 8s1.5.7 1.5 1.5m7 0c0 .8-.7 1.5-1.5 1.5S14 10.3 14 9.5 14.7 8 15.5 8s1.5.7 1.5 1.5m-5 7.73c-1.75 0-3.29-.73-4.19-1.81L9.23 14c.45.72 1.52 1.23 2.77 1.23s2.32-.51 2.77-1.23l1.42 1.42c-.9 1.08-2.44 1.81-4.19 1.81"/></svg>
+            </button>
+          
+            <button class="md-feedback__icon md-icon" type="submit" title="This page could be improved" data-md-value="0">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 12a8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8m2 0a10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2a10 10 0 0 1 10 10m-6.5-4c.8 0 1.5.7 1.5 1.5s-.7 1.5-1.5 1.5-1.5-.7-1.5-1.5.7-1.5 1.5-1.5M10 9.5c0 .8-.7 1.5-1.5 1.5S7 10.3 7 9.5 7.7 8 8.5 8s1.5.7 1.5 1.5m2 4.5c1.75 0 3.29.72 4.19 1.81l-1.42 1.42C14.32 16.5 13.25 16 12 16s-2.32.5-2.77 1.23l-1.42-1.42C8.71 14.72 10.25 14 12 14"/></svg>
+            </button>
+          
+        </div>
+        <div class="md-feedback__note">
+          
+            <div data-md-value="1" hidden>
+              
+              
+                
+              
+              Thanks for your feedback!
+            </div>
+          
+            <div data-md-value="0" hidden>
+              
+              
+                
+              
+              Thanks for your feedback! Help us improve this page by using our <a href="..." target="_blank" rel="noopener">feedback form</a>.
+            </div>
+          
+        </div>
+      </div>
+    </fieldset>
+  </form>
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../daily-papers/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Hugging Face 论文平台 Daily Papers 功能全解析">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256l137.3-137.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Hugging Face 论文平台 Daily Papers 功能全解析
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../deep-learning-with-proteins/" class="md-footer__link md-footer__link--next" aria-label="Next: 蛋白质深度学习">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                蛋白质深度学习
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2020 - 2024 FastX-AI
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+    
+    
+    
+    <a href="https://fastx-ai.com" target="_blank" rel="noopener me" title="fastx-ai" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M433 179.11c0-97.2-63.71-125.7-63.71-125.7-62.52-28.7-228.56-28.4-290.48 0 0 0-63.72 28.5-63.72 125.7 0 115.7-6.6 259.4 105.63 289.1 40.51 10.7 75.32 13 103.33 11.4 50.81-2.8 79.32-18.1 79.32-18.1l-1.7-36.9s-36.31 11.4-77.12 10.1c-40.41-1.4-83-4.4-89.63-54a102.5 102.5 0 0 1-.9-13.9c85.63 20.9 158.65 9.1 178.75 6.7 56.12-6.7 105-41.3 111.23-72.9 9.8-49.8 9-121.5 9-121.5m-75.12 125.2h-46.63v-114.2c0-49.7-64-51.6-64 6.9v62.5h-46.33V197c0-58.5-64-56.6-64-6.9v114.2H90.19c0-122.1-5.2-147.9 18.41-175 25.9-28.9 79.82-30.8 103.83 6.1l11.6 19.5 11.6-19.5c24.11-37.1 78.12-34.8 103.83-6.1 23.71 27.3 18.4 53 18.4 175z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="mailto:x.stark.dylan@gmail.com" target="_blank" rel="noopener" title="send me an email" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M64 112c-8.8 0-16 7.2-16 16v22.1l172.5 141.6c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16zM48 212.2V384c0 8.8 7.2 16 16 16h384c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0zM0 128c0-35.3 28.7-64 64-64h384c35.3 0 64 28.7 64 64v256c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="/contact" target="_blank" rel="noopener" title="contact us" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 4H7a5 5 0 0 0-5 5v11h18a2 2 0 0 0 2-2V9a5 5 0 0 0-5-5m-7 14H4V9a3 3 0 0 1 3-3 3 3 0 0 1 3 3zm9-3h-2v-2h-4v-2h6zM9 11H5V9h4z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.indexes", "navigation.instant.progress", "navigation.tracking", "navigation.tabs", "navigation.top", "navigation.footer", "navigation.prune", "content.action.edit", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips", "header.autohide", "announce.dismiss", "search.suggest", "search.highlight", "search.share", "toc.follow", "toc.integrate"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+<!-- Add scripts that need to run before here -->
+
+      <script src="../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+        <script src="../../javascripts/extra.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+<!-- Add scripts that need to run afterwards here -->
+
+  <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body>
+</html>
