@@ -1,0 +1,6435 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="FastDoc is a website that you can get started with FastX AI in minutes.">
+      
+      
+      
+        <link rel="canonical" href="https://doc.fastx-ai.com/ml/reformer/">
+      
+      
+        <link rel="prev" href="../red-teaming/">
+      
+      
+        <link rel="next" href="../regions/">
+      
+      
+        <link rel="alternate" type="application/rss+xml" title="RSS feed" href="../../feed_rss_created.xml">
+        <link rel="alternate" type="application/rss+xml" title="RSS feed of updated content" href="../../feed_rss_updated.xml">
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.46">
+    
+    
+      
+        <title>Reformer 模型 - 突破语言建模的极限 - FastDocs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6f8fc17f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-XXXXXXXXXX"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-XXXXXXXXXX",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+      
+        <meta  property="og:type"  content="website" >
+      
+        <meta  property="og:title"  content="Reformer 模型 - 突破语言建模的极限 - FastDocs" >
+      
+        <meta  property="og:description"  content="FastDoc is a website that you can get started with FastX AI in minutes." >
+      
+        <meta  property="og:image"  content="https://doc.fastx-ai.com/assets/images/social/ml/reformer.png" >
+      
+        <meta  property="og:image:type"  content="image/png" >
+      
+        <meta  property="og:image:width"  content="1200" >
+      
+        <meta  property="og:image:height"  content="630" >
+      
+        <meta  property="og:url"  content="https://doc.fastx-ai.com/ml/reformer/" >
+      
+        <meta  name="twitter:card"  content="summary_large_image" >
+      
+        <meta  name="twitter:title"  content="Reformer 模型 - 突破语言建模的极限 - FastDocs" >
+      
+        <meta  name="twitter:description"  content="FastDoc is a website that you can get started with FastX AI in minutes." >
+      
+        <meta  name="twitter:image"  content="https://doc.fastx-ai.com/assets/images/social/ml/reformer.png" >
+      
+    
+    
+   <link href="../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }
+    .gscrollbar-fixer { padding-right: 15px; }
+    .gdesc-inner { font-size: 0.75rem; }
+    body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+    body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../../assets/javascripts/glightbox.min.js"></script></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#reformer-" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+              <button class="md-banner__button md-icon" aria-label="Don't show this again">
+                
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+              </button>
+            
+            
+<p style="text-align: center">
+  Welcome to <span style="font-size: bold">FastDocs</span>! Just feel free to start read docs!
+</p>
+
+          </div>
+          
+            <script>var el=document.querySelector("[data-md-component=announce]");if(el){var content=el.querySelector(".md-typeset");__md_hash(content.innerHTML)===__md_get("__announce")&&(el.hidden=!0)}</script>
+          
+        </aside>
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="FastDocs" class="md-header__button md-logo" aria-label="FastDocs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            FastDocs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Reformer 模型 - 突破语言建模的极限
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256l137.3-137.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/C-L-STARK/C-L-STARK.github.io" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1M480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2m-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3m-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1"/></svg>
+  </div>
+  <div class="md-source__repository">
+    C-L-STARK/C-L-STARK.github.io
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+    
+  
+  主页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../backend/" class="md-tabs__link">
+        
+  
+    
+  
+  后端
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../web/" class="md-tabs__link">
+        
+  
+    
+  
+  前端
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../client/" class="md-tabs__link">
+        
+  
+    
+  
+  客户端
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../pc/" class="md-tabs__link">
+        
+  
+    
+  
+  桌面端
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../big-data/" class="md-tabs__link">
+        
+  
+    
+  
+  大数据
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../1_58_llm_extreme_quantization/" class="md-tabs__link">
+          
+  
+    
+  
+  人工智能
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../ops/" class="md-tabs__link">
+        
+  
+    
+  
+  运维
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../blog/" class="md-tabs__link">
+          
+  
+    
+  
+  博客
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../resume/" class="md-tabs__link">
+        
+  
+    
+  
+  简历模板
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="FastDocs" class="md-nav__button md-logo" aria-label="FastDocs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    FastDocs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/C-L-STARK/C-L-STARK.github.io" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1M480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2m-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3m-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1"/></svg>
+  </div>
+  <div class="md-source__repository">
+    C-L-STARK/C-L-STARK.github.io
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    主页
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../backend/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    后端
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../web/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    前端
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../client/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    客户端
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pc/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    桌面端
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../big-data/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    大数据
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    人工智能
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            人工智能
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1_58_llm_extreme_quantization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fine-tuning LLMs to 1.58bit: extreme quantization made easy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2023-in-llms/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2023, 开源大模型之年
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3d-assets/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    手把手教你使用人工智能生成 3D 素材
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4bit-transformers-bitsandbytes/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    用 bitsandbytes、4 比特量化和 QLoRA 打造亲民的 LLM
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Llama2-for-non-engineers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    非工程师指南：训练 LLaMA 2 聊天机器人
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Lora-for-sequence-classification-with-Roberta-Llama-Mistral/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在灾难推文分析场景上比较用 LoRA 微调 Roberta、Llama 2 和 Mistral 的过程及表现
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../_policy-ntia-rfc/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    人工智能政策@🤗：回应美国国家电信和信息管理局（ NTIA ）关于人工智能问责制的评论请求
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../accelerate-v1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Accelerate 1.0.0
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../accelerated-inference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    如何成功将 🤗 API 客户的 transformer 模型推理速度加快 100 倍
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../agents/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    授权调用：介绍 Transformers 智能体 2.0  
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aivsai/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AI 大战 AI，一个深度强化学习多智能体竞赛系统
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../arena-tts/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TTS 擂台: 文本转语音模型的自由搏击场
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../asr-diarization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 Hugging Face 推理终端搭建强大的“语音识别 + 说话人分割 + 投机解码”工作流
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../assisted-generation-support-gaudi/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    英特尔 Gaudi 加速辅助生成
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../assisted-generation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    辅助生成：低延迟文本生成的新方向
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../audioldm2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AudioLDM 2，加速⚡️！
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../autoformer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Transformer 模型能够有效地进行时间序列预测 (使用 Autoformer)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../beating-gaia/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Transformers 代码智能体成功刷榜 GAIA
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../big-bird/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    深入理解 BigBird 的块稀疏注意力
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../blip-2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 BLIP-2 零样本“图生文”
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bloom-inference-optimization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    优化故事: BLOOM 模型推理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bloom-inference-pytorch-scripts/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 DeepSpeed 和 Accelerate 进行超快 BLOOM 模型推理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bloom-megatron-deepspeed/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    千亿参数开源大模型 BLOOM 背后的技术
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bridgetower/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 Habana Gaudi2 加速视觉语言模型 BridgeTower
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chat-templates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    聊天模板：无声性能杀手的终结
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chinese-ai-expansion/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    中国 AI 出海现状概述
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chinese-language-blog/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hugging Face 中文博客正式发布！
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cloudflare-workers-ai/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    为 Hugging Face 用户带来无服务器 GPU 推理服务
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../codellama/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Code Llama：Llama 2 学会写代码了！
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../community-datasets/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    数据好合：Argilla 和 Hugging Face Spaces 赋能社区合力构建更好的数据集
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../constrained-beam-search/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在 🤗 Transformers 中使用约束波束搜索引导文本生成
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../controlnet/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 🧨 Diffusers 实现 ControlNet 高速推理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cosmopedia/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Cosmopedia：如何为大语言模型预训练构建大规模合成数据集
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cost-efficient-rag-applications-with-intel/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    利用英特尔 Gaudi 2 和至强 CPU 构建经济高效的企业级 RAG 应用
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cv_state/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hugging Face 中计算机视觉的现状
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../daily-papers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hugging Face 论文平台 Daily Papers 功能全解析
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dedup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    BigCode 背后的大规模数据去重
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deep-learning-with-proteins/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    蛋白质深度学习
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deepspeed-to-fsdp-and-back/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    从 DeepSpeed 到 FSDP，再回到 Hugging Face Accelerate
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deploy-deepfloydif-using-bentoml/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 BentoML 部署 🤗 Hugging Face 上的模型：DeepFloyd IF 实战
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deploy-with-openvino/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 Optimum-Intel 和 OpenVINO GenAI 优化和部署模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dialog-agents/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    是什么让对话代理有用？
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diffusers-turns-1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    🤗 Diffusers 一岁啦 !
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docmatix/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Docmatix - 超大文档视觉问答数据集
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../document-ai/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    加速 Document AI (文档智能) 发展
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dpo-trl/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 DPO 微调 Llama 2
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dpo_vlm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    为视觉语言多模态模型进行偏好优化
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dreambooth/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 Diffusers 通过 Dreambooth 技术来训练 Stable Diffusion
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dynamic_speculation_lookahead/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    更快的辅助生成: 动态推测
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../elixir-bumblebee/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    从 GPT2 到 Stable Diffusion：Elixir 社区迎来了 Hugging Face
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedding-quantization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    用于显著提高检索速度和降低成本的二进制和标量嵌入量化
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../encoder-decoder/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    基于 Transformers 的编码器-解码器模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../encrypted-llm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 FHE 实现加密大语言模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ethics-diffusers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    开发 Diffusers 库的道德行为指南
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ethics-soc-3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    道德与社会问题简报 #3: Hugging Face 上的道德开放性
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ethics-soc-4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ethics and Society Newsletter #4: Bias in Text-to-Image Models
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../falcon-180b/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Falcon 180B 登陆 Hugging Face Hub 🔥
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../falcon/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Falcon 登陆 Hugging Face 生态
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../falconmamba/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Falcon Mamba: 首个高效的无注意力机制 7B 模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fine-tune-whisper/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 🤗 Transformers 为多语种语音识别任务微调 Whisper 模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fine-video/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    揭秘 FineVideo 数据集构建的背后的秘密
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../finetune-florence2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    微调 Florence-2 - 微软的尖端视觉语言模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../game-jam-first-edition-results/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    首届开源 AI 游戏挑战赛事结果
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gaussian-splatting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3D 高斯点染简介
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gemma-july-update/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Google 最新发布： Gemma 2 2B, ShieldGemma 和 Gemma Scope
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gemma-peft/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 Hugging Face 微调 Gemma 模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gemma/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    欢迎 Gemma: Google 最新推出开放大语言模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gemma2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Google 发布最新开放大语言模型 Gemma 2，现已登陆 Hugging Face Hub
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../generative-ai-models-on-intel-cpu/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    越小越好：Q8-Chat，在英特尔至强 CPU 上体验高效的生成式 AI
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started-habana/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    基于 Habana Gaudi 的 Transformers 入门
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../google-cloud-model-garden/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在 Google Cloud 上轻松部署开放大语言模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gptq-integration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 AutoGPTQ 和 transformers 让大语言模型更轻量化
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gradio-5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gradio 5 现已发布
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gradio-lite/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gradio-Lite: 完全在浏览器里运行的无服务器 Gradio
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gradio-reload/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 Gradio 的“热重载”模式快速开发 AI 应用
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../graphml-classification/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 Transformers 进行图分类
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../habana-gaudi-2-benchmark/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    更快的训练和推理：对比 Habana Gaudi®2 和英伟达 A100 80GB
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../habana-gaudi-2-bloom/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    大语言模型快速推理：在 Habana Gaudi2 上推理 BLOOMZ
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hf-bitsandbytes-integration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    大规模 Transformer 模型 8 比特矩阵乘简介 - 基于 Hugging Face Transformers、Accelerate 以及 bitsandbytes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../how-to-generate/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    如何生成文本：通过 Transformers 用不同的解码方法生成文本
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hugging-face-wiz-security-blog/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hugging Face 与 Wiz Research 合作提高人工智能安全性
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../huggy-lingo/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Huggy Lingo：利用机器学习改进 Hugging Face Hub 上的语言元数据
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../idefics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    IDEFICS 简介：最先进视觉语言模型的开源复现
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../idefics2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Idefics2 简介：为社区而生的强大 8B 视觉语言模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../if/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在免费版 Google Colab 上使用 🧨 diffusers 运行 IF
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../image-similarity/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    基于 Hugging Face Datasets 和 Transformers 的图像相似性搜索
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../inference-endpoints-llm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    用 Hugging Face 推理端点部署 LLM
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../inference-update/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hugging Face 提供的推理（Inference）解决方案
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../infini-attention/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    一次失败的实验——无限注意力，我们为什么坚持实验
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../informer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 Informer 进行多元概率时间序列预测
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../instruction-tuning-sd/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 InstructPix2Pix 对 Stable Diffusion 进行指令微调
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../intel-fast-embedding/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    利用 🤗 Optimum Intel 和 fastRAG 在 CPU 上优化文本嵌入
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../intel-protein-language-model-protst/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在英特尔 Gaudi 2 上加速蛋白质语言模型 ProtST
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../intel-sapphire-rapids-inference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CPU 推理 | 使用英特尔 Sapphire Rapids 加速 PyTorch Transformers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../intel-sapphire-rapids/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用英特尔 Sapphire Rapids 加速 PyTorch Transformers 模型（第一部分）
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../intel-starcoder-quantization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 🤗 Optimum Intel 在英特尔至强上加速 StarCoder：Q8/Q4 及投机解码
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../intro-graphml/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    一文带你入门图机器学习
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introducing-csearch/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在 Transformers 中使用对比搜索生成可媲美人类水平的文本🤗
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduction-to-ggml/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ggml 简介
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jat/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    万事通，专精部分领域的多功能 Transformer 智能体
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kv-cache-quantization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    用 KV 缓存量化解锁长文本生成
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../langchain/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hugging Face x LangChain：全新 LangChain 合作伙伴包
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../large-language-models/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    大语言模型：新的摩尔定律？
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lcm_lora/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 LCM LoRA 4 步完成 SDXL 推理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../leaderboard-bigcodebench/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    BigCodeBench: 继 HumanEval 之后的新一代代码生成基准测试
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../leaderboard-decodingtrust/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    来自 AI Secure 实验室的 LLM 安全排行榜简介
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../leaderboard-medicalllm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    开源医疗大模型排行榜：健康领域大模型基准测试
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../leaderboard-patronus/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    企业场景排行榜简介：现实世界用例排行榜
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../llama2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Llama 2 来袭 - 在 Hugging Face 上玩转它
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../llama3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    欢迎 Llama 3：Meta 的新一代开源大语言模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../llama31/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Llama 3.1：405B/70B/8B 模型的多语言与长上下文能力解析
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../llama32/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    现在 Llama 具备视觉能力并可以在你的设备上运行 - 欢迎使用 Llama 3.2
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../long-range-transformers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    长程 transformer 模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lora/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 LoRA 进行 Stable Diffusion 的高效参数微调
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mask2former/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    通用图像分割任务：使用 Mask2Former 和 OneFormer
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../matryoshka/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    🪆 俄罗斯套娃嵌入模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../megatron-training/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    如何使用 Megatron-LM 训练语言模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mixtral/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    欢迎 Mixtral - 当前 Hugging Face 上最先进的 MoE 模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ml-for-games-1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    基于AI进行游戏开发：5天！创建一个农场游戏！第1部分
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ml-for-games-2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 ChatGPT 启发游戏创意｜基于 AI 5 天创建一个农场游戏，第 2 天
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ml-for-games-3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AI 制作 3D 素材｜基于 AI 5 天创建一个农场游戏，第 3 天
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ml-for-games-4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    制作 2D 素材｜基于 AI 5 天创建一个农场游戏，第 4 天
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ml-for-games-5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ChatGPT 设计游戏剧情 | 基于 AI 5 天创建一个农场游戏，完结篇！
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mms_adapters/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    微调用于多语言 ASR 的 MMS 适配器模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../moe/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    混合专家模型（MoE）详解
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multi-lora-serving/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TGI 多-LoRA：部署一次，搞定 30 个模型的推理服务
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../noob_intro_transformers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hugging Face Transformers 萌新完全指南
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../open-llm-leaderboard-drop/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    开放 LLM 排行榜：深入研究 DROP
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../open-llm-leaderboard-mmlu/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Open LLM 排行榜近况
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../open-llm-leaderboard-rlhf/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    基础大模型能像人类一样标注数据吗？
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../open-source-llms-as-agents/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    开源大语言模型作为 LangChain 智能体
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../optimize-llm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    面向生产的 LLM 优化
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../optimizing-bark/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 🤗 Transformers 优化 Bark
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../optimum-onnxruntime-training/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Optimum + ONNX Runtime: 更容易、更快地训练你的 Hugging Face 模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../os-llms/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hugging Face 的文本生成和大语言模型的开源生态
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../overview-quantization-transformers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    🤗 Transformers 中原生支持的量化方案概述
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packing-with-FA2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    通过打包 Flash Attention 来提升 Hugging Face 训练效率
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paligemma/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PaliGemma 正式发布 — Google 最新发布的前沿开放视觉语言模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../password-git-deprecation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hub 上的 Git 操作不再支持使用密码验证
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../peft/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    🤗 PEFT：在低资源硬件上对十亿规模模型进行参数高效微调
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../personal-copilot/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    个人编程助手：训练你自己的编码助手
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phi2-intel-meteor-lake/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    笔记本电脑上的聊天机器人：在英特尔 Meteor Lake 上运行 Phi-2
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../presidio-pii-detection/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在 Hub 上使用 Presidio 进行自动 PII 检测实验
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../putting_rl_back_in_rlhf_with_rloo/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    将强化学习重新引入 RLHF
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pycharm-integration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hugging Face 与 PyCharm 深度集成：轻松引入丰富的 AI 模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pytorch-ddp-accelerate-transformers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    从 PyTorch DDP 到 Accelerate 到 Trainer，轻松掌握分布式训练
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pytorch-fsdp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 PyTorch 完全分片数据并行技术加速大模型训练
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quanto-diffusers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    基于 Quanto 和 Diffusers 的内存高效 transformer 扩散模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quanto-introduction/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quanto：PyTorch 量化工具包
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ram-efficient-pytorch-fsdp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 PyTorch FSDP 微调 Llama 2 70B
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../red-teaming/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    为大语言模型建立红队对抗
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Reformer 模型 - 突破语言建模的极限
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Reformer 模型 - 突破语言建模的极限
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#reformer-8gb-50" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reformer 如何在不到 8GB 的​​内存上训练 50 万个词元
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-reformer" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Reformer 自注意力层
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Reformer 自注意力层">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      全局自注意力回顾
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      局部自注意力
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lsh" class="md-nav__link">
+    <span class="md-ellipsis">
+      LSH 自注意力
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      基准测试
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. 分块前馈层
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 分块前馈层">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reformer" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reformer 中的分块前馈层
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      基准测试
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. 可逆残差层
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 可逆残差层">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reformer_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reformer 中的可逆残差层
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      测试基准
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. 轴向位置编码
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 轴向位置编码">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reformer_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reformer 中的轴向位置编码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      基准测试
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../regions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    HF Hub 现已加入存储区域功能
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../researcher-dataset-sharing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在 Hugging Face Hub 分享你的开源数据集
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rlhf/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ChatGPT 背后的“功臣”——RLHF 技术详解
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rwkv/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    RWKV -- transformer 与 RNN 的强强联合
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ryght-case-study/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ryght 在 Hugging Face 专家助力下赋能医疗保健和生命科学之旅
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../safecoder/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    推介 SafeCoder
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sc2-instruct/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    StarCoder2-Instruct: 完全透明和可自我对齐的代码生成
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sd3-5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    欢迎 Stable Diffusion 3.5 Large 加入 🧨 Diffusers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sd3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    欢迎 Stable Diffusion 3 加入 🧨 Diffusers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sd_distillation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    开源 SD-Small 和 SD-Tiny 知识蒸馏代码与权重
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sdxl_lora_advanced_script/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    全世界 LoRA 训练脚本，联合起来!
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setfit-absa/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SetFitABSA：基于 SetFit 的少样本、方面级情感分析
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setfit-optimum-intel/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在英特尔至强 CPU 上使用 🤗 Optimum Intel 实现超快 SetFit 推理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setfit/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SetFit: 高效的无提示少样本学习
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../smollm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SmolLM：一个超快速、超高性能的小模型集合
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../speecht5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 SpeechT5 进行语音合成、识别和更多功能
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sql-console/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    为数据集而生的 SQL 控制台
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stable-diffusion-finetuning-intel/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在英特尔 CPU 上微调 Stable Diffusion 模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stable-diffusion-inference-intel/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在英特尔 CPU 上加速 Stable Diffusion 推理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stable_diffusion/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用Diffusers来实现Stable Diffusion 🧨
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stackllama/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    “StackLLaMA”: 用 RLHF 训练 LLaMA 的手把手教程
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../starchat-alpha/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 StarCoder 创建一个编程助手
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../starcoder/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    StarCoder：最先进的代码大模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../starcoder2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    StarCoder2 及 The Stack v2 数据集正式发布
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../synthetic-data-save-costs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    合成数据：利用开源技术节约资金、时间和减少碳排放
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../synthid-text/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SynthID Text：在 AI 生成文本中应用不可见水印的新技术
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../t2i-sdxl-adapters/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在 SDXL 上用 T2I-Adapter 实现高效可控的文生图
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../text-to-video/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    深入理解文生视频模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../textgen-pipe-gaudi/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    基于英特尔® Gaudi® 2 AI 加速器的文本生成流水线
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tgi-benchmarking/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TGI 基准测试
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../the-age-of-ml-as-code/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    机器学习即代码的时代已经到来
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../the_n_implementation_details_of_rlhf_with_ppo/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 PPO 算法进行 RLHF 的 N 步实现细节
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../time-series-transformers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 🤗 Transformers 进行概率时间序列预测
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../train-dgx-cloud/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在 NVIDIA DGX Cloud上使用 H100 GPU 轻松训练模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../train-optimize-sd-intel/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    基于 NNCF 和 🤗 Optimum 面向 Intel CPU 对 Stable Diffusion 优化
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../train-sentence-transformers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    用 Sentence Transformers v3 训练和微调嵌入模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../train-your-controlnet/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 diffusers 训练你自己的 ControlNet 🧨
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../transformers-design-philosophy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    〜不要〜重复自己
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trl-ddpo/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 DDPO 在 TRL 中微调 Stable Diffusion 模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trl-peft/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    在一张 24 GB 的消费级显卡上用 RLHF 微调 20B LLMs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trufflesecurity-partnership/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hugging Face 与 TruffleHog 成为合作伙伴，实现风险信息预警
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../unified-tool-use/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    对 LLM 工具使用进行统一
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../unity-api/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    如何安装和使用 Hugging Face Unity API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../unity-asr/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    如何在 Unity 游戏中集成 AI 语音识别？
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../unity-in-spaces/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    如何在 🤗 Space 上托管 Unity 游戏
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../universal_assisted_generation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    通用辅助生成：使用任意辅助模型加速解码
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vertex-colored-to-textured-mesh/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    顶点着色网格转换为 UV 映射的纹理化网格
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vision_language_pretraining/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    深入了解视觉语言模型
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vit-align/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Kakao Brain 的开源 ViT、ALIGN 和 COYO 文字
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vlms/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    视觉语言模型详解
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../watermarking/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    人工智能水印技术入门：工具与技巧
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../whisper-speculative-decoding/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用推测解码使 Whisper 实现 2 倍的推理加速
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../winning-aimo-progress-prize/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    NuminaMath 是如何荣膺首届 AIMO 进步奖的？
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xethub-joins-hf/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    XetHub 加入 Hugging Face!
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zero-shot-vqa-docmatix/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LAVE：使用 LLM 对 Docmatix 进行零样本 VQA 评估 - 我们还需要微调吗？
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ops/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    运维
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../blog/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    博客
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../resume/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    简历模板
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+    <a href="https://github.com/C-L-STARK/C-L-STARK.github.io/edit/master/docs/ml/reformer.md" title="Edit this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm-2.3 6.35c.22-.21.22-.56 0-.77L15.42 7.3a.53.53 0 0 0-.77 0l-1 1 2.05 2.05zM7 14.94V17h2.06l6.06-6.06-2.06-2.06z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="reformer-">Reformer 模型 - 突破语言建模的极限<a class="headerlink" href="#reformer-" title="Permanent link">&para;</a></h1>
+<p><a href="https://colab.research.google.com/github/patrickvonplaten/blog/blob/main/notebooks/03_reformer.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt=" 在 Colab 中打开 "/></a></p>
+<h2 id="reformer-8gb-50">Reformer 如何在不到 8GB 的​​内存上训练 50 万个词元<a class="headerlink" href="#reformer-8gb-50" title="Permanent link">&para;</a></h2>
+<p><a href="https://arxiv.org/pdf/2001.04451.pdf">Kitaev、Kaiser 等人于 20202 年引入的 Reformer 模型</a> 是迄今为止长序列建模领域内存效率最高的 transformer 模型之一。</p>
+<p>最近，人们对长序列建模的兴趣激增，仅今年一年，就涌现出了大量的工作，如 <a href="https://arxiv.org/abs/2004.05150">Beltagy 等人的工作 (2020) </a>、<a href="https://arxiv.org/abs/2003.05997">Roy 等人的工作 (2020) </a>、<a href="https://arxiv.org/abs/2002.11296">Tay 等人的工作</a> 以及 <a href="https://arxiv.org/abs/2006.04768">Wang 等人的工作</a> 等等。长序列建模背后的动机是，N​​LP 中的许多任务 (例如 <em>摘要、问答</em> ) 要求模型处理更长的序列，这些序列长度超出了 BERT 等模型的处理能力。在需要模型处理长输入序列的任务中，长序列模型无需对输入序列进行裁剪以避免内存溢出，因此已被证明优于标准的 <strong>BERT 类模型</strong> ( <em>见</em> <a href="https://arxiv.org/abs/2004.05150">Beltagy 等人 2020 年的工作</a>)。</p>
+<p>Reformer 能够一次处理多达 50 万个词元，从而突破了长序列建模的极限 (具体可参见本 <a href="https://github.com/patrickvonplaten/notebooks/blob/master/PyTorch_Reformer.ipynb">笔记本</a>)。相形之下，传统的 <code>bert-base-uncased</code> 模型最长仅支持 512 个词元。在 Reformer 中，标准 transformer 架构的每个部分都经过重新设计，以最小化内存需求，并避免显著降低性能。</p>
+<p>内存的改进来自于 Reformer 作者向 transformer 世界引入的 <strong>4</strong> 大特性:</p>
+<ol>
+<li><strong>Reformer 自注意力层</strong> - <em>如何在不受限于本地上下文的情况下高效地实现自注意力机制？</em></li>
+<li><strong>分块前馈层</strong> - <em>如何更好地对大型前馈层的时间和内存进行权衡？</em></li>
+<li><strong>可逆残差层</strong> - <em>如何聪明地设计残差架构以大幅减少训练中的内存消耗？</em></li>
+<li><strong>轴向位置编码 (Axial Positional Encodings)</strong> - <em>如何使位置编码可用于超长输入序列？</em></li>
+</ol>
+<p>本文的目的是 <strong>深入</strong> 阐述 Reformer 的上述四大特性。虽然这四个特性目前是用在 Reformer 上的，但其方法是通用的。因此，读者不应被此束缚，而应该多思考在哪些情况下可以把这四个特性中的某一个或某几个应用于其他的 transformer 模型，以解决其问题。</p>
+<p>下文四个部分之间的联系很松散，因此可以单独阅读。</p>
+<p>Reformer 已集成入 🤗Transformers 库。对于想使用 Reformer 的用户，建议大家阅读本文，以更好地了解该模型的工作原理以及如何正确配置它。文中所有公式都附有其在 transformers 中对应的 Reformer 配置项 ( <em>例如</em> <code>config.&lt;param_name&gt;</code> )，以便读者可以快速关联到官方文档和配置文件。</p>
+<p><strong>注意</strong>: <em>轴向位置编码</em> 在官方 Reformer 论文中没有解释，但在官方代码库中广泛使用。本文首次深入阐释了轴向位置编码。</p>
+<h2 id="1-reformer">1. Reformer 自注意力层<a class="headerlink" href="#1-reformer" title="Permanent link">&para;</a></h2>
+<p>Reformer 使用了两种特殊的自注意力层: <em>局部</em> 自注意力层和 LSH (Locality Sensitive Hashing，局部敏感哈希， <em>LSH</em> ) 自注意力层。</p>
+<p>在介绍新的自注意力层之前，我们先简要回顾一下传统的自注意力，其由 Vaswani 等人在其 <a href="https://arxiv.org/abs/1706.03762">2017 年的论文</a> 中引入。</p>
+<p>本文的符号及配色与 <a href="https://jalammar.github.io/illustrated-transformer/">《图解 transformer》</a> 一文一致，因此强烈建议读者在阅读本文之前，先阅读《图解 transformer》一文。</p>
+<p><strong>重要</strong>: 虽然 Reformer 最初是为了因果自注意力而引入的，但它也可以很好地用于双向自注意力。本文在解释 Reformer 的自注意力时，将其用于 <em>双向</em> 自注意力。</p>
+<h3 id="_1">全局自注意力回顾<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<p>Transformer 模型的核心是 <strong>自注意力</strong> 层。现在，我们回顾一下传统的自注意力层，这里称为 <strong>全局自注意力</strong> 层。首先我们假设对嵌入向量序列 <span class="arithmatex">\(\mathbf{X} = \mathbf{x}_1, \ldots, \mathbf{x}_n\)</span> 执行一个 transformer 层，该序列中的每个向量 <span class="arithmatex">\(\mathbf{x}_{i}\)</span> 的维度为 <code>config.hidden_​​size</code> ， <em>即</em> <span class="arithmatex">\(d_h\)</span>。</p>
+<p>简而言之，全局自注意力层将 <span class="arithmatex">\(\mathbf{X}\)</span> 投影到查询矩阵、键矩阵和值矩阵: <span class="arithmatex">\(\mathbf{Q}\)</span>、<span class="arithmatex">\(\mathbf{K}\)</span>、<span class="arithmatex">\(\mathbf{V}\)</span> 并使用 <em>softmax</em> 计算最终输出 <span class="arithmatex">\(\mathbf{Z}\)</span>，如下所示:</p>
+<p><span class="arithmatex">\(\mathbf{Z} = \text{SelfAttn}(\mathbf{X}) = \text{softmax}(\mathbf{Q}\mathbf{K}^T) \mathbf{V}\)</span>，其中 <span class="arithmatex">\(\mathbf{Z}\)</span> 的维度为 <span class="arithmatex">\(d_h \times n\)</span> (为简单起见，此处省略了键归一化因子和输出映射权重 <span class="arithmatex">\(\mathbf{W}^{O}\)</span>)。有关完整 transformer 操作的更多详细信息，请参阅 <a href="https://jalammar.github.io/illustrated-transformer/">《图解 transformer》</a> 一文。</p>
+<p>下图给出了 <span class="arithmatex">\(n=16，d_h=3\)</span> 情况下的操作:</p>
+<p><a class="glightbox" href="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/conventional_attention.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="" src="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/conventional_attention.png" /></a></p>
+<p>请注意，本文所有示意图都假设 <code>batch_size</code> 和 <code>config.num_attention_heads</code> 为 1。为了便于稍后更好地解释 <em>LSH 自注意力</em> ，我们还在图中标记出了一些向量， <em>如</em> <span class="arithmatex">\(\mathbf{x_3}\)</span> 及其相应的输出向量 <span class="arithmatex">\(\mathbf{z_3}\)</span>。图中的逻辑可以轻易扩展至多头自注意力 ( <code>config.num_attention_heads</code> &gt; 1)。如需了解多头注意力，建议读者参阅 <a href="https://jalammar.github.io/illustrated-transformer/">《图解 transformer》</a>。</p>
+<p>敲个重点，对于每个输出向量 <span class="arithmatex">\(\mathbf{z}_{i}\)</span>，整个输入序列 <span class="arithmatex">\(\mathbf{X}\)</span> 都需要参与其计算。内积张量 <span class="arithmatex">\(\mathbf{Q}\mathbf{K}^T\)</span> 的内存复杂度为 <span class="arithmatex">\(\mathcal{O}(n^2)\)</span>，这事实上使得 transformer 模型的瓶颈在内存。</p>
+<p>这也是为什么 <code>bert-base-cased</code> 的 <code>config.max_position_embedding_size</code> 只有 512 的原因。</p>
+<h3 id="_2">局部自注意力<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<p><strong>局部自注意力</strong> 是缓解 <span class="arithmatex">\(\mathcal{O}(n^2)\)</span> 内存瓶颈的一个显然的解决方案，它使我们能够以更低的计算成本建模更长的序列。在局部自注意力中，输入 <span class="arithmatex">\(\mathbf{X} = \mathbf{X}_{1:n} = \mathbf{x}_{1}, \ldots, \mathbf{x}_{n}\)</span> 被切成 <span class="arithmatex">\(n_{c}\)</span> 个块: <span class="arithmatex">\(\mathbf{X} = \left[\mathbf{X}_{1:l_{c}}, \ldots, \mathbf{X} _{(n_{c} - 1) * l_{c} : n_{c} * l_{c}}\right]\)</span>，每块长度为 <code>config.local_chunk_length</code> ， <em>即</em> <span class="arithmatex">\(l_{c}\)</span>，随后，对每个块分别应用全局自注意力。</p>
+<p>继续以 <span class="arithmatex">\(n=16，d_h=3\)</span> 为例:</p>
+<p><a class="glightbox" href="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/input.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="" src="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/input.png" /></a></p>
+<p>假设 <span class="arithmatex">\(l_{c} = 4，n_{c} = 4\)</span>，此时，我们将分块注意力图示如下:</p>
+<p><a class="glightbox" href="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/chunked_attention_1.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="" src="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/chunked_attention_1.png" /></a></p>
+<p>可以看出，我们对每个块分别执行了注意力操作 <span class="arithmatex">\(\mathbf{X} _{1:4}，\mathbf{X}_ {5:8}，\mathbf{X} _{9:12 }，\mathbf{X}_ {13:16}\)</span>。
+该架构的一个明显的缺点是: 一些输入向量无法访问其直接上下文， <em>例如</em> ，我们的例子中的 <span class="arithmatex">\(\mathbf{x} _9\)</span> 无法访问 <span class="arithmatex">\(\mathbf{x}_ {8}\)</span>，反之亦然。这是有问题的，因为这些词元无法在学习其向量表征时将其直接上下文的纳入考量。</p>
+<p>一个简单的补救措施是用 <code>config.local_num_chunks_before</code> ( <em>即</em> <span class="arithmatex">\(n_{p}\)</span>) 以及 <code>config.local_num_chunks_after</code> ( <em>即</em> <span class="arithmatex">\(n_{a}\)</span>) 来扩充每个块，以便每个输入向量至少可以访问 <span class="arithmatex">\(n_{p}\)</span> 个先前输入块及 <span class="arithmatex">\(n_{a}\)</span> 个后续输入块。我们可将其理解为重叠分块，其中 <span class="arithmatex">\(n_{p}\)</span> 和  <span class="arithmatex">\(n_{a}\)</span> 定义了每个块与其先前块和后续块的重叠量。我们将这种扩展的局部自注意力表示如下:</p>
+<div class="arithmatex">\[\mathbf{Z}^{\text{loc}} = \left[\mathbf{Z}_{0:l_{c}}^{\text{loc}}, \ldots, \mathbf{Z}_{(n_{c} - 1) * l_{c} + 1 : n_{c} * l_{c}}^{\text{loc}}\right]，\]</div>
+<p>其中</p>
+<div class="arithmatex">\[\mathbf{Z}_{l_{c} * (i - 1) + 1 : l_{c} * i}^{\text{loc}} = \text{SelfAttn}(\mathbf{X}_ {l_{c} * (i - 1 - n_{p}) + 1: l_{c} * (i + n_{a})})\left[n_{p} * l_{c}: -n_{ a} * l_{c}\right], \forall i \in \{1, \ldots, n_{c} \}\]</div>
+<p>好吧，这个公式看起来有点复杂，我们稍微分析一下。在 Reformer 的自注意力层中，<span class="arithmatex">\(n_{a}\)</span> 通常设为 0，<span class="arithmatex">\(n_{p}\)</span> 设为 1，我们据此重写 <span class="arithmatex">\(i = 1\)</span> 时的公式:</p>
+<div class="arithmatex">\[\mathbf{Z}_{1:l_{c}}^{\text{loc}} = \text{SelfAttn}(\mathbf{X}_{-l_{c} + 1: l_{c}})\left[l_{c}:\right]\]</div>
+<p>我们注意到这里有一个循环关系，因此第一个块也可以关注最后一个块。我们再次图解一下这种增强的局部关注算法。我们先按块找到其对应的窗口，并在其上应用自注意力，然后仅保留中心输出段作为本块的输出。</p>
+<p><a class="glightbox" href="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/local_attention_2.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="" src="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/local_attention_2.png" /></a></p>
+<p>最后，将相应的输出串接到 <span class="arithmatex">\(\mathbf{Z}^{\text{loc}}\)</span> 中，如下所示:</p>
+<p><a class="glightbox" href="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/local_attention_3.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="" src="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/local_attention_3.png" /></a></p>
+<p>请注意，在实现局部自注意力时，为了计算效率，我们并不会像图中一样先计算全部输出并随后 <em>丢弃</em> 一部分。图中红叉所示的地方仅用于说明，实际并不会产生计算行为。</p>
+<p>这里需要注意的是，扩展每个分块自注意力函数的输入向量可以使得 <em>每个</em> 输出向量 <span class="arithmatex">\(\mathbf{z}_{i}\)</span> 都能够学到更好的向量表征。以图中的向量为例，每个输出向量 <span class="arithmatex">\(\mathbf{z}_{5}^{\text{loc}}，\mathbf{z}_{6}^{\text{loc}}，\mathbf{z}_{7}^{\text{loc}}，\mathbf{z}_{8}^{\text{loc}}\)</span> 都可以将 <span class="arithmatex">\(\mathbf{X}_{1:8}\)</span> 的所有输入向量纳入考量以学到更好的表征。</p>
+<p>内存消耗上的降低也是显而易见的: <span class="arithmatex">\(\mathcal{O}(n^2)\)</span> 的内存复杂度被分解到段，因此总内存复杂度减少为 <span class="arithmatex">\(\mathcal{O}(n_{c} * l_{c}^2) = \mathcal{O}(n * l_{c})\)</span>。</p>
+<p>这种增强的局部自注意力比普通的局部自注意力架构更好，但仍然存在一个主要缺陷，因为每个输入向量只能关注预定义大小的局部上下文。对于不需要 transformer 模型学习输入向量之间的远程依赖关系的 NLP 任务 ( <em>例如</em> 语音识别、命名实体识别以及短句子的因果语言建模) 而言，可能不是一个大问题。但还有许多 NLP 任务需要模型学习远程依赖关系，因此局部自注意力在这些任务下可能会导致显著的性能下降， <em>如</em> :</p>
+<ul>
+<li><em>问答</em> : 模型必须学习问题词元和相关答案词元之间的关系，这些词元很可能并不相邻;</li>
+<li><em>多项选择</em> : 模型必须将多个答案词元段相互比较，这些答案词元段通常隔得比较远;</li>
+<li><em>摘要</em> : 模型必须学习长序列的上下文词元和较短的摘要词元序列之间的关系，而上下文和摘要之间的相关关系很可能无法通过局部自注意力来捕获。</li>
+<li>……</li>
+</ul>
+<p>局部自注意力本身很可能不足以让 transformer 模型学习输入向量 (词元) 彼此之间的相关关系。</p>
+<p>因此，Reformer 额外采用了一个近似全局自注意力的高效自注意力层，称为 <em>LSH 自注意力</em> 。</p>
+<h3 id="lsh">LSH 自注意力<a class="headerlink" href="#lsh" title="Permanent link">&para;</a></h3>
+<p>鉴于我们已经了解了局部自注意力的工作原理，下面我们继续尝试一下可能是 Reformer 中最具​​创新性的算法改进: <strong>LSH 自注意力</strong>。</p>
+<p>LSH 自注意力的设计目标是在效果上接近全局自注意力，而在速度与资源消耗上与局部自注意力一样高效。</p>
+<p>LSH 自注意力因依赖于 Andoni 等人于 2015 年提出的 <a href="https://arxiv.org/abs/1509.02897">LSH 算法</a> 而得名。</p>
+<p>LSH 自注意力源于以下洞见: 如果 <span class="arithmatex">\(n\)</span> 很大，则对每个查询向量而言，其对应的输出向量 <span class="arithmatex">\(\mathbf{z}_{i}\)</span> 作为所有 <span class="arithmatex">\(\mathbf{V}\)</span> 的线性组合，其中应只有极少数几个 <span class="arithmatex">\(\mathbf{v}_{i}\)</span> 的权重比其他大得多。也就是说对 <span class="arithmatex">\(\mathbf{Q}\mathbf{K}^T\)</span> 注意力点积作 softmax 产生的权重矩阵的每一行应仅有极少数的值远大于 0。</p>
+<p>我们展开讲讲: 设  <span class="arithmatex">\(\mathbf{k}_{i} \in \mathbf{K} = \left[\mathbf{k}_1, \ldots, \mathbf{k}_n \right]^T\)</span> 和  <span class="arithmatex">\(\mathbf{q}_{i} \in \mathbf{Q} = \left[\mathbf{q}_1, \ldots, \mathbf{q}_n\right]^T\)</span> 分别为键向量和查询向量。对于每个 <span class="arithmatex">\(\mathbf{q}_{i}\)</span>，可以仅用那些与 <span class="arithmatex">\(\mathbf{q}_{i}\)</span> 具有高余弦相似度的 <span class="arithmatex">\(\mathbf{k}_{j}\)</span> 的键向量来近似计算 <span class="arithmatex">\(\text{softmax}(\mathbf{q}_{i}^T \mathbf{K}^T)\)</span> 。这是因为 softmax 函数对较大输入值的输出会呈指数级增加。听起来没毛病，那么下一个问题就变成了如何高效地找到每个 <span class="arithmatex">\(\mathbf{q}_{i}\)</span> 的高余弦相似度键向量集合。</p>
+<p>首先，Reformer 的作者注意到共享查询投影和键投影: <span class="arithmatex">\(\mathbf{Q} = \mathbf{K}\)</span> 并不会影响 transformer 模型 <span class="arithmatex">\({}^1\)</span>。现在，不必为每个查询向量 <span class="arithmatex">\(q_i\)</span> 找到其高余弦相似度的键向量，而只需计算查询向量彼此之间的余弦相似度。这一简化很重要，因为查询向量之间的余弦相似度满足传递性: 如果 <span class="arithmatex">\(\mathbf{q}_{i}\)</span> 与  <span class="arithmatex">\(\mathbf{q}_{j}\)</span> 和  <span class="arithmatex">\(\mathbf{q}_{k}\)</span> 都具有较高的余弦相似度，则 <span class="arithmatex">\(\mathbf{q}_{j}\)</span> 与  <span class="arithmatex">\(\mathbf{q}_{k}\)</span> 也具有较高的余弦相似度。因此，可以将查询向量聚类至不同的桶中，使得同一桶中的所有查询向量彼此的余弦相似度较高。我们将 <span class="arithmatex">\(C_{m}\)</span> 定义为第 <em>m</em> 组位置索引，其中装的是属于同一个桶的所有查询向量: <span class="arithmatex">\(C_{m} = { i | \mathbf{q}_{i} \in \text{第 m 簇}}\)</span>，同时我们定义桶的数量 <code>config.num_buckets</code> ， <em>即</em> <span class="arithmatex">\(n_{b}\)</span>。</p>
+<p>对每个索引 <span class="arithmatex">\(C_{m}\)</span> 对应的查询向量桶内的查询向量 <span class="arithmatex">\(\mathbf{q}_{i}\)</span>，我们可以用 softmax 函数 <span class="arithmatex">\(\text{softmax}(\mathbf{Q}_{i \in C_{m}} \mathbf{Q}^T_{i \in C_{m}})\)</span> 通过共享查询和键投影来近似全局自注意力的 softmax 函数 <span class="arithmatex">\(\text{softmax}(\mathbf{q}_{i}^T \mathbf{Q}^T)\)</span>。</p>
+<p>其次，作者利用 <strong>LSH</strong> 算法将查询向量聚类到预定义的 <span class="arithmatex">\(n_{b}\)</span> 个桶 中。这里，LSH 算法是理想之选，因为它非常高效，且可用于近似基于余弦相似度的最近邻算法。对 LSH 进行解释超出了本文的范围，我们只要记住，对向量 <span class="arithmatex">\(\mathbf{q}_{i}\)</span>，LSH 算法将其索引至 <span class="arithmatex">\(n_{b}\)</span> 个预定义桶中的某个桶， <em>即</em> <span class="arithmatex">\(\text{LSH}(\mathbf{q}_{i}) = m\)</span> 其中 <span class="arithmatex">\(i \in {1, \ldots, n}\)</span>，<span class="arithmatex">\(m \in {1, \ldots, n_{b}}\)</span>。</p>
+<p>还用前面的例子，我们有:</p>
+<p><a class="glightbox" href="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/lsh_hashing.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="" src="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/lsh_hashing.png" /></a></p>
+<p>接着，可以注意到，将所有查询向量聚类至 <span class="arithmatex">\(n_{b}\)</span> 个桶中后，我们可以将输入向量 <span class="arithmatex">\(\mathbf{x}_1, \ldots, \mathbf{x}_n\)</span> 按其对应的索引 <span class="arithmatex">\(C_{m}\)</span> 进行重排 <span class="arithmatex">\({}^2\)</span>，以便共享查询 - 键自注意力可以像局部注意力一样分段应用。</p>
+<p>我们用例子再解释一下，假设在 <code>config.num_buckets=4</code> ， <code>config.lsh_chunk_length=4</code> 时重排输入向量 <span class="arithmatex">\(\mathbf{X} = \mathbf{x}_1, …, \mathbf{x}_{16}\)</span>。上图已将每个查询向量 <span class="arithmatex">\(\mathbf{q}_1, \ldots, \mathbf{q}_{16}\)</span> 分配给簇 <span class="arithmatex">\(\mathcal{C}_{1}、\mathcal{C}_{2}、\mathcal{C}_{3}、\mathcal{C}_{4}\)</span> 中的某一个。现在，对其对应的输入向量 <span class="arithmatex">\(\mathbf{x}_1, \ldots, \mathbf{x}_{16}\)</span> 进行重排，并将重排后的输入记为 <span class="arithmatex">\(\mathbf{X'}\)</span>:</p>
+<p><a class="glightbox" href="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/lsh_perm.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="" src="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/lsh_perm.png" /></a></p>
+<p>对每个输入向量，仅需在簇内进行自注意力计算即可，因此每个输入向量对应的输出向量可计算如下: <span class="arithmatex">\(\mathbf{Z}^{\text{LSH}}_{i \in \mathcal{C}_m} = \text{SelfAttn}_{\mathbf{Q}=\mathbf{K}}(\mathbf{X}_{i \in \mathcal{C}_m})\)</span>。</p>
+<p>我们再次图解一下该过程:</p>
+<p><a class="glightbox" href="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/lsh_cluster_attn.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="" src="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/lsh_cluster_attn.png" /></a></p>
+<p>可以看出，自注意力函数的运算矩阵大小各不相同，这种情况比较麻烦，因为 GPU 和 TPU 无法高效并行处理不同尺寸的矩阵运算。</p>
+<p>为了进一步解决高效计算的问题，可以借鉴局部注意力的方法，对重排后的输入进行分块，以使每个块的大小均为 <code>config.lsh_chunk_length</code> 。通过对重排后的输入进行分块，一个桶可能会被分成两个不同的块。为了解决这个问题，与局部自注意力一样，在 LSH 自注意力中，每个块除了自身之外还关注其前一个块 <code>config.lsh_num_chunks_before=1</code> ( <code>config.lsh_num_chunks_after</code> 通常设置为 0)。这样，我们就可以大概率确保桶中的所有向量相互关注 <span class="arithmatex">\({}^3\)</span>。</p>
+<p>总而言之，对于所有块 <span class="arithmatex">\(k \in {1, \ldots, n_{c}}\)</span>，LSH 自注意力可以如下表示:</p>
+<div class="arithmatex">\[ \mathbf{Z’}_{l_ {c} * k + 1:l_{c} *(k + 1)}^{\text{LSH}} = \text{SelfAttn}_{\mathbf{Q} = \mathbf{K}}(\mathbf{X’}_{l_{c} * (k + 1): l_{c} *(k + 1)})\left[l_{c}:\right] \]</div>
+<p>其中 <span class="arithmatex">\(\mathbf{X'}\)</span> 和  <span class="arithmatex">\(\mathbf{Z'}\)</span> 是按照 LSH 分桶进行重排后的输入和输出向量。公式有点复杂，我们还是画个图以帮助大家理解。</p>
+<p>这里，我们对上图中的重排向量 <span class="arithmatex">\(\mathbf{X'}\)</span> 进行分块，并分别计算每块的共享查询 - 键自注意力。</p>
+<p><a class="glightbox" href="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/lsh_attention_2.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="" src="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/lsh_attention_2.png" /></a></p>
+<p>最后，将输出 <span class="arithmatex">\(\mathbf{Z'}^{\text{LSH}}\)</span> 重排回原顺序。</p>
+<p><a class="glightbox" href="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/lsh_attention_3.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="" src="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/lsh_attention_3.png" /></a></p>
+<p>这里还要提到的一个重要特征是，可以通过并行运行 LSH 自注意力 <code>config.num_hashes</code> (即 <span class="arithmatex">\(n_{h}\)</span>) 次来提高 LSH 自注意力的准确性，其中每次使用不同的随机 LSH 哈希。通过设置 <code>config.num_hashes &gt; 1</code> ，对于每个 <span class="arithmatex">\(i\)</span>，会计算多个输出向量 <span class="arithmatex">\(\mathbf{z}^{\text{LSH}, 1}_{i}, \ldots , \mathbf{z}^{\text{LSH}, n_{h}}_{i}\)</span>。随后，可以对它们进行加权求和: <span class="arithmatex">\(\mathbf{z}^{\text{LSH}}_{i} = \sum_k^{n_{h}} \mathbf{Z}^{\text{LSH}, k}_{i} * \text{weight}^k_i\)</span>，这里 <span class="arithmatex">\(\text{weight}^k_i\)</span> 表示第 <span class="arithmatex">\(k\)</span> 轮哈希的输出向量 <span class="arithmatex">\(\mathbf{z}^{\text{LSH}, k}_{i}\)</span> 与其他哈希轮次相比的重要度，其应与其对应输出的 softmax 归一化系数呈指数正比关系。这一设计背后的直觉是，如果查询向量 <span class="arithmatex">\(\mathbf{q}_{i}^{k}\)</span> 与其对应块中的所有其他查询向量具有较高的余弦相似度，则该块的 softmax 归一化系数往往很大，因此相应的输出向量 <span class="arithmatex">\(\mathbf{q}_{i}^{k}\)</span> 应该能更好地近似全局注意力，因此其理应比 softmax 归一化系数较小的哈希轮次所产生的输出向量获得更高的权重。更多详细信息，请参阅 <a href="https://arxiv.org/pdf/2001.04451.pdf">该论文</a> 的附录 A。在我们的例子中，多轮 LSH 自注意力示意图如下。</p>
+<p><a class="glightbox" href="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/lsh_attention_4.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="" src="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/lsh_attention_4.png" /></a></p>
+<p>打完收工！至此，我们了解了 LSH 自注意力在 Reformer 中是如何工作的。</p>
+<p>说回内存复杂度，该方法有两个可能的瓶颈点: 点积所需的内存: <span class="arithmatex">\(\mathcal{O}(n_{h} * n_{c} * l_{c}^2) = \mathcal{O}(n * n_{h} * l_{c})\)</span> 以及 LSH 分桶所需的内存: <span class="arithmatex">\(\mathcal{O}(n * n_{h} * \frac{n_{b}}{2})\)</span> 其中 <span class="arithmatex">\(l_{c}\)</span> 是块长度。因为对于大的 <span class="arithmatex">\(n\)</span> 而言，桶的数量 <span class="arithmatex">\(\frac{n_{b}}{2}\)</span> 的增长速度远远快于块长度 <span class="arithmatex">\(l_{c}\)</span>，因此用户可以继续对存储桶的数量 <code>config.num_buckets</code> 进行分解，详见 <a href="https://huggingface.co/transformers/model_doc/reformer.html#lsh-self-attention">此处</a>。</p>
+<p>我们快速总结一下:</p>
+<ol>
+<li>我们希望利用 softmax 运算仅对极少数键向量赋予重要权重的先验知识来对全局注意力进行近似。</li>
+<li>如果键向量等于查询向量，这意味着 <em>对于每个</em> 查询向量 <span class="arithmatex">\(\mathbf{q}_{i}\)</span>，softmax 只需给与其余弦相似度高的其他查询向量赋予重要权重就行了。</li>
+<li>这种关系是对称的，也就是说，如果 <span class="arithmatex">\(\mathbf{q}_{j}\)</span> 与  <span class="arithmatex">\(\mathbf{q}_{i}\)</span> 相似，则 <span class="arithmatex">\(\mathbf{q}_{j}\)</span> 也与 <span class="arithmatex">\(\mathbf{q}_{i}\)</span> 相似，因此我们可以在计算自注意力之前对输入进行全局聚类。</li>
+<li>我们对输入按簇进行重排，并对重排后的输入计算局部自注意力，最后将输出重新恢复为原顺序。</li>
+</ol>
+<hr />
+<p><span class="arithmatex">\({}^{1}\)</span> 作者进行了一些初步实验，确认共享查询 - 键自注意力的表现与标准自注意力大体一致。</p>
+<p><span class="arithmatex">\({}^{2}\)</span> 更准确地说，对存储桶中的查询向量根据其原始顺序进行排序。举个例子， <em>假如</em> 向量 <span class="arithmatex">\(\mathbf{q}_1, \mathbf{q}_3, \mathbf{q}_7\)</span> 全部散列到存储桶 2，则存储桶 2 中向量的顺序仍应是先 <span class="arithmatex">\(\mathbf{q}_1\)</span>，后跟 <span class="arithmatex">\(\mathbf{q}_3\)</span> 和  <span class="arithmatex">\(\mathbf{q}_7\)</span>。</p>
+<p><span class="arithmatex">\({}^3\)</span> 顺带说明一下，作者在查询向量 <span class="arithmatex">\(\mathbf{q}_{i}\)</span> 上放了一个掩码，以防止向量关注本身。因为向量与其自身的余弦相似度总是大于等于其与其他向量的余弦相似度，所以强烈不建议共享查询 - 键自注意力中的查询向量关注自身。</p>
+<h3 id="_3">基准测试<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<p>Transformers 最近增加了基准测试相关的代码，你可参阅 <a href="https://github.com/huggingface/notebooks/blob/main/examples/benchmark.ipynb">此处</a> 以获取更详细的说明。</p>
+<p>为了展示局部 LSH 自注意力可以节省多少内存，我们在不同的 <code>local_attn_chunk_length</code> 和 <code>lsh_attn_chunk_length</code> 上对 Reformer 模型 <code>google/reformer-enwik8</code> 上进行了基准测试。你可以从 <a href="https://huggingface.co/google/reformer-enwik8">此处</a> 找到更详细的有关 <code>google/reformer-enwik8</code> 模型的默认配置和用法信息。</p>
+<p>我们先进行一些必要的导入和安装。</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>#@title Installs and Imports
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a># pip installs
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>!pip -qq install git+https://github.com/huggingface/transformers.git
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>!pip install -qq py3nvml
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>from transformers import ReformerConfig, PyTorchBenchmark, PyTorchBenchmarkArguments
+</span></code></pre></div>
+<p>首先，我们测试一下在 Reformer 模型上使用 <em>全局</em> 自注意力的内存使用情况。这可以通过设置 <code>lsh_attn_chunk_length</code> = <code>local_attn_chunk_length</code> = 8192 来达成，此时，对于所有小于或等于 8192 的输入序列，模型事实上就回退成全局自注意力了。</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>config = ReformerConfig.from_pretrained(&quot;google/reformer-enwik8&quot;, lsh_attn_chunk_length=16386, local_attn_chunk_length=16386, lsh_num_chunks_before=0, local_num_chunks_before=0)
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>benchmark_args = PyTorchBenchmarkArguments(sequence_lengths=[2048, 4096, 8192, 16386], batch_sizes=[1], models=[&quot;Reformer&quot;], no_speed=True, no_env_print=True)
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>benchmark = PyTorchBenchmark(configs=[config], args=benchmark_args)
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>result = benchmark.run()
+</span></code></pre></div>
+<div class="language-text highlight"><pre><span></span><code>HBox(children=(FloatProgress(value=0.0, description=&#39;Downloading&#39;, max=1279.0, style=ProgressStyle(description…
+
+
+
+1 / 1
+Doesn&#39;t fit on GPU. CUDA out of memory. Tried to allocate 2.00 GiB (GPU 0; 11.17 GiB total capacity; 8.87 GiB already allocated; 1.92 GiB free; 8.88 GiB reserved in total by PyTorch)
+
+====================      INFERENCE - MEMORY - RESULT       ====================
+--------------------------------------------------------------------------------
+          Model Name             Batch Size     Seq Length    Memory in MB 
+--------------------------------------------------------------------------------
+           Reformer                  1              2048            1465     
+           Reformer                  1              4096            2757     
+           Reformer                  1              8192            7893     
+           Reformer                  1             16386            N/A      
+--------------------------------------------------------------------------------
+</code></pre></div>
+<p>输入序列越长，输入序列和峰值内存使用之间的平方关系 <span class="arithmatex">\(\mathcal{O}(n^2)\)</span> 越明显。可以看出，实际上，需要更长的输入序列才能清楚地观察到输入序列翻倍会导致峰值内存使用量增加四倍。</p>
+<p>对使用全局注意力的 <code>google/reformer-enwik8</code> 模型而言，序列长度超过 16K 内存就溢出了。</p>
+<p>现在，我们使用模型的默认参数以使能 <em>局部 LSH</em> 自注意力。</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>  config = ReformerConfig.from_pretrained(&quot;google/reformer-enwik8&quot;)
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  benchmark_args = PyTorchBenchmarkArguments(sequence_lengths=[2048, 4096, 8192, 16384, 32768, 65436], batch_sizes=[1], models=[&quot;Reformer&quot;], no_speed=True, no_env_print=True)
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>  benchmark = PyTorchBenchmark(configs=[config], args=benchmark_args)
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>  result = benchmark.run()
+</span></code></pre></div>
+<div class="language-text highlight"><pre><span></span><code>1 / 1
+Doesn&#39;t fit on GPU. CUDA out of memory. Tried to allocate 2.00 GiB (GPU 0; 11.17 GiB total capacity; 7.85 GiB already allocated; 1.74 GiB free; 9.06 GiB reserved in total by PyTorch)
+Doesn&#39;t fit on GPU. CUDA out of memory. Tried to allocate 4.00 GiB (GPU 0; 11.17 GiB total capacity; 6.56 GiB already allocated; 3.99 GiB free; 6.81 GiB reserved in total by PyTorch)
+
+====================      INFERENCE - MEMORY - RESULT       ====================
+--------------------------------------------------------------------------------
+          Model Name             Batch Size     Seq Length    Memory in MB 
+--------------------------------------------------------------------------------
+           Reformer                  1              2048            1785     
+           Reformer                  1              4096            2621     
+           Reformer                  1              8192            4281     
+           Reformer                  1             16384            7607     
+           Reformer                  1             32768            N/A      
+           Reformer                  1             65436            N/A      
+--------------------------------------------------------------------------------
+</code></pre></div>
+<p>不出所料，对于较长的输入序列，使用局部 LSH 自注意力机制的内存效率更高，对于本文使用的 11GB 显存 GPU 而言，模型直到序列长度为 32K 时，内存才耗尽。</p>
+<h2 id="2">2. 分块前馈层<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<p>基于 transformer 的模型通常在自注意力层之后会有一个非常大的前馈层。该层可能会占用大量内存，有时甚至成为模型主要的内存瓶颈。Reformer 论文中首次引入了前馈分块技术，以用时间换取内存。</p>
+<h3 id="reformer">Reformer 中的分块前馈层<a class="headerlink" href="#reformer" title="Permanent link">&para;</a></h3>
+<p>在 Reformer 中， <em>LSH</em> 自注意力层或局部自注意力层通常后面跟着一个残差连接，我们可将其定义为 <em>transformer 块</em> 的第一部分。更多相关知识，可参阅此 <a href="http://jalammar.github.io/illusterated-transformer/">博文</a>。</p>
+<p><em>Transformer 块</em> 第一部分的输出，称为 <em>归范化自注意力</em> 输出，可以记为 <span class="arithmatex">\(\mathbf{\overline{Z}} = \mathbf{Z} + \mathbf{X}\)</span>。在 Reformer 模型中，<span class="arithmatex">\(\mathbf{Z}\)</span> 为  <span class="arithmatex">\(\mathbf{Z}^{\text{LSH}}\)</span> 或  <span class="arithmatex">\(\mathbf{Z}^\text{loc}\)</span>。</p>
+<p>在我们的例子中，输入 <span class="arithmatex">\(\mathbf{x}_1, \ldots, \mathbf{x}_{16}\)</span> 的规范化自注意力输出图示如下:</p>
+<p><a class="glightbox" href="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/layer_normed_output.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="" src="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/layer_normed_output.png" /></a></p>
+<p><em>Transformer 块</em> 的第二部分通常由两个前馈层 <span class="arithmatex">\(^{1}\)</span> 组成，其中 <span class="arithmatex">\(\text{Linear}_{\text{int}}(\ldots)\)</span> 用于将 <span class="arithmatex">\(\mathbf{\overline{Z}}\)</span> 映射到中间输出 <span class="arithmatex">\(\mathbf{Y}_{\text{int}}\)</span>，<span class="arithmatex">\(\text{Linear}_{\text{out}}(\ldots)\)</span> 用于将中间输出映射为最终输出 <span class="arithmatex">\(\mathbf{Y}_{\text{out}}\)</span>。我们将两个前馈层定义如下:</p>
+<div class="arithmatex">\[\mathbf{Y}_{\text{out}} = \text{Linear}_{\text{out}}(\mathbf{Y} _\text{int}) = \text{Linear}_{\text{out}}(\text{Linear}_{\text{int}}(\mathbf{\overline{Z}}))\]</div>
+<p>敲重点！在数学上，前馈层在位置 <span class="arithmatex">\(i\)</span> 处的输出 <span class="arithmatex">\(\mathbf{y}_{\text{out}, i}\)</span> 仅取决于该位置的输入 <span class="arithmatex">\(\mathbf{\overline{y}}_{i}\)</span>。与自注意力层相反，每个输出 <span class="arithmatex">\(\mathbf{y}_{\text{out}, i}\)</span> 与其他位置的输入 <span class="arithmatex">\(\mathbf{\overline{y}}_{j \ne i}\)</span> 完全独立。</p>
+<p><span class="arithmatex">\(\mathbf{\overline{z}}_1, \ldots, \mathbf{\overline{z}}_{16}\)</span> 的前馈层图示如下:</p>
+<p><a class="glightbox" href="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/feed_forward.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="" src="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/feed_forward.png" /></a></p>
+<p>从图中可以看出，所有输入向量 <span class="arithmatex">\(\mathbf{\overline{z}}_{i}\)</span> 均由同一前馈层并行处理。</p>
+<p>我们再观察一下前馈层的输出维度，看看有没有啥有意思的事情。在 Reformer 中，<span class="arithmatex">\(\text{Linear}_{\text{int}}\)</span> 的输出维度为 <code>config.feed_forward_size</code> ， <em>即</em> <span class="arithmatex">\(d_ {f}\)</span>; 而  <span class="arithmatex">\(\text{Linear}_{\text{out}}\)</span> 的输出维度为 <code>config.hidden_​​size</code> ， <em>即</em> <span class="arithmatex">\(d_ {h}\)</span>。</p>
+<p>Reformer 作者观察到 <span class="arithmatex">\(^{2}\)</span>，在 transformer 模型中，中间维度 <span class="arithmatex">\(d_{f}\)</span> 通常往往比输出维度 <span class="arithmatex">\(d_{h}\)</span> 大许多。这意味着尺寸为 <span class="arithmatex">\(d_{f} \times n\)</span> 的张量 <span class="arithmatex">\(\mathbf{\mathbf{Y}}_\text{int}\)</span> 占据了大量的内存，甚至可能成为内存瓶颈。</p>
+<p>为了更好地感受维度的差异，我们将本文例子中的矩阵 <span class="arithmatex">\(\mathbf{Y}_\text{int}\)</span> 和  <span class="arithmatex">\(\mathbf{Y}_\text{out}\)</span> 图示如下:</p>
+<p><a class="glightbox" href="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/feed_forward_matrix.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="" src="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/feed_forward_matrix.png" /></a></p>
+<p>很明显，张量 <span class="arithmatex">\(\mathbf{Y} _\text{int}\)</span> 比  <span class="arithmatex">\(\mathbf{Y}_{\text{out}}\)</span> 占用了更多的内存 (准确地说，多占 <span class="arithmatex">\(\frac{d_{f}}{d_{h}} \times n\)</span> 字节的内存)。但是，是否有必要存储完整的中间矩阵 <span class="arithmatex">\(\mathbf{Y}_\text{int}\)</span> ？并非如此，因为我们关心的实际上只有输出矩阵 <span class="arithmatex">\(\mathbf{Y}_ \text{out}\)</span>。为了以速度换内存，我们可以对线性层计算进行分块，一次只处理一个块。定义 <code>config.chunk_size_feed_forward</code> 为  <span class="arithmatex">\(c_{f}\)</span>，则分块线性层定义为 <span class="arithmatex">\(\mathbf{Y}_{\text{out}} = \left[\mathbf{Y}_{\text{out}, 1: c_{f}}, \ldots, \mathbf{Y}_{\text{out}, (n - c_{f}): n}\right]\)</span> 即  <span class="arithmatex">\(\mathbf{Y}_{\text{out}, (c_{f} * i):(i * c_{f} + i)} = \text{Linear}_{\text{out}}( \text{Linear}_{\text{int}}(\mathbf{\overline{Z}}_{(c_{f} * i):(i * c_{f} + i)}))\)</span>。这么做意味着我们可以增量计算输出最后再串接在一起，这样可以避免将整个中间张量 <span class="arithmatex">\(\mathbf{Y}_{\text{int}}\)</span> 存储在内存中。</p>
+<p>假设 <span class="arithmatex">\(c_{f}=1\)</span>，我们把增量计算 <span class="arithmatex">\(i=9\)</span> 的过程图示如下:</p>
+<p><a class="glightbox" href="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/chunked_feed_forward.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="" src="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/chunked_feed_forward.png" /></a></p>
+<p>当块大小为 1 时，必须完整存储在内存中的唯一张量是大小为 <span class="arithmatex">\(16 \times d_{h}\)</span> 的输入张量 <span class="arithmatex">\(\mathbf{\overline{Z}}\)</span>，其中 <span class="arithmatex">\(d_{h}\)</span> 为 <code>config.hidden_​​size</code> 。而中间张量只需要存储大小为 <span class="arithmatex">\(d_{f}\)</span> 的  <span class="arithmatex">\(\mathbf{y}_{\text{int}, i}\)</span> 就可以了 <span class="arithmatex">\(^{3}\)</span>。</p>
+<p>最后，重要的是要记住， <em>分块线性层</em> 与传统的完整线性层相比，其输出在数学上是等效的，因此可以应用于所有 transformer 线性层。因此，在某些场景下，可以考虑使用 <code>config.chunk_size_feed_forward</code> 在内存和速度之间进行更好的权衡。</p>
+<hr />
+<p><span class="arithmatex">\({}^1\)</span> 为了简单起见，我们省略了前馈层之前的层归一化操作。</p>
+<p><span class="arithmatex">\({}^2\)</span> 以 <code>bert-base-uncased</code> 为例，其中间维度 <span class="arithmatex">\(d_{f}\)</span> 是 3072，为输出维度 <span class="arithmatex">\(d_{h}\)</span> 的 4 倍。</p>
+<p><span class="arithmatex">\({}^3\)</span> 提醒一下，为清晰说明起见，本文假设输出 <code>config.num_attention_heads</code> 为 1，因此假设自注意力层的输出大小为 <code>config.hidden_​​size</code> 。</p>
+<p>读者也可以在 🤗Transformers 的 <a href="https://huggingface.co/transformers/glossary.html#feed-forward-chunking">相应文档</a> 中找到有关分块线性/前馈层的更多信息。</p>
+<h3 id="_4">基准测试<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<p>我们测试一下使用分块前馈层可以节省多少内存。</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>#@title Installs and Imports
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a># pip installs
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>!pip -qq install git+https://github.com/huggingface/transformers.git
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>!pip install -qq py3nvml
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>from transformers import ReformerConfig, PyTorchBenchmark, PyTorchBenchmarkArguments
+</span></code></pre></div>
+<div class="language-text highlight"><pre><span></span><code>  Building wheel for transformers (setup.py) ... [?25l[?25hdone
+</code></pre></div>
+<p>首先，我们将没有分块前馈层的默认 <code>google/reformer-enwik8</code> 模型与有分块前馈层的模型进行比较。</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>config_no_chunk = ReformerConfig.from_pretrained(&quot;google/reformer-enwik8&quot;) # no chunk
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>config_chunk = ReformerConfig.from_pretrained(&quot;google/reformer-enwik8&quot;, chunk_size_feed_forward=1) # feed forward chunk
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>benchmark_args = PyTorchBenchmarkArguments(sequence_lengths=[1024, 2048, 4096], batch_sizes=[8], models=[&quot;Reformer-No-Chunk&quot;, &quot;Reformer-Chunk&quot;], no_speed=True, no_env_print=True)
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>benchmark = PyTorchBenchmark(configs=[config_no_chunk, config_chunk], args=benchmark_args)
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>result = benchmark.run()
+</span></code></pre></div>
+<div class="language-text highlight"><pre><span></span><code>1 / 2
+Doesn&#39;t fit on GPU. CUDA out of memory. Tried to allocate 2.00 GiB (GPU 0; 11.17 GiB total capacity; 7.85 GiB already allocated; 1.74 GiB free; 9.06 GiB reserved in total by PyTorch)
+2 / 2
+Doesn&#39;t fit on GPU. CUDA out of memory. Tried to allocate 2.00 GiB (GPU 0; 11.17 GiB total capacity; 7.85 GiB already allocated; 1.24 GiB free; 9.56 GiB reserved in total by PyTorch)
+
+====================      INFERENCE - MEMORY - RESULT       ====================
+--------------------------------------------------------------------------------
+          Model Name             Batch Size     Seq Length    Memory in MB 
+--------------------------------------------------------------------------------
+      Reformer-No-Chunk              8              1024            4281     
+      Reformer-No-Chunk              8              2048            7607     
+      Reformer-No-Chunk              8              4096            N/A      
+        Reformer-Chunk               8              1024            4309     
+        Reformer-Chunk               8              2048            7669     
+        Reformer-Chunk               8              4096            N/A      
+--------------------------------------------------------------------------------
+</code></pre></div>
+<p>有趣的是，分块前馈层似乎在这里根本没有帮助。原因是 <code>config.feed_forward_size</code> 不够大，所以效果不明显。仅当序列长度较长 (4096) 时，才能看到内存使用量略有下降。</p>
+<p>我们再看看如果将前馈层的大小增加 4 倍，并将注意力头的数量同时减少 4 倍，从而使前馈层成为内存瓶颈，此时峰值内存情形如何。</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>config_no_chunk = ReformerConfig.from_pretrained(&quot;google/reformer-enwik8&quot;, chunk_size_feed_forward=0, num_attention_{h}eads=2, feed_forward_size=16384) # no chuck
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>config_chunk = ReformerConfig.from_pretrained(&quot;google/reformer-enwik8&quot;, chunk_size_feed_forward=1, num_attention_{h}eads=2, feed_forward_size=16384) # feed forward chunk
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>benchmark_args = PyTorchBenchmarkArguments(sequence_lengths=[1024, 2048, 4096], batch_sizes=[8], models=[&quot;Reformer-No-Chunk&quot;, &quot;Reformer-Chunk&quot;], no_speed=True, no_env_print=True)
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>benchmark = PyTorchBenchmark(configs=[config_no_chunk, config_chunk], args=benchmark_args)
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>result = benchmark.run()
+</span></code></pre></div>
+<div class="language-text highlight"><pre><span></span><code>1 / 2
+2 / 2
+
+====================      INFERENCE - MEMORY - RESULT       ====================
+--------------------------------------------------------------------------------
+          Model Name             Batch Size     Seq Length    Memory in MB 
+--------------------------------------------------------------------------------
+      Reformer-No-Chunk              8              1024            3743     
+      Reformer-No-Chunk              8              2048            5539     
+      Reformer-No-Chunk              8              4096            9087     
+        Reformer-Chunk               8              1024            2973     
+        Reformer-Chunk               8              2048            3999     
+        Reformer-Chunk               8              4096            6011     
+--------------------------------------------------------------------------------
+</code></pre></div>
+<p>现在，对于较长的输入序列，可以看到峰值内存使用量明显减少。总之，应该注意的是，分块前馈层仅对于具有很少注意力头和较大前馈层的模型才有意义。</p>
+<h2 id="3">3. 可逆残差层<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<p>可逆残差层由 <a href="https://arxiv.org/abs/1707.04585">N. Gomez 等人</a> 首先提出并应用在 <em>ResNet</em> 模型的训练上以减少内存消耗。从数学上讲，可逆残差层与 <em>真正的</em> 残差层略有不同，其不需要在前向传播期间保存激活，因此可以大大减少训练的内存消耗。</p>
+<h3 id="reformer_1">Reformer 中的可逆残差层<a class="headerlink" href="#reformer_1" title="Permanent link">&para;</a></h3>
+<p>我们首先研究为什么模型训练比推理需要更多的内存。</p>
+<p>在模型推理时，所需的内存差不多等于计算模型中 <strong>单个</strong> 最大张量所需的内存。而在训练模型时，所需的内存差不多等于所有可微张量的 <strong>总和</strong>。</p>
+<p>如果读者已经理解了深度学习框架中的自动微分的工作原理，对此就比较容易理解了。多伦多大学 Roger Grosse 的这些 <a href="https://www.cs.toronto.edu/~rgrosse/courses/csc321_2018/slides/lec10.pdf">幻灯片</a> 对大家理解自动微分很有帮助。</p>
+<p>简而言之，为了计算可微函数 ( <em>如</em> 一层) 的梯度，自动微分需要函数输出的梯度以及函数的输入、输出张量。虽然梯度是可以动态计算并随后丢弃的，但函数的输入和输出张量 ( <em>又名</em> 激活) 需要在前向传播过程中被保存下来，以供反向传播时使用。</p>
+<p>我们具体看下 transformer 模型中的情况。Transformer 模型是由多个 transformer 层堆叠起来的。每多一个 transformer 层都会迫使模型在前向传播过程中保存更多的激活，从而增加训练所需的内存。
+我们细看一下 transformer 层。Transformer 层本质上由两个残差层组成。第一个残差层是第 1) 节中解释的 <em>自注意力</em> 机制，第二个残差层是第 2) 节中解释的 <em>线性层</em> (或前馈层)。</p>
+<p>使用与之前相同的符号，transformer 层的输入 <em>即</em> <span class="arithmatex">\(\mathbf{X}\)</span> 首先被归一化 <span class="arithmatex">\(^{1}\)</span>，然后经过自注意力层获得输出 <span class="arithmatex">\(\mathbf{Z} = \text{SelfAttn}(\text{LayerNorm}(\mathbf{X}))\)</span>。为方便讨论，我们将这两层缩写为 <span class="arithmatex">\(G\)</span>，即 <span class="arithmatex">\(\mathbf{Z} = G(\mathbf{X})\)</span>。
+接下来，将残差 <span class="arithmatex">\(\mathbf{Z}\)</span> 与输入相加 <span class="arithmatex">\(\mathbf{\overline{Z}} = \mathbf{Z} + \mathbf{X}\)</span>，得到张量输入到第二个残差层 —— 两个线性层。<span class="arithmatex">\(\mathbf{\overline{Z}}\)</span> 经过第二个归一化层处理后，再经过两个线性层，得到 <span class="arithmatex">\(\mathbf{Y} = \text{Linear}(\text{LayerNorm}(\mathbf{Z} + \mathbf{X}))\)</span>。我们将第二个归一化层和两个线性层缩写为 <span class="arithmatex">\(F\)</span> ，得到 <span class="arithmatex">\(\mathbf{Y} = F(\mathbf{\overline{Z}})\)</span>。最后，将残差 <span class="arithmatex">\(\mathbf{Y}\)</span> 加到 <span class="arithmatex">\(\mathbf{\overline{Z}}\)</span> 上得到 transformer 层的输出 <span class="arithmatex">\(\mathbf{\overline{Y}} = \mathbf{Y} + \mathbf{\overline{Z}}\)</span>。</p>
+<p>我们仍以 <span class="arithmatex">\(\mathbf{x}_1, \ldots, \mathbf{x}_{16}\)</span> 为例对完整的 transformer 层进行图解。</p>
+<p><a class="glightbox" href="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/normal_trans_resnet.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="" src="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/normal_trans_resnet.png" /></a></p>
+<p><em>比如</em> ，要计算自注意力块 <span class="arithmatex">\(G\)</span> 的梯度，必须事先知道三个张量: 梯度 <span class="arithmatex">\(\partial \mathbf{Z}\)</span>、输出 <span class="arithmatex">\(\mathbf{Z}\)</span> 以及输入 <span class="arithmatex">\(\mathbf{X}\)</span>。虽然 <span class="arithmatex">\(\partial \mathbf{Z}\)</span> 可以即时计算并随后丢弃，但 <span class="arithmatex">\(\mathbf{Z}\)</span> 和 <span class="arithmatex">\(\mathbf{X}\)</span> 必须在前向传播期间计算并保存下来，因为在反向传播期间比较难轻松地即时重新计算它们。因此，在前向传播过程中，大张量输出 (如查询 - 键点积矩阵 <span class="arithmatex">\(\mathbf{Q}\mathbf{K}^T\)</span> 或线性层的中间输出 <span class="arithmatex">\(\mathbf{Y}^{\text{int}}\)</span>) 必须保存在内存中 <span class="arithmatex">\(^{2}\)</span>。</p>
+<p>此时，可逆残差层就有用了。它的想法相对简单: 残差块的设计方式使得不必保存函数的输入和输出张量，而在反向传播期间就轻松地对二者进行重新计算，这样的话在前向传播期间就无需将这些张量保存在内存中了。</p>
+<p>这是通过两个输入流 <span class="arithmatex">\(\mathbf{X}^{(1)}、\mathbf{X}^{(2)}\)</span> 及两个输出流 <span class="arithmatex">\(\mathbf{\overline {Y}}^{(1)}、\mathbf{\overline{Y}}^{(2)}\)</span> 来实现的。第一个残差 <span class="arithmatex">\(\mathbf{Z}\)</span> 由第一个输出流 <span class="arithmatex">\(\mathbf{Z} = G(\mathbf{X}^{(1)})\)</span> 算得，然后其加到第二个输入流的输入上，即 <span class="arithmatex">\(\mathbf{\overline{Z}} = \mathbf{Z} + \mathbf{X}^{(2)}\)</span>。类似地，再将残差 <span class="arithmatex">\(\mathbf{Y} = F(\mathbf{\overline{Z}})\)</span> 与第一个输入流相加。最终，两个输出流即为 <span class="arithmatex">\(\mathbf{Y}^{(1)} = \mathbf{Y} + \mathbf{X}^{(1)}\)</span>、<span class="arithmatex">\(\mathbf{Y}^{(2)} = \mathbf{ X}^{(2)} + \mathbf{Z} = \mathbf{\overline{Z}}\)</span>。</p>
+<p>以 <span class="arithmatex">\(\mathbf{x}_1, \ldots, \mathbf{x}_{16}\)</span> 为例来图示可逆 transformer 层，如下:</p>
+<p><a class="glightbox" href="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/rev_trans_resnet.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="" src="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/rev_trans_resnet.png" /></a></p>
+<p>可以看出，输出 <span class="arithmatex">\(\mathbf{\overline{Y}}^{(1)}、\mathbf{\overline{Y}}^{(2)}\)</span> 的计算方式与不可逆层 <span class="arithmatex">\(\mathbf{\overline{Y}}\)</span> 的计算方式非常相似，但在数学上又不同。Reformer 的作者在一些初步实验中观察到，可逆 transformer 模型的性能与标准 transformer 模型的性能相当。与标准 transformer 层的一个明显区别是有两个输入流和输出流 <span class="arithmatex">\(^{3}\)</span>，这一开始反而稍微增加了前向传播所需的内存。但即使如此，我们还是强调双流架构至关重要，因为其在前向传播过程中无需保存任何激活。我们解释一下: 对于反向传播，可逆 treansformer 层必须计算梯度 <span class="arithmatex">\(\partial G\)</span> 和  <span class="arithmatex">\(\partial F\)</span>。除了可即时计算的梯度 <span class="arithmatex">\(\partial \mathbf{Y}\)</span> 和  <span class="arithmatex">\(\partial \mathbf{Z}\)</span> 之外，为了计算 <span class="arithmatex">\(\partial F\)</span> 必须已知张量值 <span class="arithmatex">\(\mathbf{Y}\)</span>、<span class="arithmatex">\(\mathbf{\overline{Z}}\)</span>，为了计算 <span class="arithmatex">\(\partial G\)</span> 必须已知 <span class="arithmatex">\(\mathbf{Z}\)</span> 和  <span class="arithmatex">\(\mathbf{X}^{(1)}\)</span>。</p>
+<p>假设我们知道 <span class="arithmatex">\(\mathbf{\overline{Y}}^{(1)}，\mathbf{\overline{Y}}^{(2)}\)</span>，则从图中可以很容易看出，我们可以如下计算出 <span class="arithmatex">\(\mathbf{X}^{(1)}，\mathbf{X}^{(2)}\)</span> 。<span class="arithmatex">\(\mathbf{X}^{(1)} = F(\mathbf{\overline{Y}}^{(1)}) - \mathbf{\overline{Y}}^{(1)}\)</span>。<span class="arithmatex">\(\mathbf{X}^{(1)}\)</span> 计算出来了！然后，<span class="arithmatex">\(\mathbf{X}^{(2)}\)</span> 可以通过 <span class="arithmatex">\(\mathbf {X}^{(2)} = \mathbf{\overline{Y}}^{(1)} - G(\mathbf{X}^{(1)})\)</span> 算出。之后，<span class="arithmatex">\(\mathbf{Z}\)</span> 和  <span class="arithmatex">\(\mathbf{Y}\)</span> 的计算就简单了，可以通过 <span class="arithmatex">\(\mathbf{Y} = \mathbf{\overline{Y}}^{(1)} - \mathbf{X}^{(1)}\)</span> 和  <span class="arithmatex">\(\mathbf{Z} = \mathbf{\overline{Y}}^{(2)} - \mathbf{X }^{(2)} 算出\)</span>。总结一下，仅需在前向传播期间存储 <strong>最后一个</strong> 可逆 transformer 层的输出 <span class="arithmatex">\(\mathbf{\overline{Y}}^{(1)}，\mathbf{\overline{Y}}^{(2)}\)</span>，所有其他层的激活就可以通过在反向传播期间使用 <span class="arithmatex">\(G\)</span> 和  <span class="arithmatex">\(F\)</span> 以及 <span class="arithmatex">\(\mathbf {X}^{(1)}\)</span> 和  <span class="arithmatex">\(\mathbf{X}^{(2)}\)</span> 推导而得。在反向传播期间，每个可逆 transformer 层用两次前向传播 <span class="arithmatex">\(G\)</span> 和  <span class="arithmatex">\(F\)</span> 的计算开销换取前向传播时不必保存任何激活。好买卖！</p>
+<p><strong>注意</strong>: 最近，主要的深度学习框架都支持了梯度检查点技术，以允许仅保存某些激活并在反向传播期间重计算尺寸较大的激活 (Tensoflow 代码见 <a href="https://www.tensorflow.org/api_docs/python/tf/recompute_grad">此处</a>，PyTorch 代码见 <a href="https://pytorch.org/docs/stable/checkpoint.html">此处</a>)。对于标准可逆层，这仍然意味着必须为每个 transformer 层保存至少一个激活，但通过定义哪些激活可以动态重新计算，能够节省大量内存。</p>
+<hr />
+<p><span class="arithmatex">\(^{1}\)</span> 在前两节中，我们省略了自注意力层和线性层之前的层归一化操作。读者应该知道 <span class="arithmatex">\(\mathbf{X}\)</span> 和  <span class="arithmatex">\(\mathbf{\overline{Z}}\)</span> 在输入自注意力层和线性层之前都分别经过层归一化处理。</p>
+<p><span class="arithmatex">\(^{2}\)</span> 在原始自注意力中，<span class="arithmatex">\(\mathbf{Q}\mathbf{K}\)</span> 的维度为 <span class="arithmatex">\(n \times n\)</span>; 而在 <em>LSH 自注意力</em> 或 <em>局部自注意力</em> 层的维度为 <span class="arithmatex">\(n \times l_{c} \times n_{h}\)</span> 或  <span class="arithmatex">\(n \times l_{c}\)</span> 其中 <span class="arithmatex">\(l_{c}\)</span> 为块长度，<span class="arithmatex">\(n_{h}\)</span> 为哈希数。</p>
+<p><span class="arithmatex">\(^{3}\)</span> 第一个可逆 transformer 层的 <span class="arithmatex">\(\mathbf{X}^{(2)}\)</span> 等于 <span class="arithmatex">\(\mathbf{X}^{(1)}\)</span>。</p>
+<h3 id="_5">测试基准<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<p>为了测量可逆残差层的效果，我们将增加模型层数的同时比较 BERT 和 Reformer 的内存消耗。</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>#@title Installs and Imports
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a># pip installs
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>!pip -qq install git+https://github.com/huggingface/transformers.git
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>!pip install -qq py3nvml
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>from transformers import ReformerConfig, BertConfig, PyTorchBenchmark, PyTorchBenchmarkArguments
+</span></code></pre></div>
+<p>我们把标准 <code>bert-base-uncased</code> BERT 模型的层数从 4 增加到 12 ，同时测量其所需内存。</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>config_4_layers_bert = BertConfig.from_pretrained(&quot;bert-base-uncased&quot;, num_hidden_layers=4)
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>config_8_layers_bert = BertConfig.from_pretrained(&quot;bert-base-uncased&quot;, num_hidden_layers=8)
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>config_12_layers_bert = BertConfig.from_pretrained(&quot;bert-base-uncased&quot;, num_hidden_layers=12)
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>benchmark_args = PyTorchBenchmarkArguments(sequence_lengths=[512], batch_sizes=[8], models=[&quot;Bert-4-Layers&quot;, &quot;Bert-8-Layers&quot;, &quot;Bert-12-Layers&quot;], training=True, no_inference=True, no_speed=True, no_env_print=True)
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>benchmark = PyTorchBenchmark(configs=[config_4_layers_bert, config_8_layers_bert, config_12_layers_bert], args=benchmark_args)
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>result = benchmark.run()
+</span></code></pre></div>
+<div class="language-text highlight"><pre><span></span><code>HBox(children=(FloatProgress(value=0.0, description=&#39;Downloading&#39;, max=433.0, style=ProgressStyle(description_…
+
+
+
+1 / 3
+2 / 3
+3 / 3
+
+====================        TRAIN - MEMORY - RESULTS        ====================
+--------------------------------------------------------------------------------
+          Model Name             Batch Size     Seq Length    Memory in MB 
+--------------------------------------------------------------------------------
+        Bert-4-Layers                8              512             4103     
+        Bert-8-Layers                8              512             5759     
+        Bert-12-Layers               8              512             7415     
+--------------------------------------------------------------------------------
+</code></pre></div>
+<p>可以看出，BERT 层数每增加 1，其所需内存就会有超 400MB 的线性增长。</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>config_4_layers_reformer = ReformerConfig.from_pretrained(&quot;google/reformer-enwik8&quot;, num_hidden_layers=4, num_hashes=1)
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>config_8_layers_reformer = ReformerConfig.from_pretrained(&quot;google/reformer-enwik8&quot;, num_hidden_layers=8, num_hashes=1)
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>config_12_layers_reformer = ReformerConfig.from_pretrained(&quot;google/reformer-enwik8&quot;, num_hidden_layers=12, num_hashes=1)
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>benchmark_args = PyTorchBenchmarkArguments(sequence_lengths=[512], batch_sizes=[8], models=[&quot;Reformer-4-Layers&quot;, &quot;Reformer-8-Layers&quot;, &quot;Reformer-12-Layers&quot;], training=True, no_inference=True, no_speed=True, no_env_print=True)
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>benchmark = PyTorchBenchmark(configs=[config_4_layers_reformer, config_8_layers_reformer, config_12_layers_reformer], args=benchmark_args)
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>result = benchmark.run()
+</span></code></pre></div>
+<div class="language-text highlight"><pre><span></span><code>1 / 3
+2 / 3
+3 / 3
+
+====================        TRAIN - MEMORY - RESULTS        ====================
+--------------------------------------------------------------------------------
+          Model Name             Batch Size     Seq Length    Memory in MB 
+--------------------------------------------------------------------------------
+      Reformer-4-Layers              8              512             4607     
+      Reformer-8-Layers              8              512             4987     
+      Reformer-12-Layers             8              512             5367     
+--------------------------------------------------------------------------------
+</code></pre></div>
+<p>另一方面，对于 Reformer 而言，每增加一层所带来的内存增量会显著减少，平均不到 100MB。因此 12 层的 <code>reformer-enwik8</code> 模型比 12 层的 <code>bert-base-uncased</code> 模型的内存需求更少。</p>
+<h2 id="4">4. 轴向位置编码<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<p>Reformer 使得处理超长输入序列成为可能。然而，对于如此长的输入序列，仅存储标准位置编码权重矩阵就需要超过 1GB 内存。为了避免如此大的位置编码矩阵，官方 Reformer 代码引入了 <em>轴向位置编码</em> 。</p>
+<p><strong>重要:</strong> <em>官方论文中没有解释轴向位置编码，但通过阅读代码以及与作者讨论我们很好地理解了它。</em></p>
+<h3 id="reformer_2">Reformer 中的轴向位置编码<a class="headerlink" href="#reformer_2" title="Permanent link">&para;</a></h3>
+<p>Transformer 需要位置编码来对输入序列中的单词顺序进行编码，因为自注意力层 <em>没有顺序的概念</em> 。位置编码通常由一个简单的查找矩阵 <span class="arithmatex">\(\mathbf{E} = \left[\mathbf{e}_1, \ldots, \mathbf{e}_{n_\text{max}}\right]\)</span> 来定义，然后将位置编码向量 <span class="arithmatex">\(\mathbf{e}_{i}\)</span> 简单地加到 <em>第 i 个</em> 输入向量上，即 <span class="arithmatex">\(\mathbf{x}_{i} + \mathbf{e}_{i}\)</span>，以便模型可以区分输入向量 ( <em>即</em> 词元) 位于位置 <span class="arithmatex">\(i\)</span> 还是位置<span class="arithmatex">\(j\)</span>。对于每个输入位置，模型需要能够查找到相应的位置编码向量，因此 <span class="arithmatex">\(\mathbf{E}\)</span> 的维度由模型可以处理的最大输入序列长度 <code>config.max_position_embeddings</code> ( <em>即</em> <span class="arithmatex">\(n_\text{max}\)</span>) 以及输入向量的维度 <code>config.hidden_​​size</code> ( <em>即</em> <span class="arithmatex">\(d_{h}\)</span>) 共同决定。</p>
+<p>假设 <span class="arithmatex">\(d_{h}=4\)</span>，<span class="arithmatex">\(n_\text{max}=49\)</span>，其位置编码矩阵如下图所示:</p>
+<p><a class="glightbox" href="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/positional_encodings_default.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="" src="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/positional_encodings_default.png" /></a></p>
+<p>此处，我们仅展示位置编码 <span class="arithmatex">\(\mathbf{e}_{1}\)</span>、<span class="arithmatex">\(\mathbf{e}_{2}\)</span> 及 <span class="arithmatex">\(\mathbf{e}_{49}\)</span>，其维度 ( <em>即</em> 高度) 为 4。</p>
+<p>想象一下，我们想要在长度最长为 0.5M 个词元，输入向量维度 <code>config.hidden_​​size</code> 为 1024 的序列上训练 Reformer 模型 (请参阅 <a href="https://github.com/patrickvonplaten/notebooks/blob/master/PyTorch_Reformer.ipynb">此笔记本</a>)。其对应的位置嵌入的参数量为 <span class="arithmatex">\(0.5M \times 1024 \sim 512M\)</span>，大小为 2GB。</p>
+<p>在将模型加载到内存中或将其保存在硬盘上时，所需要的内存是很大且很没必要的。</p>
+<p>Reformer 作者通过将 <code>config.hidden_​​size</code> 维度一分为二，并巧妙地对 <span class="arithmatex">\(n_\text{max}\)</span> 维进行分解，从而成功地大幅缩小了位置编码的大小。在 transformers 中，用户可以将 <code>config.axis_pos_shape</code> 设置为一个含有两个值的列表: <span class="arithmatex">\(n_\text{max}^ 1\)</span>、<span class="arithmatex">\(n_\text{max}^2\)</span>，其中 <span class="arithmatex">\(n_\text{max}^1 \times n_\text{max}^2 = n_\text{max}\)</span>，从而对 <span class="arithmatex">\(n_\text{max}\)</span> 维度进行分解。同时，用户可以把 <code>config.axis_pos_embds_dim</code> 设置为一个含有两个值 <span class="arithmatex">\(d_{h}^{1}\)</span> 和 <span class="arithmatex">\(d_{h}^2\)</span> 的列表，其中 <span class="arithmatex">\(d_{h} ^1 + d_{h}^2 = d_{h}\)</span>，从而决定隐藏维度应该如何切割。下面用图示来直观解释一下。</p>
+<p>大家可以将对 <span class="arithmatex">\(n_{\text{max}}\)</span> 的分解视为将其维度折叠到第三个轴，下图所示为 <code>config.axis_pos_shape = [7, 7]</code> 分解:</p>
+<p><a class="glightbox" href="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/3d_positional_encoding.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="" src="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/3d_positional_encoding.png" /></a></p>
+<p>三个直立矩形棱柱分别对应于编码向量 <span class="arithmatex">\(\mathbf{e}_{1}, \mathbf{e}_{2}, \mathbf{e}_{49}\)</span>，我们可以看到 49 个编码向量被分为 7 行，每行 7 个向量。现在的想法是仅使用 7 个编码向量中的一行，并将这些向量扩展到其他 6 行。本质上是想让七行重用一行的值，但是又不能让不同位置的编码向量的值相同，所以要将每个维度 ( <em>或称</em> 高度) 为 <code>config.hidden_​​size=4</code> 的向量切割成两个部分: 大小为 <span class="arithmatex">\(1\)</span> 的低区编码向量 <span class="arithmatex">\(\mathbf{e}_\text{down}\)</span> 以及大小为 <span class="arithmatex">\(3\)</span> 的高区编码向量 <span class="arithmatex">\(\mathbf{e}_\text{up}\)</span>，这样低区就可以沿行扩展而高区可以沿列扩展。为了讲清楚，我们还是画个图。</p>
+<p><a class="glightbox" href="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/3d_positional_encoding_cut.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="" src="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/3d_positional_encoding_cut.png" /></a></p>
+<p>可以看到，我们已将嵌入向量切为 <span class="arithmatex">\(\mathbf{e}_\text{down}\)</span> ( <em>蓝色</em> ) 和 <span class="arithmatex">\(\mathbf{e}_\text{up}\)</span> ( <em>黄色</em> ) 两个部分。现在对 <em>子</em> 向量 <span class="arithmatex">\(\mathbf{E} _\text{down} = \left[\mathbf{e}_ {\text{down},1}, \ldots, \mathbf{e} _{\text{down},49}\right]\)</span> 仅保留第一行的 7 个子向量， <em>即</em> 图中宽度，并将其沿列 ( <em>又名</em> 深度) 扩展。相反，对 <em>子</em> 向量 <span class="arithmatex">\(\mathbf{E}_\text{up} = \left[\mathbf{e}_{\text{up},1}, \ldots, \mathbf{e }_{\text{up},49}\right]\)</span> 仅保留第一列的 <span class="arithmatex">\(7\)</span> 个子向量并沿行扩展。此时，得到的嵌入向量 <span class="arithmatex">\(\mathbf{e'}_{i}\)</span> 如下:</p>
+<div class="arithmatex">\[\mathbf{e'}_{i} = \left[ \left[\mathbf{e}_{\text{down, } i \% n_\text{max}^1}\right]^T, \left[\mathbf{e}_{\text{up, } \left \lfloor{\frac{i}{{n}^2_{\text{max}}}}\right \rfloor} \right]^T \right]^T \]</div>
+<p>本例中，<span class="arithmatex">\(n_\text{max}^1 = 7\)</span>，<span class="arithmatex">\(n_\text{max}^2 = 7\)</span> 。这些新编码 <span class="arithmatex">\(\mathbf{E'} = \left[\mathbf{e'}_{1}, \ldots, \mathbf{e'}_{n_\text{max}}\right]\)</span> 称为 <strong>轴向位置编码</strong>。</p>
+<p>下图针对我们的例子对轴向位置编码进行了更详细的说明。</p>
+<p><a class="glightbox" href="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/axial_pos_encoding.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="" src="https://raw.githubusercontent.com/patrickvonplaten/scientific_images/master/reformer_benchmark/axial_pos_encoding.png" /></a></p>
+<p>现在应该很清楚如何仅根据维度为 <span class="arithmatex">\(d_{h}^1 \times n_{\text{max}^1}\)</span> 的  <span class="arithmatex">\(\mathbf{E}_{\text{down}}\)</span> 及维度为 <span class="arithmatex">\(d_{h}^2 \times n_{\text{max}}^2\)</span> 的  <span class="arithmatex">\(\mathbf{E}_{\text{up}}\)</span> 计算最终位置编码向量 <span class="arithmatex">\(\mathbf{E'}\)</span> 了。</p>
+<p>这里的关键是，轴向位置编码能够从设计上确保向量 <span class="arithmatex">\(\left[\mathbf{e'}_1, \ldots, \mathbf{e'}_{n_{\text{max} }}\right]\)</span> 之间各不相等，并且使编码矩阵的大小从 <span class="arithmatex">\(n_{\text{max}} \times d_{h}\)</span> 减小到 <span class="arithmatex">\(n_{\text{max}}^1 \times d_{h}^1 + n_\text{max}^2 \times d_{h}^2\)</span>。因为设计上允许每个轴向位置编码向量不同，所以一旦模型中的轴向位置编码训出来后，模型就可以灵活高效地获取位置编码。</p>
+<p>为了证明位置编码矩阵的尺寸得到了大幅减小，假设我们为 Reformer 模型设置了参数 <code>config.axis_pos_shape = [1024, 512]</code> 以及 <code>config.axis_pos_embds_dim = [512, 512]</code> ，且该模型支持的最长输入序列长度为 0.5M 词元。此时，生成的轴向位置编码矩阵的参数量仅为 <span class="arithmatex">\(1024 \times 512 + 512 \times 512 \sim 800K\)</span>，即大约 3MB。这个数字与标准位置编码矩阵所需的 2GB 相比，简直是小巫见大巫。</p>
+<p>如需更简洁、更数学化的解释，请参阅 <a href="https://huggingface.co/transformers/model_doc/reformer.html#axis-positional-encodings">此处</a> 的  🤗Transformers 文档。</p>
+<h3 id="_6">基准测试<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<p>最后，我们对传统位置嵌入与 <em>轴向位置嵌入</em> 的峰值内存消耗进行比较。</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>#@title Installs and Imports
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a># pip installs
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>!pip -qq install git+https://github.com/huggingface/transformers.git
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>!pip install -qq py3nvml
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>from transformers import ReformerConfig, PyTorchBenchmark, PyTorchBenchmarkArguments, ReformerModel
+</span></code></pre></div>
+<p>位置嵌入仅取决于两个配置参数: 输入序列允许的最大长度 <code>config.max_position_embeddings</code> 以及 <code>config.hidden_​​size</code> 。我们使用一个模型，其支持的输入序列的最大允许长度为 50 万个词元，即 <code>google/reformer-crime-and-punishment</code> ，来看看使用轴向位置嵌入后的效果。</p>
+<p>首先，我们比较轴向位置编码与标准位置编码的参数形状，及其相应模型的总参数量。</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>config_no_pos_axial_embeds = ReformerConfig.from_pretrained(&quot;google/reformer-crime-and-punishment&quot;, axial_pos_embds=False) # disable axial positional embeddings
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>config_pos_axial_embeds = ReformerConfig.from_pretrained(&quot;google/reformer-crime-and-punishment&quot;, axial_pos_embds=True, axial_pos_embds_dim=(64, 192), axial_pos_shape=(512, 1024)) # enable axial positional embeddings
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>print(&quot;Default Positional Encodings&quot;)
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>print(20 *&#39;-&#39;)
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>model = ReformerModel(config_no_pos_axial_embeds)
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>print(f&quot;Positional embeddings shape: {model.embeddings.position_embeddings}&quot;)
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>print(f&quot;Num parameters of model: {model.num_parameters()}&quot;)
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>print(20 *&#39;-&#39; + &#39;\n\n&#39;)
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>
+</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>print(&quot;Axial Positional Encodings&quot;)
+</span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>print(20 *&#39;-&#39;)
+</span><span id="__span-10-13"><a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>model = ReformerModel(config_pos_axial_embeds)
+</span><span id="__span-10-14"><a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>print(f&quot;Positional embeddings shape: {model.embeddings.position_embeddings}&quot;)
+</span><span id="__span-10-15"><a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>print(f&quot;Num parameters of model: {model.num_parameters()}&quot;)
+</span><span id="__span-10-16"><a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>print(20 *&#39;-&#39; + &#39;\n\n&#39;)
+</span></code></pre></div>
+<div class="language-text highlight"><pre><span></span><code>HBox(children=(FloatProgress(value=0.0, description=&#39;Downloading&#39;, max=1151.0, style=ProgressStyle(description…
+
+
+
+Default Positional Encodings
+--------------------
+Positional embeddings shape: PositionEmbeddings(
+  (embedding): Embedding(524288, 256)
+)
+Num parameters of model: 136572416
+--------------------
+
+
+Axial Positional Encodings
+--------------------
+Positional embeddings shape: AxialPositionEmbeddings(
+  (weights): ParameterList(
+      (0): Parameter containing: [torch.FloatTensor of size 512x1x64]
+      (1): Parameter containing: [torch.FloatTensor of size 1x1024x192]
+  )
+)
+Num parameters of model: 2584064
+--------------------
+</code></pre></div>
+<p>理解了相应的理论后，读者应该不会对轴向位置编码权重的形状感到惊讶。</p>
+<p>从结果中可以看出，对于需要处理如此长输入序列的模型，使用标准位置编码是不切实际的。以 <code>google/reformer-crime-and-punishment</code> 为例，仅标准位置编码自身参数量就超过 100M。轴向位置编码可以将这个数字减少到略高于 200K。</p>
+<p>最后，我们比较一下推理所需内存。</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>benchmark_args = PyTorchBenchmarkArguments(sequence_lengths=[512], batch_sizes=[8], models=[&quot;Reformer-No-Axial-Pos-Embeddings&quot;, &quot;Reformer-Axial-Pos-Embeddings&quot;], no_speed=True, no_env_print=True)
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>benchmark = PyTorchBenchmark(configs=[config_no_pos_axial_embeds, config_pos_axial_embeds], args=benchmark_args)
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>result = benchmark.run()
+</span></code></pre></div>
+<div class="language-text highlight"><pre><span></span><code>1 / 2
+2 / 2
+
+====================      INFERENCE - MEMORY - RESULT       ====================
+--------------------------------------------------------------------------------
+          Model Name             Batch Size     Seq Length    Memory in MB 
+--------------------------------------------------------------------------------
+Reformer-No-Axial-Pos-Embeddin       8              512             959      
+Reformer-Axial-Pos-Embeddings        8              512             447      
+--------------------------------------------------------------------------------
+</code></pre></div>
+<p>可以看出，在 <code>google/reformer-crime-and-punishment</code> 模型上，使用轴向位置嵌入可减少大约一半的内存需求。</p>
+
+
+
+
+
+
+
+  
+    
+  
+  
+    
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 1, 2024</span>
+  </span>
+
+    
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Created">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 1, 2024</span>
+  </span>
+
+    
+    
+      
+  
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Contributors">
+      
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 5.5A3.5 3.5 0 0 1 15.5 9a3.5 3.5 0 0 1-3.5 3.5A3.5 3.5 0 0 1 8.5 9 3.5 3.5 0 0 1 12 5.5M5 8c.56 0 1.08.15 1.53.42-.15 1.43.27 2.85 1.13 3.96C7.16 13.34 6.16 14 5 14a3 3 0 0 1-3-3 3 3 0 0 1 3-3m14 0a3 3 0 0 1 3 3 3 3 0 0 1-3 3c-1.16 0-2.16-.66-2.66-1.62a5.54 5.54 0 0 0 1.13-3.96c.45-.27.97-.42 1.53-.42M5.5 18.25c0-2.07 2.91-3.75 6.5-3.75s6.5 1.68 6.5 3.75V20h-13zM0 20v-1.5c0-1.39 1.89-2.56 4.45-2.9-.59.68-.95 1.62-.95 2.65V20zm24 0h-3.5v-1.75c0-1.03-.36-1.97-.95-2.65 2.56.34 4.45 1.51 4.45 2.9z"/></svg>
+      
+    </span>
+    <nav>
+      
+    </nav>
+  </span>
+
+    
+    
+  </aside>
+
+
+  
+
+
+
+  <form class="md-feedback" name="feedback" hidden>
+    <fieldset>
+      <legend class="md-feedback__title">
+        Was this page helpful?
+      </legend>
+      <div class="md-feedback__inner">
+        <div class="md-feedback__list">
+          
+            <button class="md-feedback__icon md-icon" type="submit" title="This page was helpful" data-md-value="1">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 12a8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8m2 0a10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2a10 10 0 0 1 10 10M10 9.5c0 .8-.7 1.5-1.5 1.5S7 10.3 7 9.5 7.7 8 8.5 8s1.5.7 1.5 1.5m7 0c0 .8-.7 1.5-1.5 1.5S14 10.3 14 9.5 14.7 8 15.5 8s1.5.7 1.5 1.5m-5 7.73c-1.75 0-3.29-.73-4.19-1.81L9.23 14c.45.72 1.52 1.23 2.77 1.23s2.32-.51 2.77-1.23l1.42 1.42c-.9 1.08-2.44 1.81-4.19 1.81"/></svg>
+            </button>
+          
+            <button class="md-feedback__icon md-icon" type="submit" title="This page could be improved" data-md-value="0">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 12a8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8m2 0a10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2a10 10 0 0 1 10 10m-6.5-4c.8 0 1.5.7 1.5 1.5s-.7 1.5-1.5 1.5-1.5-.7-1.5-1.5.7-1.5 1.5-1.5M10 9.5c0 .8-.7 1.5-1.5 1.5S7 10.3 7 9.5 7.7 8 8.5 8s1.5.7 1.5 1.5m2 4.5c1.75 0 3.29.72 4.19 1.81l-1.42 1.42C14.32 16.5 13.25 16 12 16s-2.32.5-2.77 1.23l-1.42-1.42C8.71 14.72 10.25 14 12 14"/></svg>
+            </button>
+          
+        </div>
+        <div class="md-feedback__note">
+          
+            <div data-md-value="1" hidden>
+              
+              
+                
+              
+              Thanks for your feedback!
+            </div>
+          
+            <div data-md-value="0" hidden>
+              
+              
+                
+              
+              Thanks for your feedback! Help us improve this page by using our <a href="..." target="_blank" rel="noopener">feedback form</a>.
+            </div>
+          
+        </div>
+      </div>
+    </fieldset>
+  </form>
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../red-teaming/" class="md-footer__link md-footer__link--prev" aria-label="Previous: 为大语言模型建立红队对抗">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256l137.3-137.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                为大语言模型建立红队对抗
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../regions/" class="md-footer__link md-footer__link--next" aria-label="Next: HF Hub 现已加入存储区域功能">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                HF Hub 现已加入存储区域功能
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2020 - 2024 FastX-AI
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+    
+    
+    
+    <a href="https://fastx-ai.com" target="_blank" rel="noopener me" title="fastx-ai" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M433 179.11c0-97.2-63.71-125.7-63.71-125.7-62.52-28.7-228.56-28.4-290.48 0 0 0-63.72 28.5-63.72 125.7 0 115.7-6.6 259.4 105.63 289.1 40.51 10.7 75.32 13 103.33 11.4 50.81-2.8 79.32-18.1 79.32-18.1l-1.7-36.9s-36.31 11.4-77.12 10.1c-40.41-1.4-83-4.4-89.63-54a102.5 102.5 0 0 1-.9-13.9c85.63 20.9 158.65 9.1 178.75 6.7 56.12-6.7 105-41.3 111.23-72.9 9.8-49.8 9-121.5 9-121.5m-75.12 125.2h-46.63v-114.2c0-49.7-64-51.6-64 6.9v62.5h-46.33V197c0-58.5-64-56.6-64-6.9v114.2H90.19c0-122.1-5.2-147.9 18.41-175 25.9-28.9 79.82-30.8 103.83 6.1l11.6 19.5 11.6-19.5c24.11-37.1 78.12-34.8 103.83-6.1 23.71 27.3 18.4 53 18.4 175z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="mailto:x.stark.dylan@gmail.com" target="_blank" rel="noopener" title="send me an email" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M64 112c-8.8 0-16 7.2-16 16v22.1l172.5 141.6c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16zM48 212.2V384c0 8.8 7.2 16 16 16h384c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0zM0 128c0-35.3 28.7-64 64-64h384c35.3 0 64 28.7 64 64v256c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="/contact" target="_blank" rel="noopener" title="contact us" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 4H7a5 5 0 0 0-5 5v11h18a2 2 0 0 0 2-2V9a5 5 0 0 0-5-5m-7 14H4V9a3 3 0 0 1 3-3 3 3 0 0 1 3 3zm9-3h-2v-2h-4v-2h6zM9 11H5V9h4z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.indexes", "navigation.instant.progress", "navigation.tracking", "navigation.tabs", "navigation.top", "navigation.footer", "navigation.prune", "content.action.edit", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips", "header.autohide", "announce.dismiss", "search.suggest", "search.highlight", "search.share", "toc.follow", "toc.integrate"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+<!-- Add scripts that need to run before here -->
+
+      <script src="../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+        <script src="../../javascripts/extra.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+<!-- Add scripts that need to run afterwards here -->
+
+  <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body>
+</html>
